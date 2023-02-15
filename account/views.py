@@ -1,5 +1,7 @@
 from django.shortcuts import render
 
 # Create your views here.
-def home(request):
-    return render (request,'index.html')
+
+
+def create_user(request):
+    return render (request,'account/create_user.html')
