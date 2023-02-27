@@ -4,7 +4,6 @@ from .models import *
 
 
 def admin_dashboard(request):
-    if request.user.is_superuser:
         roles = Role.objects.all()
         users = CompanyUser.objects.all()
         context = {
@@ -12,8 +11,6 @@ def admin_dashboard(request):
             'users':users
         }
         return render (request,'account/admin_dashboard.html',context)
-    else:
-        return redirect('home')
 
 
 def create_role(request):
@@ -107,7 +104,7 @@ def create_company_user(request):
         password = request.POST['password']
         permission = request.POST['permission']
         role = request.POST['role']
-        user
+        
         CompanyUser.objects.create(role=role,permission=permission)
         return render(request,'account/create_user.html')
     else:
