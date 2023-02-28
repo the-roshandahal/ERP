@@ -5,115 +5,68 @@ from .models import *
 def home(request):
     return render (request,'index.html') 
 
-
-def admin_dashboard(request):
+def role(request):
     roles = Role.objects.all()
-    users = CompanyUser.objects.all()
     context = {
         'roles':roles,
-        'users':users
     }
-    return render (request,'account/admin_dashboard.html',context)
-
+    return render (request,'account/role.html',context)
 
 def create_role(request):
-    if request.method =="POST":
+    if request.method == "POST":
         role = request.POST["role"]
-        
-        if 'create_finance' in request.POST:
-            create_finance = request.POST['create_finance']
-        else:
-            create_finance = 0
-
-        if 'read_finance' in request.POST:
-            read_finance = request.POST['read_finance']
-        else:
-            read_finance = 0
-
-        if 'update_finance' in request.POST:
-            update_finance = request.POST['update_finance']
-        else:
-            update_finance = 0
-
-        if 'delete_finance' in request.POST:
-            delete_finance = request.POST['delete_finance']
-        else:
-            delete_finance = 0
-
-        
-        if 'create_account' in request.POST:
-            create_account = request.POST['create_account']
-        else:
-            create_account = 0
-
-        if 'read_account' in request.POST:
-            read_account = request.POST['read_account']
-        else:
-            read_account = 0
-
-        if 'update_account' in request.POST:
-            update_account = request.POST['update_account']
-        else:
-            update_account = 0
-
-        if 'delete_account' in request.POST:
-            delete_account = request.POST['delete_account']
-        else:
-            delete_account = 0
-
-
-
-        if 'create_leads' in request.POST:
-            create_leads = request.POST['create_leads']
-        else:
-            create_leads = 0
-
-        if 'read_leads' in request.POST:
-            read_leads = request.POST['read_leads']
-        else:
-            read_leads = 0
-
-        if 'update_leads' in request.POST:
-            update_leads = request.POST['update_leads']
-        else:
-            update_leads = 0
-
-        if 'delete_leads' in request.POST:
-            delete_leads = request.POST['delete_leads']
-        else:
-            delete_leads = 0
+        create_finance = request.POST.get('create_finance', 0)
+        read_finance = request.POST.get('read_finance', 0)
+        update_finance = request.POST.get('update_finance', 0)
+        delete_finance = request.POST.get('delete_finance', 0)
+        create_account = request.POST.get('create_account', 0)
+        read_account = request.POST.get('read_account', 0)
+        update_account = request.POST.get('update_account', 0)
+        delete_account = request.POST.get('delete_account', 0)
+        create_leads = request.POST.get('create_leads', 0)
+        read_leads = request.POST.get('read_leads', 0)
+        update_leads = request.POST.get('update_leads', 0)
+        delete_leads = request.POST.get('delete_leads', 0)
         try:
             new_role=Role.objects.create( role = role)
             new_role.save()
 
-            roleee = Role.objects.get(role=new_role)
+            role_obj = Role.objects.get(role=new_role)
 
-            Permission.objects.create(role=roleee, create_finance =create_finance, read_finance =read_finance, update_finance =update_finance, 
+            Permission.objects.create(role=role_obj, create_finance =create_finance, read_finance =read_finance, update_finance =update_finance, 
                                     delete_finance =delete_finance, create_account =create_account, read_account =read_account, update_account =update_account,
                                     delete_account =delete_account, create_leads =create_leads, read_leads =read_leads, update_leads =update_leads, 
                                     delete_leads =delete_leads)
         except:
             print('something went wrong')
-            return render (request,'account/create_role.html')
+            return redirect('role')
 
-        return render (request,'account/create_role.html')
+        return redirect('role')
     else:
-        return render (request,'account/create_role.html')
+        return redirect('role')
     
+
+def company_user(request):
+    company_users = CompanyUser.objects.all()
+    roles = Role.objects.all()
+    context = {
+        'company_users':company_users,
+        'roles':roles,
+    }
+    return render (request,'account/company_user.html',context)
 
 def create_company_user(request):
     if request.method=="POST":
         username = request.POST['username']
         password = request.POST['password']
+        email = request.POST['email']
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
         role = request.POST['role']
-        user=User.objects.create_user(username=username,password=password)
-        role=Role.objects.get(id=role)
-        CompanyUser.objects.create(user=user,role=role)
+        user=User.objects.create_user(first_name=first_name,last_name=last_name,email=email,password=password,username=username)
+        permission=Permission.objects.get(role=role)
+        CompanyUser.objects.create(user=user,permission=permission)
         user.save()
-        return render(request,'account/create_user.html')
+        return redirect('company_user')
     else:
-        role= Role.objects.all()
-        context={
-            'role':role,
-        }
-        return render(request,'account/create_user.html',context)
+        return redirect('company_user')

@@ -1,0 +1,138 @@
+{% load static %}{% include 'header.html' %}
+<!-- Main Content -->
+<div class="hk-pg-wrapper">
+	<div class="container-xxl">
+		<!-- Page Header -->
+		<div class="hk-pg-header pg-header-wth-tab pt-7">
+			<div class="d-flex">
+				<div class="d-flex flex-wrap justify-content-between flex-1">
+					<div class="mb-lg-0 mb-2 me-8">
+						<h1 class="pg-title">Welcome back</h1>
+						<p>Welcome to SPELL CRM Dashboard.</p>
+					</div>
+					<div class="mb-lg-0 mb-2 me-8">
+						<button type="button" class="btn btn-success  btn-animated" data-bs-toggle="modal" data-bs-target="#createUserModal">Create User</button>
+					</div>
+					<div class="modal fade" id="createUserModal" tabindex="-1" role="dialog" aria-labelledby="createUserModal" aria-hidden="true">
+						<div class="modal-dialog modal-dialog-centered" role="document">
+							<div class="modal-content">
+								<form action="{% url 'create_company_user' %}" method="POST">
+									{% csrf_token %}
+									<div class="modal-header">
+										<h5 class="modal-title" id="createUserModal">Create Role</h5>
+										<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										</button>
+									</div>
+									<div class="modal-body">
+										<div class="row">
+											<div class="col-md-6 mb-3">
+												<label for="">First Name</label>
+												<input type="text" class="form-control"  placeholder="alex" name='first_name' required>
+											</div>
+											<div class="col-md-6 mb-3">
+												<label for="">Last_name</label>
+												<input type="text" class="form-control"  placeholder="alex" name='last_name' required>
+											</div>
+										</div>
+										<div class="col-md-12 mb-3">
+											<label for="">Email Address</label>
+											<input type="text" class="form-control"  placeholder="alex" name='email' required>
+										</div>
+										
+										<div class="col-md-12 mb-3">
+											<label for="">Username</label>
+											<input type="text" class="form-control"  placeholder="alex" name='username' required>
+										</div>
+										
+										<div class="col-md-12 mb-3">
+											<label for="">Password</label>
+											<input type="password" class="form-control"  placeholder="*******" name='password' required>
+										</div>
+										
+										<div class="col-md-12 mb-3">
+											<h6>Select Role</h6>
+											<div class="form-group">
+												<select class="form-select" name="role" required>
+													<option value="" data-id="0" selected>Select Role</option>
+													{% for roles in roles %}
+													<option value="{{roles.id}}" >{{roles.role}}</option>
+													{% endfor %}
+												</select>
+											</div>
+											<a class="d-inline-flex align-items-center" data-bs-toggle="modal" data-bs-target="#billed_info" href="#">
+											<i class="ri-add-box-line me-1"></i> Add new role </a>
+										</div>
+										
+
+
+										
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+										<button type="submit" class="btn btn-primary">Save</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+		<!-- /Page Header -->
+		<!-- /Add other contents below -->
+																
+		
+														
+        <div class="container mt-5">
+            														
+            <div class="row">
+                <div class="table-responsive">
+					<table class="table nowrap table-advance">
+						<thead>
+							<tr>
+								<th class="mnw-150p">Name</th>
+								<th class="mnw-200p">Email address</th>
+								<th class="mnw-150p">Username</th>
+								<th>Role</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for company_users in company_users %}
+							<tr>
+								<td class="text-truncate">
+									<div class="media align-items-center">
+										<div class="media-head me-3">
+											<div class="avatar avatar-xs">
+												<img src="{% static 'dist/img/avatar1.jpg' %}" alt="user" class="avatar-img">
+											</div>
+										</div>
+										<div class="media-body mnw-0">
+											<a href="#" class="table-link-text text-high-em text-truncate mb-0">{{company_users.user.first_name}} {{company_users.user.last_name}}</a>
+										</div>
+									</div>
+								</td>
+								<td class="text-truncate">{{company_users.user.email}}</td>
+								<td class="text-truncate">{{company_users.user.username}}</td>
+								<td><span class="badge badge-lg badge-light">{{company_users.permission.role}}</span></td>
+								<td>
+									<div  class="d-flex align-items-center justify-content-end">
+										<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Archive" href="#"><span class="icon"><span class="feather-icon"><i data-feather="archive"></i></span></span></a>
+										<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" href="#"><span class="icon"><span class="feather-icon"><i data-feather="edit-2"></i></span></span></a>
+									</div>
+								</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+                
+            </div>
+													
+        </div>
+		
+	</div>
+</div>
+{% include 'footer.html' %}
