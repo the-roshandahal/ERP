@@ -7,19 +7,27 @@
         <form action="{% url 'create_company_user' %}" method="POST">
             {% csrf_token %}
             
-            <label> Username</label><br>
-            <input type="text" name="username" required>
+            <div>
+                <label> Username</label><br>
+                <input type="text" name="username" required>
+            </div>
 
-            <label> Password</label><br>
-            <input type="text" name="password" required>
+            <div>
+                 <label> Password</label><br>
+                <input type="text" name="password" required>
+            </div>
 
-
+            <div>
             <label> Role</label><br>
             <select name="role">
-                {% for roles in roles %}
-                <option value="{{roles.role}}">{{roles.role}}</option>
+                {% for role in role %}
+                <option value="{{role.id}}">{{role.role}}</option>
                 {% endfor %}    
             </select>
+            </div>
+           
+
+            
             
             <input type="submit" value="Submit">
         </form>

@@ -5,343 +5,349 @@
 {% include 'nav_links.html' %}
 <body>
 	<div class="page-wrapper">
-		{% for message in messages %}
-		<div class="popup-msg">
-		  <p class="popup-msg-text">{{message}}</p>
-		  <!-- <i class="fa fa-times popup-close"></i> -->
-		</div>
-		{% endfor %}
-		<style>
-		  .popup-msg {
-			display: flex;
-			justify-content: space-between;
-			position: absolute;
-			transform: translateX(-50%);
-			z-index: 1000;
-			top: 10%;
-			right: -3%;
-			padding: 0.5rem;
-			border-radius: 10px;
-			border: 1.3px solid gray;
-			color: rgb(255, 255, 255);
-			background-color: rgb(228, 228, 228);
-			box-shadow: 3px 4px 12px 0px rgba(0, 0, 0, 0.3);
-		  }
-		  .popup-msg-text {
-			padding: 7px 5px 0px 5px;
-			color:#FB8500 ;
-		  }
-		</style>
-		
-		<script>
-		  let popup = document.querySelector(".popup-msg");
-		  if (popup) {
-			setTimeout(() => {
-			  popup.style.display = "none";
-			}, 10000);
-		  }
-		</script>
-   	<!-- Wrapper -->
-	<div class="hk-wrapper" data-layout="vertical" data-layout-style="default" data-menu="light" data-footer="simple">
-		<!-- Top Navbar -->
-		<nav class="hk-navbar navbar navbar-expand-xl navbar-light fixed-top">
-			<div class="container-fluid">
-			<!-- Start Nav -->
-			<div class="nav-start-wrap">
-				<button class="btn btn-icon btn-rounded btn-flush-dark flush-soft-hover navbar-toggle d-xl-none"><span class="icon"><span class="feather-icon"><i data-feather="align-left"></i></span></span></button>
-					
-				
+		<div class="messages">
+			{% for message in messages %}
+			<div class="popup-msg">
+			<p class="popup-msg-text">{{message}}</p>
+			<!-- <i class="fa fa-times popup-close"></i> -->
 			</div>
-			<!-- /Start Nav -->
+			{% endfor %}
+			<style>
+			.popup-msg {
+				display: flex;
+				justify-content: space-between;
+				position: absolute;
+				transform: translateX(-50%);
+				z-index: 1000;
+				top: 10%;
+				right: -3%;
+				padding: 0.5rem;
+				border-radius: 10px;
+				border: 1.3px solid gray;
+				color: rgb(255, 255, 255);
+				background-color: rgb(228, 228, 228);
+				box-shadow: 3px 4px 12px 0px rgba(0, 0, 0, 0.3);
+			}
+			.popup-msg-text {
+				padding: 7px 5px 0px 5px;
+				color:#FB8500 ;
+			}
+			</style>
 			
-			<!-- End Nav -->
-			<div class="nav-end-wrap">
-				<ul class="navbar-nav flex-row">
-					<li class="nav-item">
-						<div class="dropdown ps-2">
-							<a class=" dropdown-toggle no-caret" href="#" role="button" data-bs-display="static" data-bs-toggle="dropdown" data-dropdown-animation data-bs-auto-close="outside" aria-expanded="false">
-								<div class="avatar avatar-rounded avatar-xs">
-									<img src="{% static 'fav.png' %}" alt="user" class="avatar-img">
-								</div>
-							</a>
-							<div class="dropdown-menu dropdown-menu-end">
-								<div class="p-2">
-									<div class="media">
-										<div class="media-head me-2">
-											<div class="avatar avatar-primary avatar-sm avatar-rounded">
-												<span class="initial-wrap">SP</span>
+			<script>
+			let popup = document.querySelector(".popup-msg");
+			if (popup) {
+				setTimeout(() => {
+				popup.style.display = "none";
+				}, 10000);
+			}
+			</script>
+		</div>
+		<!-- Wrapper -->
+		<div class="hk-wrapper" data-layout="vertical" data-layout-style="default" data-menu="light" data-footer="simple">
+			<!-- Top Navbar -->
+			<nav class="hk-navbar navbar navbar-expand-xl navbar-light fixed-top">
+				<div class="container-fluid">
+				<!-- Start Nav -->
+				<div class="nav-start-wrap">
+					<button class="btn btn-icon btn-rounded btn-flush-dark flush-soft-hover navbar-toggle d-xl-none"><span class="icon"><span class="feather-icon"><i data-feather="align-left"></i></span></span></button>
+						
+					
+				</div>
+				<!-- /Start Nav -->
+				
+				<!-- End Nav -->
+				<div class="nav-end-wrap">
+					<ul class="navbar-nav flex-row">
+						<li class="nav-item">
+							<div class="dropdown ps-2">
+								<a class=" dropdown-toggle no-caret" href="#" role="button" data-bs-display="static" data-bs-toggle="dropdown" data-dropdown-animation data-bs-auto-close="outside" aria-expanded="false">
+									<div class="avatar avatar-rounded avatar-xs">
+										<img src="{% static 'fav.png' %}" alt="user" class="avatar-img">
+									</div>
+								</a>
+								<div class="dropdown-menu dropdown-menu-end">
+									<div class="p-2">
+										<div class="media">
+											<div class="media-head me-2">
+												<div class="avatar avatar-primary avatar-sm avatar-rounded">
+													<span class="initial-wrap">{{request.user.username|truncatechars:3}}</span>
+												</div>
+											</div>
+											<div class="media-body">
+													<a href="#" class="d-block link-dark fw-medium">{{request.user.first_name}} {{request.user.last_name}}</a>
 											</div>
 										</div>
-										<div class="media-body">
-												<a href="#" class="d-block link-dark fw-medium">{{request.user.first_name}} {{request.user.last_name}}</a>
-										</div>
 									</div>
+									<div class="dropdown-divider"></div>
+									{% comment %} <a class="dropdown-item" href="">Profile</a> {% endcomment %}
+									<a class="dropdown-item" href="#"><span class="me-2">Sign Out</a><div class="dropdown-divider"></div>
 								</div>
-								<div class="dropdown-divider"></div>
-								{% comment %} <a class="dropdown-item" href="">Profile</a> {% endcomment %}
-								<a class="dropdown-item" href="{% url 'logout' %}"><span class="me-2">Sign Out</a><div class="dropdown-divider"></div>
 							</div>
-						</div>
-					</li>
-				</ul>
-			</div>
-			<!-- /End Nav -->
-			</div>									
-		</nav>
-		<!-- /Top Navbar -->
+						</li>
+					</ul>
+				</div>
+				<!-- /End Nav -->
+				</div>									
+			</nav>
+			<!-- /Top Navbar -->
 
-        <!-- Vertical Nav -->
-        <div class="hk-menu">
-			<!-- Brand -->
-			<div class="menu-header">
-				<span>
-					<a class="navbar-brand" href="{% url 'home' %}">
-						<img class="brand-img img-fluid" src="{% static 'logo.png' %}" alt="brand" style="height:30px;" />
-					</a>
-					<button class="btn btn-icon btn-rounded btn-flush-dark flush-soft-hover navbar-toggle">
-						<span class="icon">
-							<span class="svg-icon fs-5">
-								<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-bar-to-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-									<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-									<line x1="10" y1="12" x2="20" y2="12"></line>
-									<line x1="10" y1="12" x2="14" y2="16"></line>
-									<line x1="10" y1="12" x2="14" y2="8"></line>
-									<line x1="4" y1="4" x2="4" y2="20"></line>
-								</svg>
+			<!-- Vertical Nav -->
+			<div class="hk-menu">
+				<!-- Brand -->
+				<div class="menu-header">
+					<span>
+						<a class="navbar-brand" href="#}">
+							<img class="brand-img img-fluid" src="{% static 'logo.png' %}" alt="brand" style="height:30px;" />
+						</a>
+						<button class="btn btn-icon btn-rounded btn-flush-dark flush-soft-hover navbar-toggle">
+							<span class="icon">
+								<span class="svg-icon fs-5">
+									<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-bar-to-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+										<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+										<line x1="10" y1="12" x2="20" y2="12"></line>
+										<line x1="10" y1="12" x2="14" y2="16"></line>
+										<line x1="10" y1="12" x2="14" y2="8"></line>
+										<line x1="4" y1="4" x2="4" y2="20"></line>
+									</svg>
+								</span>
 							</span>
-						</span>
-					</button>
-				</span>
-			</div>
-			<!-- /Brand -->
+						</button>
+					</span>
+				</div>
+				<!-- /Brand -->
 
-			<!-- Main Menu -->
-			<div data-simplebar class="nicescroll-bar">
-				<div class="menu-content-wrap">
-					<div class="menu-group">
-						<ul class="navbar-nav flex-column">
-							<li class="nav-item active">
-								<a class="nav-link" href="{% url 'home' %}">
-									<span class="nav-icon-wrap">
-										<span class="svg-icon">
-											<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-template" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-												<path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-												<rect x="4" y="4" width="16" height="4" rx="1" />
-												<rect x="4" y="12" width="6" height="8" rx="1" />
-												<line x1="14" y1="12" x2="20" y2="12" />
-												<line x1="14" y1="16" x2="20" y2="16" />
-												<line x1="14" y1="20" x2="20" y2="20" />
-											</svg>
+				<!-- Main Menu -->
+				<div data-simplebar class="nicescroll-bar">
+					<div class="menu-content-wrap">
+						<div class="menu-group">
+							<ul class="navbar-nav flex-column">
+								<li class="nav-item active">
+									<a class="nav-link" href="#}">
+										<span class="nav-icon-wrap">
+											<span class="svg-icon">
+												<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-template" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+													<path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+													<rect x="4" y="4" width="16" height="4" rx="1" />
+													<rect x="4" y="12" width="6" height="8" rx="1" />
+													<line x1="14" y1="12" x2="20" y2="12" />
+													<line x1="14" y1="16" x2="20" y2="16" />
+													<line x1="14" y1="20" x2="20" y2="20" />
+												</svg>
+											</span>
 										</span>
-									</span>
-									<span class="nav-link-text">Dashboard</span>
-									
-								</a>
-							</li>
-						</ul>	
-					</div>
-					<div class="menu-gap"></div>
-					<div class="menu-group">
-						<div class="nav-header">
-							<span>Features</span>
+										<span class="nav-link-text">Dashboard</span>
+										
+									</a>
+								</li>
+							</ul>	
 						</div>
-						<ul class="navbar-nav flex-column">
-							{% if request.user.is_staff %}
-							<li class="nav-item">
-								<a class="nav-link" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#dash_chat">
-									<span class="nav-icon-wrap">
-										<span class="svg-icon">
-											<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-message-dots" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-												<path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-												<path d="M4 21v-13a3 3 0 0 1 3 -3h10a3 3 0 0 1 3 3v6a3 3 0 0 1 -3 3h-9l-4 4" />
-												<line x1="12" y1="11" x2="12" y2="11.01" />
-												<line x1="8" y1="11" x2="8" y2="11.01" />
-												<line x1="16" y1="11" x2="16" y2="11.01" />
-											</svg>
+						<div class="menu-gap"></div>
+						<div class="menu-group">
+							<div class="nav-header">
+								<span>Features</span>
+							</div>
+							<ul class="navbar-nav flex-column">
+								<li class="nav-item">
+									<a class="nav-link" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#dash_chat_role">
+										<span class="nav-icon-wrap">
+											<span class="svg-icon">
+												<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-message-dots" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+													<path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+													<path d="M4 21v-13a3 3 0 0 1 3 -3h10a3 3 0 0 1 3 3v6a3 3 0 0 1 -3 3h-9l-4 4" />
+													<line x1="12" y1="11" x2="12" y2="11.01" />
+													<line x1="8" y1="11" x2="8" y2="11.01" />
+													<line x1="16" y1="11" x2="16" y2="11.01" />
+												</svg>
+											</span>
 										</span>
-									</span>
-									<span class="nav-link-text">Client</span>
-								</a>
-								<ul id="dash_chat" class="nav flex-column collapse  nav-children">
-									<li class="nav-item">
-										<ul class="nav flex-column">
-											<li class="nav-item">
-												<a class="nav-link" href="{% url 'clients' %}"><span class="nav-link-text">Clients</span></a>
-											</li>
-											<li class="nav-item">
-												<a class="nav-link" href="{% url 'add_client' %}"><span class="nav-link-text">Add Client</span></a>
-											</li>
-											<li class="nav-item">
-												<a class="nav-link" href="{% url 'followup' %}"><span class="nav-link-text">Followup</span></a>
-											</li>
-											<li class="nav-item">
-												<a class="nav-link" href="{% url 'cpr' %}"><span class="nav-link-text">CPR</span></a>
-											</li>
-										</ul>	
-									</li>	
-								</ul>	
-							</li>	
+										<span class="nav-link-text">Roles and User</span>
+									</a>
+									<ul id="dash_chat_role" class="nav flex-column collapse  nav-children">
+										<li class="nav-item">
+											<ul class="nav flex-column">
+												<li class="nav-item">
+													<a class="nav-link" href="#"><span class="nav-link-text">Roles</span></a>
+												</li>
+												<li class="nav-item">
+													<a class="nav-link" href="#"><span class="nav-link-text">Users</span></a>
+												</li>
+											</ul>	
+										</li>	
+									</ul>	
+								</li>	
+								<li class="nav-item">
+									<a class="nav-link" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#dash_chat">
+										<span class="nav-icon-wrap">
+											<span class="svg-icon">
+												<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-message-dots" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+													<path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+													<path d="M4 21v-13a3 3 0 0 1 3 -3h10a3 3 0 0 1 3 3v6a3 3 0 0 1 -3 3h-9l-4 4" />
+													<line x1="12" y1="11" x2="12" y2="11.01" />
+													<line x1="8" y1="11" x2="8" y2="11.01" />
+													<line x1="16" y1="11" x2="16" y2="11.01" />
+												</svg>
+											</span>
+										</span>
+										<span class="nav-link-text">Client</span>
+									</a>
+									<ul id="dash_chat" class="nav flex-column collapse  nav-children">
+										<li class="nav-item">
+											<ul class="nav flex-column">
+												<li class="nav-item">
+													<a class="nav-link" href="#"><span class="nav-link-text">Clients</span></a>
+												</li>
+												<li class="nav-item">
+													<a class="nav-link" href="#"><span class="nav-link-text">Add Client</span></a>
+												</li>
+												<li class="nav-item">
+													<a class="nav-link" href="#"><span class="nav-link-text">Followup</span></a>
+												</li>
+												<li class="nav-item">
+													<a class="nav-link" href="#"><span class="nav-link-text">CPR</span></a>
+												</li>
+											</ul>	
+										</li>	
+									</ul>	
+								</li>	
 
-							<li class="nav-item">
-								<a class="nav-link" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#dash_scrumboard">
-									<span class="nav-icon-wrap position-relative">
-										<span class="svg-icon">
-											<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-layout-kanban" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-												<path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-												<line x1="4" y1="4" x2="10" y2="4" />
-												<line x1="14" y1="4" x2="20" y2="4" />
-												<rect x="4" y="8" width="6" height="12" rx="2" />
-												<rect x="14" y="8" width="6" height="6" rx="2" />
-											</svg>
+								<li class="nav-item">
+									<a class="nav-link" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#dash_scrumboard">
+										<span class="nav-icon-wrap position-relative">
+											<span class="svg-icon">
+												<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-layout-kanban" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+													<path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+													<line x1="4" y1="4" x2="10" y2="4" />
+													<line x1="14" y1="4" x2="20" y2="4" />
+													<rect x="4" y="8" width="6" height="12" rx="2" />
+													<rect x="14" y="8" width="6" height="6" rx="2" />
+												</svg>
+											</span>
 										</span>
-									</span>
-									<span class="nav-link-text">Package</span>
-								</a>
-								<ul id="dash_scrumboard" class="nav flex-column collapse  nav-children">
-									<li class="nav-item">
-										<ul class="nav flex-column">
-											<li class="nav-item">
-												<a class="nav-link" href="{% url 'package' %}"><span class="nav-link-text">All Packages</span></a>
-											</li>
-											
-											<li class="nav-item">
-												<a class="nav-link" href="{% url 'add_package' %}"><span class="nav-link-text">Add Package</span></a>
-											</li>
-										</ul>	
-									</li>	
-								</ul>	
-							</li>
+										<span class="nav-link-text">Package</span>
+									</a>
+									<ul id="dash_scrumboard" class="nav flex-column collapse  nav-children">
+										<li class="nav-item">
+											<ul class="nav flex-column">
+												<li class="nav-item">
+													<a class="nav-link" href="#"><span class="nav-link-text">All Packages</span></a>
+												</li>
+												
+												<li class="nav-item">
+													<a class="nav-link" href="#"><span class="nav-link-text">Add Package</span></a>
+												</li>
+											</ul>	
+										</li>	
+									</ul>	
+								</li>
 
-							<li class="nav-item">
-								<a class="nav-link" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#dash_contact">
-									<span class="nav-icon-wrap">
-										<span class="svg-icon">
-											<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-notebook" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-												<path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-												<path d="M6 4h11a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-11a1 1 0 0 1 -1 -1v-14a1 1 0 0 1 1 -1m3 0v18" />
-												<line x1="13" y1="8" x2="15" y2="8" />
-												<line x1="13" y1="12" x2="15" y2="12" />
-											</svg>
+								<li class="nav-item">
+									<a class="nav-link" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#dash_contact">
+										<span class="nav-icon-wrap">
+											<span class="svg-icon">
+												<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-notebook" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+													<path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+													<path d="M6 4h11a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-11a1 1 0 0 1 -1 -1v-14a1 1 0 0 1 1 -1m3 0v18" />
+													<line x1="13" y1="8" x2="15" y2="8" />
+													<line x1="13" y1="12" x2="15" y2="12" />
+												</svg>
+											</span>
 										</span>
-									</span>
-									<span class="nav-link-text">Invoice</span>
-								</a>
-								<ul id="dash_contact" class="nav flex-column collapse  nav-children">
-									<li class="nav-item">
-										<ul class="nav flex-column">
-											<li class="nav-item">
-												<a class="nav-link" href="{% url 'invoice' %}"><span class="nav-link-text">All Invoice</span></a>
-											</li>
-											<li class="nav-item">
-												<a class="nav-link" href="{% url 'create_invoice' %}"><span class="nav-link-text">Add Invoice</span></a>
-											</li>
-										</ul>	
-									</li>	
-								</ul>	
-							</li>
+										<span class="nav-link-text">Invoice</span>
+									</a>
+									<ul id="dash_contact" class="nav flex-column collapse  nav-children">
+										<li class="nav-item">
+											<ul class="nav flex-column">
+												<li class="nav-item">
+													<a class="nav-link" href="#"><span class="nav-link-text">All Invoice</span></a>
+												</li>
+												<li class="nav-item">
+													<a class="nav-link" href="#"><span class="nav-link-text">Add Invoice</span></a>
+												</li>
+											</ul>	
+										</li>	
+									</ul>	
+								</li>
 
-                            <li class="nav-item">
-								<a class="nav-link" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#dash_task">
-									<span class="nav-icon-wrap">
-										<span class="svg-icon">
-											<i class="material-icons">account_balance_wallet</i>
+								<li class="nav-item">
+									<a class="nav-link" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#dash_task">
+										<span class="nav-icon-wrap">
+											<span class="svg-icon">
+												<i class="material-icons">account_balance_wallet</i>
+											</span>
 										</span>
-									</span>
-									<span class="nav-link-text">Receipt</span>
-								</a>
-								<ul id="dash_task" class="nav flex-column collapse  nav-children">
-									<li class="nav-item">
-										<ul class="nav flex-column">
-											<li class="nav-item">
-												<a class="nav-link" href="{% url 'receipt' %}"><span class="nav-link-text">All Receipts</span></a>
-											</li>
-											<li class="nav-item">
-												<a class="nav-link" href="{% url 'create_receipt' %}"><span class="nav-link-text">Add Receipt</span></a>
-											</li>
-										</ul>	
-									</li>	
-								</ul>	
-							</li>
+										<span class="nav-link-text">Receipt</span>
+									</a>
+									<ul id="dash_task" class="nav flex-column collapse  nav-children">
+										<li class="nav-item">
+											<ul class="nav flex-column">
+												<li class="nav-item">
+													<a class="nav-link" href="#"><span class="nav-link-text">All Receipts</span></a>
+												</li>
+												<li class="nav-item">
+													<a class="nav-link" href="#"><span class="nav-link-text">Add Receipt</span></a>
+												</li>
+											</ul>	
+										</li>	
+									</ul>	
+								</li>
 
-							<li class="nav-item">
-								<a class="nav-link" href="{% url 'statement' %}">
-									<span class="nav-icon-wrap">
-										<span class="svg-icon">
-											<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-												<path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-												<path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
-												<circle cx="18" cy="18" r="4" />
-												<path d="M15 3v4" />
-												<path d="M7 3v4" />
-												<path d="M3 11h16" />
-												<path d="M18 16.496v1.504l1 1" />
-											</svg>
+								<li class="nav-item">
+									<a class="nav-link" href="#}">
+										<span class="nav-icon-wrap">
+											<span class="svg-icon">
+												<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+													<path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+													<path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+													<circle cx="18" cy="18" r="4" />
+													<path d="M15 3v4" />
+													<path d="M7 3v4" />
+													<path d="M3 11h16" />
+													<path d="M18 16.496v1.504l1 1" />
+												</svg>
+											</span>
 										</span>
-									</span>
-									<span class="nav-link-text">Statement</span>
-								</a>
-							</li>
+										<span class="nav-link-text">Statement</span>
+									</a>
+								</li>
 
-							<li class="nav-item">
-								<a class="nav-link" href="{% url 'leads' %}" >
-									<span class="nav-icon-wrap">
-										<span class="svg-icon">
-											<i class="bi bi-link"></i>
+								<li class="nav-item">
+									<a class="nav-link" href="#%}" >
+										<span class="nav-icon-wrap">
+											<span class="svg-icon">
+												<i class="bi bi-link"></i>
+											</span>
 										</span>
-									</span>
-									<span class="nav-link-text">Leads</span>
-								</a>	
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" href="{% url 'log_sheet' %}" >
-									<span class="nav-icon-wrap">
-										<span class="svg-icon">
-											<i data-feather="bar-chart-2"></i>
-										</span>
-									</span>
-									<span class="nav-link-text">Log Sheet</span>
-								</a>	
-							</li>
+										<span class="nav-link-text">Leads</span>
+									</a>	
+								</li>
 
-							<li class="nav-item">
-								<a class="nav-link" href="{% url 'todo' %}" >
-									<span class="nav-icon-wrap">
-										<span class="svg-icon">
-											<i class="bi bi-check2-all"></i>
+								<li class="nav-item">
+									<a class="nav-link" href="#%}" >
+										<span class="nav-icon-wrap">
+											<span class="svg-icon">
+												<i data-feather="bar-chart-2"></i>
+											</span>
 										</span>
-									</span>
-									<span class="nav-link-text">To Do</span>
-								</a>	
-							</li>
-							{% else %}
-							<li class="nav-item">
-								<a class="nav-link" href="{% url 'log_sheet' %}" >
-									<span class="nav-icon-wrap">
-										<span class="svg-icon">
-											<i data-feather="bar-chart-2"></i>
-										</span>
-									</span>
-									<span class="nav-link-text">Log Sheet</span>
-								</a>	
-							</li>
+										<span class="nav-link-text">Log Sheet</span>
+									</a>	
+								</li>
 
-							<li class="nav-item">
-								<a class="nav-link" href="{% url 'todo' %}" >
-									<span class="nav-icon-wrap">
-										<span class="svg-icon">
-											<i class="bi bi-check2-all"></i>
+								<li class="nav-item">
+									<a class="nav-link" href="#%}" >
+										<span class="nav-icon-wrap">
+											<span class="svg-icon">
+												<i class="bi bi-check2-all"></i>
+											</span>
 										</span>
-									</span>
-									<span class="nav-link-text">To Do</span>
-								</a>	
-							</li>
-							
-							{% endif %}
-						</ul>
+										<span class="nav-link-text">To Do</span>
+									</a>	
+								</li>
+							</ul>
+						</div>
 					</div>
 				</div>
+				<!-- /Main Menu -->
 			</div>
-			<!-- /Main Menu -->
-		</div>
-        <div id="hk_menu_backdrop" class="hk-menu-backdrop"></div>
-        <!-- /Vertical Nav -->
+			<div id="hk_menu_backdrop" class="hk-menu-backdrop"></div>
+			<!-- /Vertical Nav -->

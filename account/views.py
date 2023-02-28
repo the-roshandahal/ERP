@@ -2,15 +2,18 @@ from django.shortcuts import render,redirect
 from .models import *
 # Create your views here.
 
+def home(request):
+    return render (request,'index.html') 
+
 
 def admin_dashboard(request):
-        roles = Role.objects.all()
-        users = CompanyUser.objects.all()
-        context = {
-            'roles':roles,
-            'users':users
-        }
-        return render (request,'account/admin_dashboard.html',context)
+    roles = Role.objects.all()
+    users = CompanyUser.objects.all()
+    context = {
+        'roles':roles,
+        'users':users
+    }
+    return render (request,'account/admin_dashboard.html',context)
 
 
 def create_role(request):
@@ -102,10 +105,15 @@ def create_company_user(request):
     if request.method=="POST":
         username = request.POST['username']
         password = request.POST['password']
-        permission = request.POST['permission']
         role = request.POST['role']
-        
-        CompanyUser.objects.create(role=role,permission=permission)
+        user=User.objects.create_user(username=username,password=password)
+        role=Role.objects.get(id=role)
+        CompanyUser.objects.create(user=user,role=role)
+        user.save()
         return render(request,'account/create_user.html')
     else:
-        return redirect('home')
+        role= Role.objects.all()
+        context={
+            'role':role,
+        }
+        return render(request,'account/create_user.html',context)
