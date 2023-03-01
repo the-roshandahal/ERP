@@ -158,11 +158,32 @@
 								<td><span class="badge badge-lg badge-light">{{roles.role}}</span></td>
 								<td>
 									<div  class="d-flex align-items-center justify-content-end">
-										<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Archive" href="#"><span class="icon"><span class="feather-icon"><i data-feather="archive"></i></span></span></a>
-										<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" href="#"><span class="icon"><span class="feather-icon"><i data-feather="edit-2"></i></span></span></a>
+										<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" href="{% url 'edit_role' id=roles.id %}"><span class="icon"><span class="feather-icon"><i data-feather="edit-2"></i></span></span></a>
+										<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="modal" data-bs-target="#exampleModalCenter{{roles.id}}" href=""><span class="icon"><span class="feather-icon"><i data-feather="archive"></i></span></span></a>
 									</div>
 								</td>
 							</tr>
+							{% endfor %}
+							{% for roles in roles %}
+							<div class="modal fade" id="exampleModalCenter{{roles.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter{{roles.id}}" aria-hidden="true">
+								<div class="modal-dialog modal-dialog-centered" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title">Delete Role</h5>
+											<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+										</div>
+										<div class="modal-body">
+											<p>Are you sure you want to delete this role?</p>
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+											<a href="{% url 'delete_role' id=roles.id %}"><button type="button" class="btn btn-primary">Delete</button></a>
+										</div>
+									</div>
+								</div>
+							</div>
 							{% endfor %}
 						</tbody>
 					</table>

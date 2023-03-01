@@ -37,6 +37,7 @@ class Permission(models.Model):
 class CompanyUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     permission = models.ForeignKey(Permission,on_delete=models.CASCADE,null=True, blank=True)
+    # key=models.IntegerField(null=True, blank=True)
     def __str__(self):
         return self.user.username
     

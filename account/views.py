@@ -34,7 +34,6 @@ def login(request):
         else:
             return render (request,'account/login.html')
 
-@login_required   
 def logout(request):
     auth.logout(request)
     return redirect(login)
@@ -44,18 +43,6 @@ def home(request):
         return render (request,'index.html') 
     else:
         return redirect('login')
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 def check_permission(request):
@@ -79,13 +66,14 @@ def check_permission(request):
 
 def role(request):
     if 'read' in check_permission(request):
-        roles = Role.objects.all()
+        roles = Permission.objects.all()
         context = {
             'roles':roles,
         }
         return render (request,'account/role.html',context)
     else:
-        return render (request, '404.html')
+        messages.info(request, "Unauthorized access.")
+        return redirect(home)
     
 
 def create_role(request):
@@ -122,8 +110,60 @@ def create_role(request):
         else:
             return redirect('role')
     else:
-        return render (request, '404.html')
+        messages.info(request, "Unauthorized access.")
+        return redirect(home)
     
+
+def edit_role(request, id):
+    if 'update' in check_permission(request):
+        permission = Permission.objects.get(id=id)
+        new_role = Role.objects.get(role = permission.role)
+        if request.method == "POST":
+            new_role.role = request.POST["role"]
+            permission.create_finance = request.POST.get('create_finance', 0)
+            permission.read_finance = request.POST.get('read_finance', 0)
+            permission.update_finance = request.POST.get('update_finance', 0)
+            permission.delete_finance = request.POST.get('delete_finance', 0)
+
+            permission.create_account = request.POST.get('create_account', 0)
+            permission.read_account = request.POST.get('read_account', 0)
+            permission.update_account = request.POST.get('update_account', 0)
+            permission.delete_account = request.POST.get('delete_account', 0)
+
+            permission.create_leads = request.POST.get('create_leads', 0)
+            permission.read_leads = request.POST.get('read_leads', 0)
+            permission.update_leads = request.POST.get('update_leads', 0)
+            permission.delete_leads = request.POST.get('delete_leads', 0)
+            try:
+                permission.save()
+                new_role.save()
+            except:
+                print('something went wrong')
+                return redirect('role')
+            return redirect('role')
+        else:
+            role_data = Permission.objects.get(id=id)
+            context={
+                'role_data':role_data,
+            }
+            return render(request, 'account/edit_role.html',context)
+    else:
+        
+        messages.info(request, "Unauthorized access.")
+        return redirect(home)
+
+def delete_role(request,id):
+    if 'delete' in check_permission(request):
+        print(id)
+        role_data = Role.objects.get(id=id)
+        deleted_role = role_data.role
+        role_data.delete()
+        messages.info(request, f"{deleted_role} Deleted Successfully")
+        return redirect('role')
+    else:
+        messages.info(request, "Unauthorized access.")
+        return redirect(home)
+
 
 def company_user(request):
     if 'read' in check_permission(request):
@@ -135,7 +175,8 @@ def company_user(request):
         }
         return render (request,'account/company_user.html',context)
     else:
-        return render (request, '404.html')
+        messages.info(request, "Unauthorized access.")
+        return redirect(home)
     
 
 def create_company_user(request):
@@ -155,5 +196,57 @@ def create_company_user(request):
         else:
             return redirect('company_user')
     else:
-        return render (request, '404.html')
+        messages.info(request, "Unauthorized access.")
+        return redirect(home)
     
+
+
+
+def edit_company_user(request,id):
+    if 'update' in check_permission(request):
+        if request.method =="POST":
+            username = request.POST['username']
+            email = request.POST['email']
+            first_name = request.POST['first_name']
+            last_name = request.POST['last_name']
+            role = request.POST['role']
+            user_data = CompanyUser.objects.get(id=id)
+            permission=Permission.objects.get(role=role)
+
+            user = User.objects.get(username=username)
+            user.username=username
+            user.email=email
+            user.first_name=first_name
+            user.last_name=last_name
+            user.save()
+            user_data.permission=permission
+            user_data.save()
+            return redirect('company_user')
+        else:
+            user_data = CompanyUser.objects.get(id=id)
+            roles = Role.objects.all()
+            context={
+                'user_data':user_data,
+                'roles':roles,
+            }
+            return render (request,'account/edit_company_user.html',context)
+    else:
+        messages.info(request, "Unauthorized access.")
+        return redirect(home)
+    
+
+def delete_company_user(request,id):
+    if 'delete' in check_permission(request):
+        user_data = CompanyUser.objects.get(id=id)
+        user = User.objects.get(username=user_data.user.username)
+        print(user)
+        if (user.is_superuser==True):
+            messages.info(request, "This user can't be deleted.")
+        else:
+            user.delete()
+            user_data.delete()
+            messages.info(request, "User Deleted Successfully")
+        return redirect('company_user')
+    else:
+        messages.info(request, "Unauthorized access.")
+        return redirect(home)
