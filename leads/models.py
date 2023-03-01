@@ -1,6 +1,6 @@
-# from django.db import models
-# from django.contrib.auth.models import User
-# # Create your models here.
+from django.db import models
+from django.contrib.auth.models import User
+# Create your models here.
 # class LeadFile(models.Model):
 #     file = models.FileField(upload_to='leads')
 
@@ -12,24 +12,24 @@
 
 
 
-# class Leads(models.Model):
-#     title = models.CharField(max_length=200,null=True, blank=True)
-#     lead_name = models.CharField(max_length=200,null=True, blank=True)
-#     email = models.CharField(max_length=200,null=True, blank=True)
-#     contact = models.CharField(max_length=200,null=True, blank=True)
-#     address = models.CharField(max_length=200,null=True, blank=True)
-#     company_name = models.CharField(max_length=200,null=True, blank=True)
-#     source = models.CharField(max_length=200,null=True, blank=True)
-#     stage = models.CharField(max_length=100,null=True, blank=True)
-#     assigned_to = models.ManyToManyField(User)
-#     active = models.BooleanField(default=1)
-#     date_modified = models.DateTimeField(auto_now=True)
-#     created = models.DateTimeField(auto_now_add=True)
-#     def __str__(self):
-#         return self.title
+class Leads(models.Model):
+    title = models.CharField(max_length=200,null=True, blank=True)
+    lead_name = models.CharField(max_length=200,null=True, blank=True)
+    email = models.CharField(max_length=200,null=True, blank=True)
+    contact = models.CharField(max_length=200,null=True, blank=True)
+    address = models.CharField(max_length=200,null=True, blank=True)
+    company_name = models.CharField(max_length=200,null=True, blank=True)
+    source = models.CharField(max_length=200,null=True, blank=True)
+    stage = models.CharField(max_length=100,null=True, blank=True)
+    assigned_to = models.ManyToManyField(User)
+    active = models.BooleanField(default=1)
+    date_modified = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return self.title
 
-#     class Meta:
-#         verbose_name_plural = "01. Leads"
+    class Meta:
+        verbose_name_plural = "01. Leads"
 
 
 # class LeadLog(models.Model):

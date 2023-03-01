@@ -102,11 +102,9 @@ def create_role(request):
                                         delete_finance =delete_finance, create_account =create_account, read_account =read_account, update_account =update_account,
                                         delete_account =delete_account, create_leads =create_leads, read_leads =read_leads, update_leads =update_leads, 
                                         delete_leads =delete_leads)
-            except:
+            except Exception:
                 print('something went wrong')
                 return redirect('role')
-
-            return redirect('role')
         else:
             return redirect('role')
     else:
@@ -137,7 +135,7 @@ def edit_role(request, id):
             try:
                 permission.save()
                 new_role.save()
-            except:
+            except Exception:
                 print('something went wrong')
                 return redirect('role')
             return redirect('role')
@@ -148,7 +146,6 @@ def edit_role(request, id):
             }
             return render(request, 'account/edit_role.html',context)
     else:
-        
         messages.info(request, "Unauthorized access.")
         return redirect(home)
 

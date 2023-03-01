@@ -1,28 +1,28 @@
-# from django.shortcuts import render,redirect
-# from .models import *
-# import pandas as pd
-# from django.contrib import messages, auth
-# from django.contrib.auth.models import User
-# from features.views import *
-# # Create your views here.
-# def leads(request):
-#     if request.user.is_staff:
-#         leads = Leads.objects.filter(active=1).order_by('created')
-#         closed_leads = Leads.objects.filter(active=0).order_by('created')
-#         my_leads = Leads.objects.filter(active=1,assigned_to = request.user).order_by('created')
-#         stage = LeadStage.objects.all()
-#         assign_to = User.objects.all()
-#         context = {
-#             'my_leads':my_leads,
-#             'leads':leads,
-#             'stage':stage,
-#             'assign_to':assign_to,
-#             'closed_leads':closed_leads,
-#         }
-#         return render(request,'leads.html',context)
-#     else:
-#         messages.info(request, "Unauthorized access.")
-#         return redirect(home)
+from django.shortcuts import render,redirect
+from .models import *
+import pandas as pd
+from django.contrib import messages, auth
+from django.contrib.auth.models import User
+from features.views import *
+# Create your views here.
+def leads(request):
+    if request.user.is_staff:
+        leads = Leads.objects.filter(active=1).order_by('created')
+        closed_leads = Leads.objects.filter(active=0).order_by('created')
+        my_leads = Leads.objects.filter(active=1,assigned_to = request.user).order_by('created')
+        stage = LeadStage.objects.all()
+        assign_to = User.objects.all()
+        context = {
+            'my_leads':my_leads,
+            'leads':leads,
+            'stage':stage,
+            'assign_to':assign_to,
+            'closed_leads':closed_leads,
+        }
+        return render(request,'leads.html',context)
+    else:
+        messages.info(request, "Unauthorized access.")
+        return redirect(home)
     
 
 # def create_leads(request, file_name):
