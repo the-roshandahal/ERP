@@ -176,6 +176,30 @@
 										</li>	
 									</ul>	
 								</li>	
+
+								<li class="nav-item">
+									<a class="nav-link" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#dash_chat_lead">
+										<span class="nav-icon-wrap">
+											<i class="bi bi-link"></i>
+										</span>
+										<span class="nav-link-text">Leads</span>
+									</a>
+									<ul id="dash_chat_lead" class="nav flex-column collapse  nav-children">
+										<li class="nav-item">
+											<ul class="nav flex-column">
+												<li class="nav-item">
+													<a class="nav-link" href="{% url 'leads' %}"><span class="nav-link-text">Leads</span></a>
+												</li>
+												<li class="nav-item">
+													<a class="nav-link" href="{% url 'stage' %}"><span class="nav-link-text">Stage Setup</span></a>
+												</li>
+												<li class="nav-item">
+													<a class="nav-link" href="{% url 'source' %}"><span class="nav-link-text">Sources Setup</span></a>
+												</li>
+											</ul>	
+										</li>	
+									</ul>	
+								</li>	
 								<!-- <li class="nav-item">
 									<a class="nav-link" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#dash_chat">
 										<span class="nav-icon-wrap">
@@ -310,17 +334,6 @@
 										<span class="nav-link-text">Statement</span>
 									</a>
 								</li> -->
-
-								<li class="nav-item">
-									<a class="nav-link" href=" {% url 'leads' %}" >
-										<span class="nav-icon-wrap">
-											<span class="svg-icon">
-												<i class="bi bi-link"></i>
-											</span>
-										</span>
-										<span class="nav-link-text">Leads</span>
-									</a>	
-								</li>
 
 								<!-- <li class="nav-item">
 									<a class="nav-link" href="#%}" >

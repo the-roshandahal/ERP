@@ -5,25 +5,161 @@ from django.contrib import messages, auth
 from django.contrib.auth.models import User
 from features.views import *
 # Create your views here.
-def leads(request):
-    if request.user.is_staff:
-        leads = Leads.objects.filter(active=1).order_by('created')
-        closed_leads = Leads.objects.filter(active=0).order_by('created')
-        my_leads = Leads.objects.filter(active=1,assigned_to = request.user).order_by('created')
-        stage = LeadStage.objects.all()
-        assign_to = User.objects.all()
+
+def check_permission(request):
+    logged_in_user = User.objects.get(username=request.user)
+    user = CompanyUser.objects.get(user=logged_in_user)
+    role=Role.objects.get(role=user.permission)
+    permission=Permission.objects.get(role=role)
+    permissions = []
+
+    if permission.create_leads:
+        permissions.append('create')
+    if permission.read_leads:
+        permissions.append('read')
+    if permission.update_leads:
+        permissions.append('update')
+    if permission.delete_leads:
+        permissions.append('delete')
+    return permissions
+
+def stage(request):
+    if 'read' in check_permission(request):
+        lead_stage = LeadStage.objects.all()
         context = {
-            'my_leads':my_leads,
-            'leads':leads,
-            'stage':stage,
-            'assign_to':assign_to,
-            'closed_leads':closed_leads,
+            'lead_stage':lead_stage,
         }
-        return render(request,'leads.html',context)
+        return render (request,'leads/stage.html',context)
+    else:
+        messages.info(request, "Unauthorized access.")
+        return redirect(home)
+
+def create_stage(request):
+    if 'create' in check_permission(request):
+        if request.method =="POST":
+            lead_stage = request.POST['lead_stage']
+            LeadStage.objects.create(stage=lead_stage)
+            messages.info(request, "Lead Stage Created Successfully.")
+            return redirect('stage')
+        else:
+            return redirect('stage')
     else:
         messages.info(request, "Unauthorized access.")
         return redirect(home)
     
+def delete_stage(request,id):
+    if 'delete' in check_permission(request):
+        stage_data = LeadStage.objects.get(id=id)
+        deleted_role = stage_data.stage
+        stage_data.delete()
+        messages.info(request, f"{deleted_role} Deleted Successfully")
+        return redirect('stage')
+    else:
+        messages.info(request, "Unauthorized access.")
+        return redirect(home)
+
+def source(request):
+    if 'create' in check_permission(request):
+        lead_source = LeadSource.objects.all()
+        context = {
+            'lead_source':lead_source,
+        }
+        return render (request,'leads/source.html',context)
+    else:
+        messages.info(request, "Unauthorized access.")
+        return redirect(home)
+
+
+def create_source(request):
+    if 'create' in check_permission(request):
+        if request.method =="POST":
+            lead_source = request.POST['lead_source']
+            LeadSource.objects.create(source=lead_source)
+            messages.info(request, "Lead Source Created Successfully.")
+            return redirect('source')
+        else:
+            return redirect('source')
+    else:
+        messages.info(request, "Unauthorized access.")
+        return redirect(home)
+
+   
+def delete_source(request,id):
+    if 'delete' in check_permission(request):
+        source_data = LeadSource.objects.get(id=id)
+        deleted_role = source_data.source
+        source_data.delete()
+        messages.info(request, f"{deleted_role} Deleted Successfully")
+        return redirect('source')
+    else:
+        messages.info(request, "Unauthorized access.")
+        return redirect(home)
+
+
+def leads(request):
+    if 'read' in check_permission(request):
+        leads = Leads.objects.filter(active=1).order_by('-created')
+        stage = LeadStage.objects.all()
+        source = LeadSource.objects.all()
+        filtered_users = CompanyUser.objects.all()
+
+        assign_to_user = []
+        for filtered_users in filtered_users:
+            if (filtered_users.permission.create_leads or filtered_users.permission.read_leads or 
+                filtered_users.permission.update_leads or filtered_users.permission.delete_leads):
+                assign_to_user.append(filtered_users.id)
+        print(assign_to_user)
+        all_users = CompanyUser.objects.all()
+
+        data_list=[]
+        
+        for all_users in all_users:
+            if all_users.id in assign_to_user:
+                print('hello')
+        context = {
+            'leads':leads,
+            'leads':leads,
+            'source':source,
+            'stage':stage,
+            'all_users':all_users,
+        }
+        return render (request,'leads/leads.html',context)
+    else:
+        messages.info(request, "Unauthorized access.")
+        return redirect(home)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # def create_leads(request, file_name):
 #     df = pd.read_csv(file_name, delimiter=',')

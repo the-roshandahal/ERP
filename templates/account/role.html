@@ -67,25 +67,25 @@
 											<label for="">Lead</label>
 											<div class="col mb-1">
 												<div class="form-check">
-													<input type="checkbox" class="form-check-input" id="customCheck1" name="create_lead" value="1">
+													<input type="checkbox" class="form-check-input" id="customCheck1" name="create_leads" value="1">
 													<label class="form-check-label" for="customCheck1">Create</label>
 												</div>
 											</div>
 											<div class="col mb-1">
 												<div class="form-check">
-													<input type="checkbox" class="form-check-input" id="customCheck1" name="read_lead" value="1">
+													<input type="checkbox" class="form-check-input" id="customCheck1" name="read_leads" value="1">
 													<label class="form-check-label" for="customCheck1">Read</label>
 												</div>
 											</div>
 											<div class="col mb-1">
 												<div class="form-check">
-													<input type="checkbox" class="form-check-input" id="customCheck1" name="update_lead" value="1">
+													<input type="checkbox" class="form-check-input" id="customCheck1" name="update_leads" value="1">
 													<label class="form-check-label" for="customCheck1">Update</label>
 												</div>
 											</div>
 											<div class="col mb-1">
 												<div class="form-check">
-													<input type="checkbox" class="form-check-input" id="customCheck1" name="delete_lead" value="1">
+													<input type="checkbox" class="form-check-input" id="customCheck1" name="delete_leads" value="1">
 													<label class="form-check-label" for="customCheck1">Delete</label>
 												</div>
 											</div>
@@ -98,25 +98,25 @@
 											<label for="">Account</label>
 											<div class="col mb-1">
 												<div class="form-check">
-													<input type="checkbox" class="form-check-input" id="customCheck1" name="Areate_account" value="1">
+													<input type="checkbox" class="form-check-input" id="customCheck1" name="create_account" value="1">
 													<label class="form-check-label" for="customCheck1">Create</label>
 												</div>
 											</div>
 											<div class="col mb-1">
 												<div class="form-check">
-													<input type="checkbox" class="form-check-input" id="customCheck1" name="Aead_account" value="1">
+													<input type="checkbox" class="form-check-input" id="customCheck1" name="read_account" value="1">
 													<label class="form-check-label" for="customCheck1">Read</label>
 												</div>
 											</div>
 											<div class="col mb-1">
 												<div class="form-check">
-													<input type="checkbox" class="form-check-input" id="customCheck1" name="Apdate_account" value="1">
+													<input type="checkbox" class="form-check-input" id="customCheck1" name="update_account" value="1">
 													<label class="form-check-label" for="customCheck1">Update</label>
 												</div>
 											</div>
 											<div class="col mb-1">
 												<div class="form-check">
-													<input type="checkbox" class="form-check-input" id="customCheck1" name="Aelete_account" value="1">
+													<input type="checkbox" class="form-check-input" id="customCheck1" name="delete_account" value="1">
 													<label class="form-check-label" for="customCheck1">Delete</label>
 												</div>
 											</div>
@@ -146,6 +146,7 @@
 						<thead>
 							<tr>
 								<th>Role</th>
+								<th>ID</th>
 								<th></th>
 							</tr>
 						</thead>
@@ -154,6 +155,7 @@
 							<tr class="mt-1">
 								
 								<td><span class="badge badge-lg badge-light">{{roles.role}}</span></td>
+								<td><span class="badge badge-lg badge-light">{{roles.role_id}}</span></td>
 								<td>
 									<div  class="d-flex align-items-center justify-content-end">
 										<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" href="{% url 'edit_role' id=roles.id %}"><span class="icon"><span class="feather-icon"><i data-feather="edit-2"></i></span></span></a>
@@ -177,7 +179,7 @@
 										</div>
 										<div class="modal-footer">
 											<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-											<a href="{% url 'delete_role' id=roles.id %}"><button type="button" class="btn btn-primary">Delete</button></a>
+											<a href="{% url 'delete_role' id=roles.role_id %}"><button type="button" class="btn btn-primary">Delete</button></a>
 										</div>
 									</div>
 								</div>

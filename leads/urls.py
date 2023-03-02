@@ -8,6 +8,13 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path("leads/", views.leads, name="leads"),
+    path("stage/", views.stage, name="stage"),
+    path("source/", views.source, name="source"),
+    path("create_stage/", views.create_stage, name="create_stage"),
+    path("create_source/", views.create_source, name="create_source"),
+    path("delete_stage/<int:id>", views.delete_stage, name="delete_stage"),
+    path("delete_source/<int:id>", views.delete_source, name="delete_source"),
+
 #     path("upload_leads/", views.upload_leads, name="upload_leads"),
 #     path("add_lead/", views.add_lead, name="add_lead"),
 #     path("delete_lead/<int:id>", views.delete_lead, name="delete_lead"),

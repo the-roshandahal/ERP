@@ -1,16 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-# Create your models here.
-# class LeadFile(models.Model):
-#     file = models.FileField(upload_to='leads')
-
-#     def __str__(self):
-#         return self.file
-
-#     class Meta:
-#         verbose_name_plural = "01. Lead Files"
-
-
+from account.models import *
 
 class Leads(models.Model):
     title = models.CharField(max_length=200,null=True, blank=True)
@@ -21,7 +11,7 @@ class Leads(models.Model):
     company_name = models.CharField(max_length=200,null=True, blank=True)
     source = models.CharField(max_length=200,null=True, blank=True)
     stage = models.CharField(max_length=100,null=True, blank=True)
-    assigned_to = models.ManyToManyField(User)
+    assigned_to = models.ManyToManyField(CompanyUser)
     active = models.BooleanField(default=1)
     date_modified = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
@@ -30,6 +20,24 @@ class Leads(models.Model):
 
     class Meta:
         verbose_name_plural = "01. Leads"
+
+
+class LeadStage(models.Model):
+    stage = models.CharField(max_length=200)
+    def __str__(self):
+        return self.stage
+
+    class Meta:
+        verbose_name_plural = "04. Lead Stage"
+
+
+class LeadSource(models.Model):
+    source = models.CharField(max_length=200)
+    def __str__(self):
+        return self.source
+
+    class Meta:
+        verbose_name_plural = "04. Lead Sources"
 
 
 # class LeadLog(models.Model):
@@ -59,13 +67,6 @@ class Leads(models.Model):
 #         verbose_name_plural = "03. Lead Call"
 
 
-# class LeadStage(models.Model):
-#     stage = models.CharField(max_length=200)
-#     def __str__(self):
-#         return self.stage
-
-#     class Meta:
-#         verbose_name_plural = "04. Lead Stage"
 
 # class LeadNotes(models.Model):
 #     leads = models.ForeignKey(Leads,on_delete=models.CASCADE)

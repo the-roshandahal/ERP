@@ -102,6 +102,8 @@ def create_role(request):
                                         delete_finance =delete_finance, create_account =create_account, read_account =read_account, update_account =update_account,
                                         delete_account =delete_account, create_leads =create_leads, read_leads =read_leads, update_leads =update_leads, 
                                         delete_leads =delete_leads)
+                return redirect('role')
+
             except Exception:
                 print('something went wrong')
                 return redirect('role')
@@ -151,8 +153,8 @@ def edit_role(request, id):
 
 def delete_role(request,id):
     if 'delete' in check_permission(request):
-        print(id)
         role_data = Role.objects.get(id=id)
+        print(role_data)
         deleted_role = role_data.role
         role_data.delete()
         messages.info(request, f"{deleted_role} Deleted Successfully")
