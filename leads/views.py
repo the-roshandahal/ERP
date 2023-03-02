@@ -108,20 +108,22 @@ def leads(request):
             if (filtered_users.permission.create_leads or filtered_users.permission.read_leads or 
                 filtered_users.permission.update_leads or filtered_users.permission.delete_leads):
                 assign_to_user.append(filtered_users.id)
-        print(assign_to_user)
         all_users = CompanyUser.objects.all()
 
         data_list=[]
-        
         for all_users in all_users:
             if all_users.id in assign_to_user:
-                print('hello')
+                
+                data_list.append({
+                    'user': all_users,
+                })
+        print(data_list)
         context = {
             'leads':leads,
             'leads':leads,
             'source':source,
             'stage':stage,
-            'all_users':all_users,
+            'data_list':data_list,
         }
         return render (request,'leads/leads.html',context)
     else:
