@@ -1,0 +1,693 @@
+{% load static %}{% include 'header.html' %}
+<!-- Main Content -->
+
+	<div class="container mt-5">
+		<!-- Page Header -->
+		<div class="hk-pg-header pg-header-wth-tab pt-7">
+			<div class="d-flex">
+				<div class="d-flex flex-wrap justify-content-between flex-1">
+					<div class="mb-lg-0 mb-2 me-8">
+						<h1 class="pg-title">{{lead.title}} <span class="badge badge-primary badge-outline">{{lead.stage}}</span></h1>
+                        
+                        
+                        {% if lead.active %}
+                        <span class="badge badge-success badge-outline">Active</span>
+                        {% else %}
+                        <span class="badge badge-danger badge-outline">Closed</span>
+                        {% endif %}
+					</div>
+					
+				</div>
+			</div>
+		</div>
+		<!-- /Page Header -->
+		<!-- /Add other contents below -->
+        														
+        <ul class="nav nav-justified nav-light nav-tabs nav-segmented-tabs mt-2">
+            <li class="nav-item">
+                <a class="nav-link active" data-bs-toggle="tab" href="#tab_block_16">
+                    <span class="nav-link-text">General</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#tab_block_26">
+                    <span class="nav-link-text">Calls, Notes & Files</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#tab_block_activity">
+                    <span class="nav-link-text">Activity</span>
+                </a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Action</a>
+                <div class="dropdown-menu">
+                    
+                    {% if lead.active %}
+                    <a class="dropdown-item" href="{% url 'close_lead' id=lead.id %}"><i class="bi bi-x-circle"></i> Close Lead</a>
+                    {% else %}
+                    <a class="dropdown-item" href="{% url 'reopen_lead' id=lead.id %}"><i class="bi bi-envelope-open"></i> Reopen Lead</a>
+                    {% endif %}
+                    <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#exampleModalCenterUser"> <i class="bi bi-people"></i> Update Users</a>
+                    <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#exampleModalCenterNotes"> <i class="bi bi-journal-check"></i> Add Notes</a>
+                    <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#exampleModalCenterCalls"> <i class="bi bi-telephone-inbound"></i> Add Calls</a>
+                    <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#exampleModalCenterFiles"> <i class="bi bi-file-earmark-arrow-up"></i> Add Files</a>
+                    <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#exampleModalCenterStatus"> <i class="bi bi-star"></i> Update Status</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#exampleModalLargeee"> <i class="bi bi-pencil-square"></i> Edit</a>
+                    <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#exampleModalDelete"> <i class="bi bi-trash"></i> Delete Lead</a>
+                </div>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane fade show active mt-5" id="tab_block_16">
+
+                <div class="card-body ">
+                    <div class="row mt-2">
+                        <div class="col-3">
+                            <div class="d-flex align-items-start">
+                                <div class="media align-items-center">
+                                    <div class="media-head me-2">
+                                        <div class="avatar avatar-xs avatar-rounded">
+                                            <i class="bi bi-calendar-month"></i>
+                                        </div>
+                                    </div>
+                                    <div class="media-body">
+                                        <div class="text-high-em">Date</div> 
+                                        <div class="fs-7"><a href="#" class="table-link-text link-medium-em">{{lead.date_modified|date}}</a></div> 
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        
+                        
+                        <div class="col-3">
+                            <div class="d-flex align-items-start">
+                                <div class="media align-items-center">
+                                    <div class="media-head me-2">
+                                        <div class="avatar avatar-xs avatar-rounded">
+                                            <i class="bi bi-telephone"></i>
+                                        </div>
+                                    </div>
+                                    <div class="media-body">
+                                        <div class="text-high-em">Phone Number</div> 
+                                        <div class="fs-7"><a href="#" class="table-link-text link-medium-em">{{lead.contact}}</a></div> 
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        
+                        
+                        
+                        
+                        <div class="col-3">
+                            <div class="d-flex align-items-start">
+                                <div class="media align-items-center">
+                                    <div class="media-head me-2">
+                                        <div class="avatar avatar-xs avatar-rounded">
+                                            <i class="bi bi-envelope"></i>
+                                        </div>
+                                    </div>
+                                    <div class="media-body">
+                                        <div class="text-high-em">Email</div> 
+                                        <div class="fs-7"><a href="#" class="table-link-text link-medium-em">{{lead.email}}</a></div> 
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+
+                        <div class="col-3">
+                            <div class="d-flex align-items-start">
+                                <div class="media align-items-center">
+                                    <div class="media-head me-2">
+                                        <div class="avatar avatar-xs avatar-rounded">
+                                            <i class="bi bi-geo"></i>
+                                        </div>
+                                    </div>
+                                    <div class="media-body">
+                                        <div class="text-high-em">Address</div> 
+                                        <div class="fs-7"><a href="#" class="table-link-text link-medium-em">{{lead.address}}</a></div> 
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-5">
+                        
+                        
+                        
+                        <div class="col-3">
+                            <div class="d-flex align-items-start">
+                                <div class="media align-items-center">
+                                    <div class="media-head me-2">
+                                        <div class="avatar avatar-xs avatar-rounded">
+                                            <i class="bi bi-people"></i>
+                                        </div>
+                                    </div>
+                                    <div class="media-body">
+                                        <div class="text-high-em">Lead Name</div> 
+                                        <div class="fs-7"><a href="#" class="table-link-text link-medium-em">{{lead.lead_name}}</a></div> 
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        
+                        
+                        <div class="col-3">
+                            <div class="d-flex align-items-start">
+                                <div class="media align-items-center">
+                                    <div class="media-head me-2">
+                                        <div class="avatar avatar-xs avatar-rounded">
+                                            <i class="bi bi-building"></i>
+                                        </div>
+                                    </div>
+                                    <div class="media-body">
+                                        <div class="text-high-em">Company Name</div> 
+                                        <div class="fs-7"><a href="#" class="table-link-text link-medium-em">{{lead.company_name}}</a></div> 
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        
+                        
+                        
+                        
+                        <div class="col-3">
+                            <div class="d-flex align-items-start">
+                                <div class="media align-items-center">
+                                    <div class="media-head me-2">
+                                        <div class="avatar avatar-xs avatar-rounded">
+                                            <i class="bi bi-arrow-clockwise"></i>
+                                        </div>
+                                    </div>
+                                    <div class="media-body">
+                                        <div class="text-high-em">Source</div> 
+                                        <div class="fs-7"><a href="#" class="table-link-text link-medium-em">{{lead.source}}</a></div> 
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="d-flex align-items-start">
+                                <div class="media align-items-center">
+                                    <div class="media-head me-2">
+                                        <div class="avatar avatar-xs avatar-rounded">
+                                            <i class="bi bi-calendar-month"></i>
+                                        </div>
+                                    </div>
+                                    <div class="media-body">
+                                        <div class="text-high-em">Last Updated</div> 
+                                        <div class="fs-7"><a href="#" class="table-link-text link-medium-em">{{lead.date_modified|date}}</a></div> 
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="card card-border mb-0 h-100">
+                        <div class="card-header card-header-action">
+                            <h3>Assigned Users</h3>
+                        </div>
+                        
+                        <div class="card-body">
+                            <div class="row">
+                                {% for lead in lead.assigned_to.all %}
+                                <div class="col-md-3">
+                                    <div class="media align-items-center mb-3">
+                                        <div class="media-head me-3">
+                                            <div class="avatar avatar-xxs avatar-rounded">
+                                                {% comment %} <img src="{% static 'dist/fonts/flags/4x3/us.svg' %}" alt="user" class="avatar-img"> {% endcomment %}
+                                                <i class="bi bi-person-circle"></i>
+                                            </div>
+                                        </div>
+                                        <div class="media-body">
+                                            <div class="progress-lb-wrap">
+                                                <label class="progress-label mb-0">{{lead.user.first_name}} {{lead.user.last_name}}</label>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="tab-pane fade" id="tab_block_26">
+                <div class="card card-border mb-0 h-100">
+                    <div class="card-header card-header-action">
+                        <h3>Notes</h3>
+                    </div>
+                    <div class="card-body">
+                        {% if lead_notes %}
+                        {% for lead_notes in lead_notes %}
+                        <div class="row">
+                            <p><i class="bi bi-journal mx-2"></i>{{lead_notes.notes}}</p>
+                        </div>
+                        {% endfor %}
+                        {% else %}
+                        <div class="title title-wth-divider"><span>No notes yet</span></div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="card card-border mb-0 h-100">
+                    <div class="card-header card-header-action">
+                        <h3>Calls</h3>
+                    </div>
+                    <div class="card-body ">
+                        {% if lead_calls %}
+                            {% for lead_calls in lead_calls %}
+                            
+                            <div class="row mt-4">
+                                <div class="title title-wth-divider "><span>{{lead_calls.created}}</span></div>
+                                <div class="col-3">
+                                    <div class="d-flex align-items-start">
+                                        <div class="media align-items-center">
+                                            <div class="media-body">
+                                                <div class="text-high-em">Purpose</div> 
+                                                <div class="fs-7"><a href="#" class="table-link-text link-medium-em">{{lead_calls.purpose}}</a></div> 
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                </div> 
+                                <div class="col-2">
+                                    <div class="d-flex align-items-start">
+                                        <div class="media align-items-center">
+                                            <div class="media-body">
+                                                <div class="text-high-em">Called By</div> 
+                                                <div class="fs-7"><a href="#" class="table-link-text link-medium-em">{{lead_calls.called_by}}</a></div> 
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                                <div class="col-2">
+                                    <div class="d-flex align-items-start">
+                                        <div class="media align-items-center">
+                                            <div class="media-body">
+                                                <div class="text-high-em">Duration</div> 
+                                                <div class="fs-7"><a href="#" class="table-link-text link-medium-em">{{lead_calls.duration}}</a></div> 
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                                <div class="col-5">
+                                    <div class="d-flex align-items-start">
+                                        <div class="media align-items-center">
+                                            <div class="media-body">
+                                                <div class="text-high-em">Summary</div> 
+                                                <div class="fs-7"><a href="#" class="table-link-text link-medium-em">{{lead_calls.summary}}</a></div> 
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        
+                        
+                        {% else %}
+                            <div class="title title-wth-divider"><span>No calls yet</span></div>
+                        {% endif %}
+                    </div>                    
+                </div>
+
+                <div class="card card-border mb-0 h-100">
+                    <div class="card-header card-header-action">
+                        <h3>Files</h3>
+                    </div>
+                    <div class="card-body">
+                        {% if lead_files %}
+                        
+                        
+                        <div class="row">
+                            {% for lead_files in lead_files %}
+                            <div class="col-3">
+                                <div class="card-body" style="text-align: center;">
+                                    <div class="text-high-em mb-1">{{lead_files.title}}</div>
+                                    <div class="avatar avatar-sm avatar-violet mb-3">
+                                        <span class="initial-wrap"><i class="bi bi-arrow-down-circle"></i></span>
+                                    </div>
+                                    
+                                    <div class="app-cat">{{lead_files.created}}</div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        
+                        {% else %}
+                        <div class="title title-wth-divider"><span>No files yet</span></div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="tab_block_activity">
+                <div class="card card-border mb-0 h-100">
+                    <div class="card-header card-header-action">
+                        <h3>Activity</h3>
+                    </div>
+                    <div class="card-body">
+                        {% if lead_activity %}
+                        {% for lead_activity in lead_activity %}
+                        <div class="row">
+                            <div class="card-body">
+                                <div class="app-name" style="font-size:13px;">{{lead_activity.created}}</div>
+                                <div class="title title-wth-divider"><span>{{lead_activity.changed_by}} {{lead_activity.activity}}</span></div>
+                            </div>
+
+                        </div>
+                        {% endfor %}
+                        {% else %}
+                        <div class="title title-wth-divider"><span>No activities.</span></div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+	</div>
+
+
+{% comment %} popups {% endcomment %}
+{% comment %} delete  {% endcomment %}
+
+
+<div class="modal fade" id="exampleModalDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Delete Lead</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<p>Are you sure you want to delete the Lead.</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+				<a href="{% url 'delete_lead' id=lead.id %}"><button type="button" class="btn btn-primary">Delete</button></a>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+{% comment %} user {% endcomment %}
+<div class="modal fade" id="exampleModalCenterUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterUser" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Update Users</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+            <form action="{% url 'update_users' id=lead.id %}" method='post'>
+            {% comment %} <form action="" method='post'> {% endcomment %}
+                <div class="modal-body">
+                    {% csrf_token %}
+                    
+                    <div class="row">
+                        <div class="col-xxl-12">
+                            <div class="form-check">
+                                {% for data_list in data_list %}
+                                <div class="form-check form-check-inline">
+                                    
+                                    <input class="form-check-input" type="checkbox" value="{{data_list.user.id}}" name="assigned_to" 
+                                    {% for lead in lead.assigned_to.all %}{% if data_list.user.id == lead.id %}checked{% endif %}{% endfor %}>
+                                    
+                                    <label class="form-check-label">{{data_list.user}} </label>
+                                </div>
+                                {% endfor %}
+                                
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="separator separator-light"></div>
+
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+		</div>
+	</div>
+</div>
+
+
+{% comment %} add notes  {% endcomment %}
+<div class="modal fade" id="exampleModalCenterNotes" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterNotes" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Add Notes</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+            <form action="{% url 'add_note' id=lead.id %}" method='post'>
+            {% comment %} <form action="#" method='post'> {% endcomment %}
+                <div class="modal-body">
+                    {% csrf_token %}
+                    
+                    <div class="row">
+                        <div class="col-xxl-12">
+                            <h3>Note</h3>
+                            <input type="text" class="form-control" name="note" required="">
+                        </div>
+                    </div>
+                    <div class="separator separator-light"></div>
+
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+		</div>
+	</div>
+</div>
+
+
+{% comment %} Add Call {% endcomment %}
+<div class="modal fade" id="exampleModalCenterCalls" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterCalls" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Add Call</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+            {% comment %} <form action="" method='post'> {% endcomment %}
+            <form action="{% url 'add_call' id=lead.id %}" method='post'>
+                <div class="modal-body">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-xxl-12">
+                            <h3>Purpose</h3>
+                            <input type="text" class="form-control" name="purpose" required="">
+                        </div>
+                    </div>
+                    <div class="separator separator-light"></div>
+
+                    <div class="row">
+                        <div class="col-xxl-12">
+                            <h6>Duration</h6>
+                            <input type="text" class="form-control" name="duration" required="">
+                        </div>
+                    </div>
+                    <div class="separator separator-light"></div>
+
+                    <div class="row">
+                        <div class="col-xxl-12">
+                            <h6>Summary</h6>
+                            <textarea class="form-control" rows="6" placeholder="Write an internal note" name="summary"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+		</div>
+	</div>
+</div>
+
+
+
+{% comment %} Add Files {% endcomment %}
+<div class="modal fade" id="exampleModalCenterFiles" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterFiles" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Add File</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+            {% comment %} <form action="" method='post'> {% endcomment %}
+            <form action="{% url 'add_file' id=lead.id %}" method='post' enctype= 'multipart/form-data'>
+                <div class="modal-body">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-xxl-12">
+                            <h6>Title</h6>
+                            <input type="text" class="form-control" name="title" required >
+                        </div>
+                    </div>
+                    <div class="separator separator-light"></div>
+                    
+                    
+                    <div class="row">
+                        <div class="col-xxl-12">
+                            <h6>File</h6>
+                            <input type="file" class="form-control" name="file" required >
+                        </div>
+                    </div>
+                    <div class="separator separator-light"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+		</div>
+	</div>
+</div>
+
+
+
+{% comment %} Add Status {% endcomment %}
+<div class="modal fade" id="exampleModalCenterStatus" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterStatus" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Update Lead Status</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+            <form action="{% url 'update_lead_status' id=lead.id %}" method='post'>
+                <div class="modal-body">
+                    {% csrf_token %}
+                    
+                    <div class="row">
+                        <div class="col-xxl-12">
+                            <div class="form-check">
+                                {% for stage in stage %}
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" value="{{stage.stage}}" name="status" {% if lead.stage == stage.stage %}checked{% endif %}>
+                                    <label class="form-check-label">{{stage.stage}}</label>
+                                </div>
+                                {% endfor %}
+                                
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="separator separator-light"></div>
+
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+		</div>
+	</div>
+</div>
+
+
+
+
+{% comment %} edit  {% endcomment %}
+<div class="modal fade" id="exampleModalLargeee" tabindex="-1" role="dialog" aria-labelledby="exampleModalLargeee" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Lead</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{% url 'edit_lead' id=lead.id %}" method = "post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">                                                                        
+                    <div class="row">
+                        <div class="col-xxl-6 mb-xxl-0 mb-4">
+                            <h6>Lead Title</h6>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name = "title" value="{{lead.title}}" required >
+                                </div>
+                        </div>
+                        <div class="col-xxl-6 mb-xxl-0 mb-4">
+                            <h6>Lead name</h6>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name = "lead_name" value="{{lead.lead_name}}" required>
+                                </div>
+                        </div>
+                        <div class="col-xxl-6 mb-xxl-0 mb-4">
+                            <h6>Email</h6>
+                                <div class="form-group">
+                                    <input type="email" class="form-control" name = "email" value="{{lead.email}}" required>
+                                </div>
+                        </div>
+                        <div class="col-xxl-6 mb-xxl-0 mb-4">
+                            <h6>Address</h6>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name = "address" value="{{lead.address}}" required>
+                                </div>
+                        </div>
+                        <div class="col-xxl-6 mb-xxl-0 mb-4">
+                            <h6>Company Name</h6>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name = "company_name" value="{{lead.company_name}}" required>
+                                </div>
+                        </div>
+                        <div class="col-xxl-6 mb-xxl-0 mb-4">
+                            <h6>Contact Number</h6>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name = "contact" value="{{lead.contact}}" required>
+                                </div>
+                        </div>
+                        <div class="col-xxl-6 mb-xxl-0 mb-4">
+                            <h6>Source</h6>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name = "source" value="{{lead.source}}" required>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <a href="#" ><button class="btn btn-primary ms-2 d-sm-inline-block d-none">Save</button></a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% include 'footer.html' %}

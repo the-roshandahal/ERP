@@ -28,7 +28,7 @@ class LeadStage(models.Model):
         return self.stage
 
     class Meta:
-        verbose_name_plural = "04. Lead Stage"
+        verbose_name_plural = "02. Lead Stage"
 
 
 class LeadSource(models.Model):
@@ -37,42 +37,58 @@ class LeadSource(models.Model):
         return self.source
 
     class Meta:
-        verbose_name_plural = "04. Lead Sources"
-
-
-# class LeadLog(models.Model):
-#     lead = models.ForeignKey(Leads,on_delete=models.CASCADE)
-#     changed_by = models.CharField(max_length=200)
-#     activity = models.CharField(max_length=200)
-#     created = models.DateTimeField(auto_now_add=True)
-
-#     def __str__(self):
-#         return self.lead.lead_name
-
-#     class Meta:
-#         verbose_name_plural = "02. Activity Log"
-
-
-# class LeadCall(models.Model):
-#     lead = models.ForeignKey(Leads,on_delete=models.CASCADE)
-#     purpose = models.CharField(max_length=200)
-#     called_by = models.CharField(max_length=200)
-#     duration = models.CharField(max_length=200)
-#     summary = models.TextField()
-#     created = models.DateTimeField(auto_now_add=True)
-#     def __str__(self):
-#         return self.lead.lead_name
-
-#     class Meta:
-#         verbose_name_plural = "03. Lead Call"
+        verbose_name_plural = "03. Lead Sources"
 
 
 
-# class LeadNotes(models.Model):
-#     leads = models.ForeignKey(Leads,on_delete=models.CASCADE)
-#     notes = models.TextField()
-#     def __str__(self):
-#         return self.leads.lead_name
 
-#     class Meta:
-#         verbose_name_plural = "05. Lead Notes"
+class LeadLog(models.Model):
+    lead = models.ForeignKey(Leads,on_delete=models.CASCADE)
+    changed_by = models.CharField(max_length=200)
+    activity = models.CharField(max_length=200)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.lead.lead_name
+
+    class Meta:
+        verbose_name_plural = "04. Activity Log"
+
+
+class LeadCall(models.Model):
+    lead = models.ForeignKey(Leads,on_delete=models.CASCADE)
+    purpose = models.CharField(max_length=200)
+    called_by = models.CharField(max_length=200)
+    duration = models.CharField(max_length=200)
+    summary = models.TextField()
+    created = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return self.lead.lead_name
+
+    class Meta:
+        verbose_name_plural = "05. Lead Call"
+
+
+
+class LeadNotes(models.Model):
+    leads = models.ForeignKey(Leads,on_delete=models.CASCADE)
+    notes = models.TextField()
+    def __str__(self):
+        return self.leads.lead_name
+
+    class Meta:
+        verbose_name_plural = "06. Lead Notes"
+
+
+class LeadFiles(models.Model):
+    leads = models.ForeignKey(Leads,on_delete=models.CASCADE)
+    title = models.CharField(max_length=255)
+    file = models.FileField(upload_to='lead_file/')
+    added_by = models.CharField(max_length=200)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.leads.lead_name
+
+    class Meta:
+        verbose_name_plural = "06. Lead Files"

@@ -1,0 +1,653 @@
+{% load static %}
+{% include 'header.html' %}
+<!-- Main Content -->
+<div class="hk-pg-wrapper">
+    <div class="container-xxl">                              
+        														
+    <div class="row">
+        <div class="col-10 col-md-2">
+            <ul class="nav flex-column nav-light nav-pills nav-vertical">
+                <li class="nav-item">
+                    <a class="nav-link active" data-bs-toggle="tab" href="#tab_block_15">
+                        <span class="nav-link-text">General</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#tab_block_25">
+                        <span class="nav-link-text">Activity</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-10 col-md-10">
+            <div class="tab-content mt-0">
+                <div class="tab-pane fade show active" id="tab_block_15">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-12 mb-md-4 mb-3">
+                                <div class="card card-border mb-0 h-100">
+                                    <div class="card-header card-header-action">
+                                        <h6>{{lead.title}}<span class="badge badge-sm badge-light ms-1">{{lead.stage}}</span></h6>
+                                        <div class="card-action-wrap">
+                                            <div class="d-flex align-items-center">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="d-flex">
+                                                        <button class="btn btn-icon btn-rounded" data-bs-toggle="modal" data-bs-target="#exampleModalLargeee">
+                                                            <a  data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" href="#" ><span class="btn-icon-wrap"><span class="feather-icon"><i class="bi bi-pencil-square"></i></span></span></a>
+
+                                                        </button>
+                                                        <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover"  data-bs-toggle="modal" data-bs-target="#exampleModaleeeeeeeeee" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Delete" href="#"><span class="btn-icon-wrap"><span class="feather-icon"><i class="bi bi-trash"></i></span></span></a>
+                                                        {% comment %} {% if lead.active == 1 %}
+                                                        <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Close Lead" href="{% url 'close_lead' id=lead.id %}"><span class="btn-icon-wrap"><span class="feather-icon"><i class="bi bi-x-circle"></i></span></span></a>
+                                                        {% else %}
+                                                        <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Reopen Lead" href="{% url 'reopen_lead' id=lead.id %}"><span class="btn-icon-wrap"><span class="feather-icon"><i class="bi bi-box-arrow-in-down-left"></i></span></span></a>
+                                                        {% endif %} {% endcomment %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <button class="btn btn-sm btn-primary"  data-bs-toggle="modal" data-bs-target="#exampleModalCenterr">
+                                                <span><span class="icon"><span class="feather-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" 
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
+                                                    class="feather feather-plus"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line>
+                                                </svg></span></span><span class="btn-text">Update Status</span></span>
+                                            </button>
+                                            
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="card-body ">
+                                        <div class="row mt-2">
+                                            <div class="col-4">
+                                                <div class="d-flex align-items-start">
+                                                    <div class="media align-items-center">
+                                                        <div class="media-head me-2">
+                                                            <div class="avatar avatar-xs avatar-rounded">
+                                                                <i class="bi bi-calendar-month"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="media-body">
+                                                            <div class="text-high-em">Date</div> 
+                                                            <div class="fs-7"><a href="#" class="table-link-text link-medium-em">{{lead.created}}</a></div> 
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+                                            
+                                            
+                                            <div class="col-4">
+                                                <div class="d-flex align-items-start">
+                                                    <div class="media align-items-center">
+                                                        <div class="media-head me-2">
+                                                            <div class="avatar avatar-xs avatar-rounded">
+                                                                <i class="bi bi-telephone"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="media-body">
+                                                            <div class="text-high-em">Phone Number</div> 
+                                                            <div class="fs-7"><a href="#" class="table-link-text link-medium-em">{{lead.contact}}</a></div> 
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+                                            
+                                            
+                                            
+                                            
+                                            <div class="col-4">
+                                                <div class="d-flex align-items-start">
+                                                    <div class="media align-items-center">
+                                                        <div class="media-head me-2">
+                                                            <div class="avatar avatar-xs avatar-rounded">
+                                                                <i class="bi bi-envelope"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="media-body">
+                                                            <div class="text-high-em">Email</div> 
+                                                            <div class="fs-7"><a href="#" class="table-link-text link-medium-em">{{lead.email}}</a></div> 
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                
+                                        <div class="row mt-5">
+                                            <div class="col-4">
+                                                <div class="d-flex align-items-start">
+                                                    <div class="media align-items-center">
+                                                        <div class="media-head me-2">
+                                                            <div class="avatar avatar-xs avatar-rounded">
+                                                                <i class="bi bi-geo"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="media-body">
+                                                            <div class="text-high-em">Address</div> 
+                                                            <div class="fs-7"><a href="#" class="table-link-text link-medium-em">{{lead.address}}</a></div> 
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+                                            
+                                            
+                                            <div class="col-4">
+                                                <div class="d-flex align-items-start">
+                                                    <div class="media align-items-center">
+                                                        <div class="media-head me-2">
+                                                            <div class="avatar avatar-xs avatar-rounded">
+                                                                <i class="bi bi-building"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="media-body">
+                                                            <div class="text-high-em">Company Name</div> 
+                                                            <div class="fs-7"><a href="#" class="table-link-text link-medium-em">{{lead.company_name}}</a></div> 
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+                                            
+                                            
+                                            
+                                            
+                                            <div class="col-4">
+                                                <div class="d-flex align-items-start">
+                                                    <div class="media align-items-center">
+                                                        <div class="media-head me-2">
+                                                            <div class="avatar avatar-xs avatar-rounded">
+                                                                <i class="bi bi-arrow-clockwise"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="media-body">
+                                                            <div class="text-high-em">Source</div> 
+                                                            <div class="fs-7"><a href="#" class="table-link-text link-medium-em">{{lead.source}}</a></div> 
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-5">
+                                            <div class="col-4">
+                                                <div class="d-flex align-items-start">
+                                                    <div class="media align-items-center">
+                                                        <div class="media-head me-2">
+                                                            <div class="avatar avatar-xs avatar-rounded">
+                                                                <i class="bi bi-geo"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="media-body">
+                                                            <div class="text-high-em">Name</div> 
+                                                            <div class="fs-7"><a href="#" class="table-link-text link-medium-em">{{lead.lead_name}}</a></div> 
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        
+                        														
+                        
+                        
+
+                        <div class="row">
+                            <div class="col-md-12 mb-md-4 mb-3">
+                                <div class="card card-border mb-0 h-100">
+                                    <div class="card-header card-header-action">
+                                        <h6>Assigned Users</h6>
+                                        <div class="card-action-wrap">
+                                            
+                                            <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalCenterrr">
+                                                <span><span class="icon"><span class="feather-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" 
+                                                    height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" 
+                                                    stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus"><line x1="12" 
+                                                    y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></span>
+                                                </span><span class="btn-text">Update Users</span></span>
+                                            </button>            
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            {% for leads in lead.assigned_to.all %}
+                                                <div class="col-md-3">
+                                                    <div class="media align-items-center mb-3">
+                                                        <div class="media-head me-3">
+                                                            <div class="avatar avatar-xxs avatar-rounded">
+                                                                {% comment %} <img src="{% static 'dist/fonts/flags/4x3/us.svg' %}" alt="user" class="avatar-img"> {% endcomment %}
+                                                                <i class="bi bi-person-circle"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="media-body">
+                                                            <div class="progress-lb-wrap">
+                                                                <label class="progress-label mb-0">{{leads.username}}</label>
+                                                            </div>
+                                                            
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-md-12 mb-md-4 mb-3">
+                                <div class="card card-border mb-0 h-100">
+                                    <div class="card-header card-header-action">
+                                        <h6>Notes</h6>
+                                        <div class="card-action-wrap">
+                                            <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalCenterrrr">
+                                                <span><span class="icon"><span class="feather-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" 
+                                                    height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" 
+                                                    stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus"><line x1="12" 
+                                                    y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></span>
+                                                </span><span class="btn-text">Add Notes</span></span>
+                                            </button>         
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            {% for notes in notes %}
+                                            <p><i class="bi bi-journal mx-2"></i>{{notes.notes}}</p>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <div class="row">
+                            <div class="col-md-12 mb-md-4 mb-3">
+                                <div class="card card-border mb-0 h-100">
+                                    <div class="card-header card-header-action">
+                                        <h6>Calls</h6>
+                                        <div class="card-action-wrap">
+                                            <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalCenter"><span><span class="icon"><span class="feather-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></span></span><span class="btn-text">Add Call</span></span></button>
+                                        </div>
+                                    </div>
+                                    {% if call_data %}
+                                    {% for call_data in call_data %}
+                                    <div class="card-body ">
+                                        <div class="title title-wth-divider"><span>{{call_data.created}}</span></div>
+                                        <div class="row">
+                                            <div class="row mt-2">
+                                                <div class="col-3">
+                                                    <div class="d-flex align-items-start">
+                                                        <div class="media align-items-center">
+                                                            <div class="media-body">
+                                                                <div class="text-high-em">Purpose</div> 
+                                                                <div class="fs-7"><a href="#" class="table-link-text link-medium-em">{{call_data.purpose}}</a></div> 
+                                                            </div>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </div>
+                                                
+                                                
+                                                
+                                                
+                                                <div class="col-2">
+                                                    <div class="d-flex align-items-start">
+                                                        <div class="media align-items-center">
+                                                            <div class="media-body">
+                                                                <div class="text-high-em">Called By</div> 
+                                                                <div class="fs-7"><a href="#" class="table-link-text link-medium-em">{{call_data.called_by}}</a></div> 
+                                                            </div>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-2">
+                                                    <div class="d-flex align-items-start">
+                                                        <div class="media align-items-center">
+                                                            <div class="media-body">
+                                                                <div class="text-high-em">Duration</div> 
+                                                                <div class="fs-7"><a href="#" class="table-link-text link-medium-em">{{call_data.duration}}</a></div> 
+                                                            </div>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </div>
+                                                <div class="col-5">
+                                                    <div class="d-flex align-items-start">
+                                                        <div class="media align-items-center">
+                                                            <div class="media-body">
+                                                                <div class="text-high-em">Summary</div> 
+                                                                <div class="fs-7"><a href="#" class="table-link-text link-medium-em">{{call_data.summary}}</a></div> 
+                                                            </div>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                    {% else %}
+                                    <div class="card-body ">
+                                        <div class="title title-wth-divider"><span>No calls yet</span></div>
+                                        
+                                    </div>
+                                    {% endif %}
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        
+                            
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="tab_block_25">
+                    <div class="row">
+                        <div class="col-md-12 mb-md-4 mb-3">
+                            <div class="card card-border mb-0 h-100">
+                                <div class="card-header card-header-action">
+                                    <h6>Activity</h6>
+                                </div>
+                                {% if activity %}
+                                {% for activity in activity %}
+                                <div class="card-body">
+                                    <div class="app-name" style="font-size:13px;">{{activity.created}}</div>
+                                    <div class="title title-wth-divider"><span>{{activity.changed_by}} {{activity.activity}}</span></div>
+                                </div>
+                                {% endfor %}
+                                {% else %}
+                                <div class="title-lg title-wth-divider"><span>No Activities Yet</span></div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+
+{% comment %} Add Call {% endcomment %}
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Add Call</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+            <form action="#" method='post'>
+                <div class="modal-body">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-xxl-12">
+                            <h6>Purpose</h6>
+                            <input type="text" class="form-control" name="purpose" required="">
+                        </div>
+                    </div>
+                    <div class="separator separator-light"></div>
+
+                    <div class="row">
+                        <div class="col-xxl-12">
+                            <h6>Duration</h6>
+                            <input type="text" class="form-control" name="duration" required="">
+                        </div>
+                    </div>
+                    <div class="separator separator-light"></div>
+
+                    <div class="row">
+                        <div class="col-xxl-12">
+                            <h6>Task</h6>
+                            <textarea class="form-control" rows="6" placeholder="Write an internal note" name="summary"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+		</div>
+	</div>
+</div>
+
+{% comment %} update {% endcomment %}
+<div class="modal fade" id="exampleModalCenterr" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterr" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Update Lead Status</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+            <form action="#" method='post'>
+                <div class="modal-body">
+                    {% csrf_token %}
+                    
+                    <div class="row">
+                        <div class="col-xxl-12">
+                            <div class="form-check">
+                                {% for stage in stage %}
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" value="{{stage.stage}}" name="status" {% if lead.stage == stage.stage %}checked{% endif %}>
+                                    <label class="form-check-label">{{stage.stage}}</label>
+                                </div>
+                                {% endfor %}
+                                
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="separator separator-light"></div>
+
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+{% comment %} user {% endcomment %}
+<div class="modal fade" id="exampleModalCenterrr" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterrr" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Update Users</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+            <form action="#" method='post'>
+                <div class="modal-body">
+                    {% csrf_token %}
+                    
+                    <div class="row">
+                        <div class="col-xxl-12">
+                            <div class="form-check">
+                                {% for users in users %}
+                                <div class="form-check form-check-inline">
+                                    
+                                    <input class="form-check-input" type="checkbox" value="{{users.id}}" name="assigned_to" {% for leads in lead.assigned_to.all %}{% if users.id == leads.id %}checked{% endif %}{% endfor %}>
+                                    
+                                    <label class="form-check-label">{{users.username}}</label>
+                                </div>
+                                {% endfor %}
+                                
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="separator separator-light"></div>
+
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+		</div>
+	</div>
+</div>
+
+
+
+
+{% comment %} add notes  {% endcomment %}
+<div class="modal fade" id="exampleModalCenterrrr" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterrrr" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Add Notes</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+            <form action="" method='post'>
+                <div class="modal-body">
+                    {% csrf_token %}
+                    
+                    <div class="row">
+                        <div class="col-xxl-12">
+                            <h6>Note</h6>
+                            <input type="text" class="form-control" name="note" required="">
+                        </div>
+                    </div>
+                    <div class="separator separator-light"></div>
+
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+
+{% comment %} edit  {% endcomment %}
+<div class="modal fade" id="exampleModalLargeee" tabindex="-1" role="dialog" aria-labelledby="exampleModalLargeee" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Lead</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="" method = "post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">                                                                        
+                    <div class="row">
+                        <div class="col-xxl-6 mb-xxl-0 mb-4">
+                            <h6>Lead Title</h6>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name = "title" value="{{lead.title}}" required >
+                                </div>
+                        </div>
+                        <div class="col-xxl-6 mb-xxl-0 mb-4">
+                            <h6>Lead name</h6>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name = "lead_name" value="{{lead.lead_name}}" required>
+                                </div>
+                        </div>
+                        <div class="col-xxl-6 mb-xxl-0 mb-4">
+                            <h6>Email</h6>
+                                <div class="form-group">
+                                    <input type="email" class="form-control" name = "email" value="{{lead.email}}" required>
+                                </div>
+                        </div>
+                        <div class="col-xxl-6 mb-xxl-0 mb-4">
+                            <h6>Address</h6>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name = "address" value="{{lead.address}}" required>
+                                </div>
+                        </div>
+                        <div class="col-xxl-6 mb-xxl-0 mb-4">
+                            <h6>Company Name</h6>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name = "company_name" value="{{lead.company_name}}" required>
+                                </div>
+                        </div>
+                        <div class="col-xxl-6 mb-xxl-0 mb-4">
+                            <h6>Contact Number</h6>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name = "contact" value="{{lead.contact}}" required>
+                                </div>
+                        </div>
+                        <div class="col-xxl-6 mb-xxl-0 mb-4">
+                            <h6>Source</h6>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name = "source" value="{{lead.source}}" required>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <a href="#" ><button class="btn btn-primary ms-2 d-sm-inline-block d-none">Save</button></a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+{% comment %} delete  {% endcomment %}
+
+
+<div class="modal fade" id="exampleModaleeeeeeeeee" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Delete Lead</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<p>Are you sure you want to delete the Lead.</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+				<a href="{% url 'delete_lead' id=lead.id %}"><button type="button" class="btn btn-primary">Delete</button></a>
+			</div>
+		</div>
+	</div>
+</div>
+{% include 'footer.html' %}
