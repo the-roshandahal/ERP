@@ -89,8 +89,15 @@
                                     <input type="checkbox" class="form-check-input" id="customCheck1" {% if role_data.delete_leads == True %}checked{% endif %} name="delete_leads" value=True>
                                     <label class="form-check-label" for="customCheck1">Delete</label>
                                 </div>
+                            </div>  
+                        </div>
+                        <div class="row">
+                            <div class="col mb-1">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="customCheck1" {% if role_data.manage_leads == True %}checked{% endif %} name="manage_leads" value=True>
+                                    <label class="form-check-label" for="customCheck1">Manage</label>
+                                </div>
                             </div>
-                            
                         </div>
                         <div class="separator separator-light"></div>
 
@@ -124,6 +131,71 @@
                             
                         </div>
                         <div class="separator separator-light"></div>
+
+
+                        <div class="row">
+                            <label for="">hrm</label>
+                            <div class="col mb-1">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="customCheck1" {% if role_data.create_hrm == True %}checked{% endif %} name="create_hrm" value=True>
+                                    <label class="form-check-label" for="customCheck1">Create</label>
+                                </div>
+                            </div>
+                            <div class="col mb-1">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="customCheck1" {% if role_data.read_hrm == True %}checked{% endif %} name="read_hrm" value=True>
+                                    <label class="form-check-label" for="customCheck1">Read</label>
+                                </div>
+                            </div>
+                            <div class="col mb-1">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="customCheck1" {% if role_data.update_hrm == True %}checked{% endif %} name="update_hrm" value=True>
+                                    <label class="form-check-label" for="customCheck1">Update</label>
+                                </div>
+                            </div>
+                            <div class="col mb-1">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="customCheck1" {% if role_data.delete_hrm == True %}checked{% endif %} name="delete_hrm" value=True>
+                                    <label class="form-check-label" for="customCheck1">Delete</label>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div class="separator separator-light"></div>
+                        
+
+
+                        <div class="row">
+                            <label for="">Products</label>
+                            <div class="col mb-1">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="customCheck1" {% if role_data.create_products == True %}checked{% endif %} name="create_products" value=True>
+                                    <label class="form-check-label" for="customCheck1">Create</label>
+                                </div>
+                            </div>
+                            <div class="col mb-1">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="customCheck1" {% if role_data.read_products == True %}checked{% endif %} name="read_products" value=True>
+                                    <label class="form-check-label" for="customCheck1">Read</label>
+                                </div>
+                            </div>
+                            <div class="col mb-1">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="customCheck1" {% if role_data.update_products == True %}checked{% endif %} name="update_products" value=True>
+                                    <label class="form-check-label" for="customCheck1">Update</label>
+                                </div>
+                            </div>
+                            <div class="col mb-1">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="customCheck1" {% if role_data.delete_products == True %}checked{% endif %} name="delete_products" value=True>
+                                    <label class="form-check-label" for="customCheck1">Delete</label>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div class="separator separator-light"></div>
+
+
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary">Save changes</button>

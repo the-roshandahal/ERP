@@ -1,0 +1,149 @@
+{% load static %}{% include 'header.html' %}
+<!-- Main Content -->
+<div class="hk-pg-wrapper">
+	<div class="container-xxl">
+		<!-- Page Header -->
+		<div class="hk-pg-header pg-header-wth-tab pt-7">
+			<div class="d-flex">
+				<div class="d-flex flex-wrap justify-content-between flex-1">
+
+					<div class="mb-lg-0 mb-2 me-8">
+						<h1 class="pg-title">Welcome back</h1>
+						<p>Welcome to SPELL CRM Dashboard.</p>
+					</div>
+					<div class="mb-lg-0 mb-2 me-8">
+						<button type="button" class="btn btn-success  btn-animated" data-bs-toggle="modal" data-bs-target="#exampleModalCenter">Add Employees</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- /Page Header -->
+
+
+		<!-- /Add other contents below -->
+        <div class="card-body">
+            <div class="contact-list-view table-responsive text-nowrap">
+                <table class="table w-100 mb-5">
+                    <thead>
+                        <tr>
+                            <th>Employee Name</th>
+                            <th>Position</th>
+                            <th>Email</th>
+                            <th>Contact</th>
+                            <th>Address</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for employees in employees %}
+                        <tr>
+                            <strong><td>{{employees.name}}</td></strong>
+                            <strong><td>{{employees.position}}</td></strong>
+                            <td>{{employees.email}}</td>
+                            <td>{{employees.contact}}</td>
+                            <td>{{employees.address}}</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="d-flex">
+                                        <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-placement="top" title="" data-bs-original-title="Edit" href="#"><span class="btn-icon-wrap"><span class="feather-icon"><i class="bi bi-scissors"></i></span></span></a>
+                                    </div>
+
+                                    
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+	</div>
+</div>
+
+
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Add Employee</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<form action="{% url 'add_employee' %}" method="POST">
+				{% csrf_token %}
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-xxl-12 mb-xxl-0 mb-4">
+							<h6>Employee Name</h6>
+							<div class="form-group">
+								<input type="text" class="form-control" name = "name" required>
+							</div>
+						</div>
+					</div>
+					<div class="separator separator-light"></div>
+					
+					
+					<div class="row">
+						<div class="col-xxl-6 mb-xxl-0 mb-4">
+							<h6>Employee Position</h6>
+							<div class="form-group">
+								<input type="text" class="form-control" name = "position" required>
+							</div>
+						</div>
+						<div class="col-xxl-6 mb-xxl-0 mb-4">
+							<h6>Date Joined</h6>
+							<div class="form-group">
+								<input type="date" class="form-control" name = "date_joined" required>
+							</div>
+						</div>
+					</div>
+					<div class="separator separator-light"></div>
+
+
+					<div class="row">
+						<div class="col-xxl-6 mb-xxl-0 mb-4">
+							<h6>Email</h6>
+							<div class="form-group">
+								<input type="email" class="form-control" name = "email" required>
+							</div>
+						</div>
+
+						<div class="col-xxl-6 mb-xxl-0 mb-4">
+							<h6>Contact</h6>
+							<div class="form-group">
+								<input type="text" class="form-control" name = "contact" required>
+							</div>
+						</div>
+					</div>
+					<div class="separator separator-light"></div>
+					
+					
+					<div class="row">
+						<div class="col-xxl-6 mb-xxl-0 mb-4">
+							<h6>Address</h6>
+							<div class="form-group">
+								<input type="text" class="form-control" name = "address" required>
+							</div>
+						</div>
+
+						<div class="col-xxl-6 mb-xxl-0 mb-4">
+							<h6>Salary</h6>
+							<div class="form-group">
+								<input type="number" class="form-control" name = "salary" required>
+							</div>
+						</div>
+					</div>
+					<div class="separator separator-light"></div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+					<a href="#" ><button class="btn btn-primary ms-2 d-sm-inline-block d-none">Save</button></a>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>	
+
+
+{% include 'footer.html' %}

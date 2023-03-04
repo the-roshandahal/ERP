@@ -27,17 +27,27 @@ class Permission(models.Model):
     read_leads = models.BooleanField(default=0)
     update_leads = models.BooleanField(default=0)
     delete_leads = models.BooleanField(default=0)
+    manage_leads = models.BooleanField(default=0)
 
+    create_hrm = models.BooleanField(default=0)
+    read_hrm = models.BooleanField(default=0)
+    update_hrm = models.BooleanField(default=0)
+    delete_hrm = models.BooleanField(default=0)
+
+    create_products = models.BooleanField(default=0)
+    read_products = models.BooleanField(default=0)
+    update_products = models.BooleanField(default=0)
+    delete_products = models.BooleanField(default=0)
     def __str__(self):
         return self.role.role
     
     class Meta:
         verbose_name_plural = "02. Permissions"
 
+
 class CompanyUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     permission = models.ForeignKey(Permission,on_delete=models.CASCADE,null=True, blank=True)
-    # key=models.IntegerField(null=True, blank=True)
     def __str__(self):
         return self.user.username
     
