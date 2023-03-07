@@ -7,6 +7,9 @@ from django.conf.urls.static import static
 
 
 urlpatterns = [
+    path("facebook_leads_callback/", views.facebook_leads_callback, name="facebook_leads_callback"),
+
+    
     path("leads/", views.leads, name="leads"),
     path("stage/", views.stage, name="stage"),
     path("source/", views.source, name="source"),

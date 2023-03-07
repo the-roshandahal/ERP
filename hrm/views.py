@@ -134,9 +134,11 @@ def add_leave(request):
             emp = request.POST['employee']
             employe = Employee.objects.get(id=emp)
             current_datetime = datetime.date.today()
+            print(current_datetime)
 
             if Leave.objects.filter(employee = employe):
-                leaves = Leave.objects.filter(employee = employe).order_by('created')[0]
+                leaves = Leave.objects.filter(employee = employe).order_by('-created')[0]
+                print(leaves.created)
             else:
                 leaves=None
 
