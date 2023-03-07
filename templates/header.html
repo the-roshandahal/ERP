@@ -161,7 +161,7 @@
 												</svg>
 											</span>
 										</span>
-										<span class="nav-link-text">Roles and User</span>
+										<span class="nav-link-text">User Management</span>
 									</a>
 									<ul id="dash_chat_role" class="nav flex-column collapse  nav-children">
 										<li class="nav-item">
@@ -180,9 +180,15 @@
 								<li class="nav-item">
 									<a class="nav-link" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#dash_chat_lead">
 										<span class="nav-icon-wrap">
-											<i class="bi bi-link"></i>
+											<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-message-dots" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+												<path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+												<path d="M4 21v-13a3 3 0 0 1 3 -3h10a3 3 0 0 1 3 3v6a3 3 0 0 1 -3 3h-9l-4 4" />
+												<line x1="12" y1="11" x2="12" y2="11.01" />
+												<line x1="8" y1="11" x2="8" y2="11.01" />
+												<line x1="16" y1="11" x2="16" y2="11.01" />
+											</svg>
 										</span>
-										<span class="nav-link-text">Leads</span>
+										<span class="nav-link-text">CRM System</span>
 									</a>
 									<ul id="dash_chat_lead" class="nav flex-column collapse  nav-children">
 										<li class="nav-item">
@@ -213,7 +219,7 @@
 												</svg>
 											</span>
 										</span>
-										<span class="nav-link-text">HRM</span>
+										<span class="nav-link-text">HRM System</span>
 									</a>
 									<ul id="dash_chat" class="nav flex-column collapse  nav-children">
 										<li class="nav-item">
@@ -237,8 +243,8 @@
 										</li>	
 									</ul>	
 								</li>	
-								<!-- <li class="nav-item">
-									<a class="nav-link" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#dash_chat">
+								<li class="nav-item">
+									<a class="nav-link" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#dash_chat_customer">
 										<span class="nav-icon-wrap">
 											<span class="svg-icon">
 												<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-message-dots" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -250,149 +256,55 @@
 												</svg>
 											</span>
 										</span>
-										<span class="nav-link-text">Client</span>
+										<span class="nav-link-text">Accounting</span>
 									</a>
-									<ul id="dash_chat" class="nav flex-column collapse  nav-children">
+									<ul id="dash_chat_customer" class="nav flex-column collapse  nav-children">
 										<li class="nav-item">
 											<ul class="nav flex-column">
 												<li class="nav-item">
-													<a class="nav-link" href="#"><span class="nav-link-text">Clients</span></a>
+													<a class="nav-link" href="{% url 'client' %}"><span class="nav-link-text">Clients</span></a>
 												</li>
 												<li class="nav-item">
-													<a class="nav-link" href="#"><span class="nav-link-text">Add Client</span></a>
+													<a class="nav-link" href="{% url 'add_client' %}"><span class="nav-link-text">Invoice</span></a>
 												</li>
 												<li class="nav-item">
-													<a class="nav-link" href="#"><span class="nav-link-text">Followup</span></a>
+													<a class="nav-link" href="{% url 'add_client' %}"><span class="nav-link-text">Receipt</span></a>
 												</li>
 												<li class="nav-item">
-													<a class="nav-link" href="#"><span class="nav-link-text">CPR</span></a>
+													<a class="nav-link" href="{% url 'add_client' %}"><span class="nav-link-text">Statement</span></a>
 												</li>
 											</ul>	
 										</li>	
 									</ul>	
 								</li>	
-
 								<li class="nav-item">
-									<a class="nav-link" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#dash_scrumboard">
-										<span class="nav-icon-wrap position-relative">
+									<a class="nav-link" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#dash_chat_service">
+										<span class="nav-icon-wrap">
 											<span class="svg-icon">
-												<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-layout-kanban" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+												<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-message-dots" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
 													<path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-													<line x1="4" y1="4" x2="10" y2="4" />
-													<line x1="14" y1="4" x2="20" y2="4" />
-													<rect x="4" y="8" width="6" height="12" rx="2" />
-													<rect x="14" y="8" width="6" height="6" rx="2" />
+													<path d="M4 21v-13a3 3 0 0 1 3 -3h10a3 3 0 0 1 3 3v6a3 3 0 0 1 -3 3h-9l-4 4" />
+													<line x1="12" y1="11" x2="12" y2="11.01" />
+													<line x1="8" y1="11" x2="8" y2="11.01" />
+													<line x1="16" y1="11" x2="16" y2="11.01" />
 												</svg>
 											</span>
 										</span>
-										<span class="nav-link-text">Package</span>
+										<span class="nav-link-text">Products</span>
 									</a>
-									<ul id="dash_scrumboard" class="nav flex-column collapse  nav-children">
+									<ul id="dash_chat_service" class="nav flex-column collapse  nav-children">
 										<li class="nav-item">
 											<ul class="nav flex-column">
 												<li class="nav-item">
-													<a class="nav-link" href="#"><span class="nav-link-text">All Packages</span></a>
+													<a class="nav-link" href="{% url 'products' %}"><span class="nav-link-text">Products & Services</span></a>
 												</li>
-												
 												<li class="nav-item">
-													<a class="nav-link" href="#"><span class="nav-link-text">Add Package</span></a>
+													<a class="nav-link" href="{% url 'products' %}"><span class="nav-link-text">Product Stock</span></a>
 												</li>
 											</ul>	
 										</li>	
 									</ul>	
-								</li>
-
-								<li class="nav-item">
-									<a class="nav-link" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#dash_contact">
-										<span class="nav-icon-wrap">
-											<span class="svg-icon">
-												<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-notebook" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-													<path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-													<path d="M6 4h11a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-11a1 1 0 0 1 -1 -1v-14a1 1 0 0 1 1 -1m3 0v18" />
-													<line x1="13" y1="8" x2="15" y2="8" />
-													<line x1="13" y1="12" x2="15" y2="12" />
-												</svg>
-											</span>
-										</span>
-										<span class="nav-link-text">Invoice</span>
-									</a>
-									<ul id="dash_contact" class="nav flex-column collapse  nav-children">
-										<li class="nav-item">
-											<ul class="nav flex-column">
-												<li class="nav-item">
-													<a class="nav-link" href="#"><span class="nav-link-text">All Invoice</span></a>
-												</li>
-												<li class="nav-item">
-													<a class="nav-link" href="#"><span class="nav-link-text">Add Invoice</span></a>
-												</li>
-											</ul>	
-										</li>	
-									</ul>	
-								</li>
-
-								<li class="nav-item">
-									<a class="nav-link" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#dash_task">
-										<span class="nav-icon-wrap">
-											<span class="svg-icon">
-												<i class="material-icons">account_balance_wallet</i>
-											</span>
-										</span>
-										<span class="nav-link-text">Receipt</span>
-									</a>
-									<ul id="dash_task" class="nav flex-column collapse  nav-children">
-										<li class="nav-item">
-											<ul class="nav flex-column">
-												<li class="nav-item">
-													<a class="nav-link" href="#"><span class="nav-link-text">All Receipts</span></a>
-												</li>
-												<li class="nav-item">
-													<a class="nav-link" href="#"><span class="nav-link-text">Add Receipt</span></a>
-												</li>
-											</ul>	
-										</li>	
-									</ul>	
-								</li>
-
-								<li class="nav-item">
-									<a class="nav-link" href="#}">
-										<span class="nav-icon-wrap">
-											<span class="svg-icon">
-												<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-													<path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-													<path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
-													<circle cx="18" cy="18" r="4" />
-													<path d="M15 3v4" />
-													<path d="M7 3v4" />
-													<path d="M3 11h16" />
-													<path d="M18 16.496v1.504l1 1" />
-												</svg>
-											</span>
-										</span>
-										<span class="nav-link-text">Statement</span>
-									</a>
-								</li> -->
-
-								<!-- <li class="nav-item">
-									<a class="nav-link" href="#%}" >
-										<span class="nav-icon-wrap">
-											<span class="svg-icon">
-												<i data-feather="bar-chart-2"></i>
-											</span>
-										</span>
-										<span class="nav-link-text">Log Sheet</span>
-									</a>	
-								</li>
-
-								<li class="nav-item">
-									<a class="nav-link" href="#%}" >
-										<span class="nav-icon-wrap">
-											<span class="svg-icon">
-												<i class="bi bi-check2-all"></i>
-											</span>
-										</span>
-										<span class="nav-link-text">To Do</span>
-									</a>	
-								</li> -->
+								</li>	
 							</ul>
 						</div>
 					</div>

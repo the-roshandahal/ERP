@@ -98,7 +98,6 @@ def delete_source(request,id):
 
 def leads(request):
     if 'read' in check_permission(request):
-
         logged_in_user = User.objects.get(username=request.user)
         company_user = CompanyUser.objects.get(user=logged_in_user)
         leads = Leads.objects.filter(active=1).order_by('created')
@@ -468,60 +467,61 @@ def reopen_lead(request,id):
 
 
 
-from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponseBadRequest
-from django.http import HttpResponse
-import requests
-import json
+# from django.views.decorators.csrf import csrf_exempt
+# from django.http import HttpResponseBadRequest
+# from django.http import HttpResponse
+# import requests
+# import json
  
-@csrf_exempt
+# @csrf_exempt
 def facebook_leads_callback(request):
-    if request.method == 'POST':
-        print('hello')
-        # Define your Facebook app credentials
-        facebook_app_id = '1628117010947627'
-        facebook_app_secret = 'de2a509c315fdc852b2c51ce9392f1dd'
-        facebook_access_token = 'dbe96db68e6b9d6e51bbaf63eb8d61b3'
+    pass
+#     if request.method == 'POST':
+#         print('hello')
+#         # Define your Facebook app credentials
+#         facebook_app_id = '1628117010947627'
+#         facebook_app_secret = 'de2a509c315fdc852b2c51ce9392f1dd'
+#         facebook_access_token = 'dbe96db68e6b9d6e51bbaf63eb8d61b3'
 
-        # Get the lead data from the callback
-        try:
-            data = json.loads(request.body.decode('utf-8'))
-            leadgen_id = data['entry'][0]['changes'][0]['value']['leadgen_id']
-        except (KeyError, ValueError):
-            return HttpResponseBadRequest()
+#         # Get the lead data from the callback
+#         try:
+#             data = json.loads(request.body.decode('utf-8'))
+#             leadgen_id = data['entry'][0]['changes'][0]['value']['leadgen_id']
+#         except (KeyError, ValueError):
+#             return HttpResponseBadRequest()
 
-        # Verify the authenticity of the request
-        signed_request = data['entry'][0]['changes'][0]['value']['signed_request']
-        expected_signature = hmac.new(
-            facebook_app_secret.encode('utf-8'),
-            signed_request.encode('utf-8'),
-            hashlib.sha256
-        ).hexdigest()
-        encoded_sig, payload = signed_request.split('.', 1)
-        decoded_payload = base64.urlsafe_b64decode(
-            payload + '=' * (4 - len(payload) % 4)
-        ).decode('utf-8')
-        decoded_payload = json.loads(decoded_payload)
-        if decoded_payload.get('algorithm').upper() != 'HMAC-SHA256':
-            return HttpResponseBadRequest()
-        if encoded_sig != expected_signature:
-            return HttpResponseBadRequest()
+#         # Verify the authenticity of the request
+#         signed_request = data['entry'][0]['changes'][0]['value']['signed_request']
+#         expected_signature = hmac.new(
+#             facebook_app_secret.encode('utf-8'),
+#             signed_request.encode('utf-8'),
+#             hashlib.sha256
+#         ).hexdigest()
+#         encoded_sig, payload = signed_request.split('.', 1)
+#         decoded_payload = base64.urlsafe_b64decode(
+#             payload + '=' * (4 - len(payload) % 4)
+#         ).decode('utf-8')
+#         decoded_payload = json.loads(decoded_payload)
+#         if decoded_payload.get('algorithm').upper() != 'HMAC-SHA256':
+#             return HttpResponseBadRequest()
+#         if encoded_sig != expected_signature:
+#             return HttpResponseBadRequest()
 
-        # Retrieve the lead information using the Graph API
-        api_url = 'https://graph.facebook.com/v12.0/' + leadgen_id + '?fields=full_name,email,phone_number'
-        request_url = api_url + '&access_token=' + facebook_access_token
-        response = requests.get(request_url)
-        lead_info = response.json()
+#         # Retrieve the lead information using the Graph API
+#         api_url = 'https://graph.facebook.com/v12.0/' + leadgen_id + '?fields=full_name,email,phone_number'
+#         request_url = api_url + '&access_token=' + facebook_access_token
+#         response = requests.get(request_url)
+#         lead_info = response.json()
 
-        # Save the lead information to your database
-        full_name = lead_info.get('full_name')
-        email = lead_info.get('email')
-        phone_number = lead_info.get('phone_number')
-        if full_name and email and phone_number:
-            lead = Lead(full_name=lead_name, email=email, phone_number=contact)
-            lead.save()
+#         # Save the lead information to your database
+#         full_name = lead_info.get('full_name')
+#         email = lead_info.get('email')
+#         phone_number = lead_info.get('phone_number')
+#         if full_name and email and phone_number:
+#             lead = Leads.objects.create(lead_name=full_name, email=email, contact=phone_number)
+#             lead.save()
 
-        # Send a response back to Facebook
-        return HttpResponse('Lead information saved successfully.')
-    else:
-        return HttpResponseBadRequest()
+#         # Send a response back to Facebook
+#         return HttpResponse('Lead information saved successfully.')
+#     else:
+#         return HttpResponseBadRequest()

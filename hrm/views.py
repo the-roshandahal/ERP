@@ -111,7 +111,7 @@ def add_employee(request):
 
 
 def attendance (request):
-    if 'create' in check_permission(request):
+    if 'read' in check_permission(request):
         employees = Employee.objects.all()
         current_datetime = datetime.date.today()  
         leaves = Leave.objects.all()

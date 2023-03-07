@@ -1,0 +1,46 @@
+{% include 'header.html' %}
+
+<div class="hk-pg-wrapper pb-0">
+    <div class="hk-pg-body py-0">
+        <div class="invoiceapp-wrap invoiceapp-setting-active">
+            <div class="invoice-body">
+                <div class="container">
+                    <div class="create-invoice-wrap mt-xxl-5 p-md-5 p-3">
+                        <div class="separator separator-light"></div>
+                        <form action="{% url 'edit_client' id=client_data.id %}" method="POST">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-xxl-6">
+                                    <h6>Client Name</h6>
+                                    <input type="text" class="form-control" value="{{client_data.client_name}}"  name = "client_name">
+                                </div>
+                                <div class="col-xxl-6">
+                                    <h6>Client address</h6>
+                                    <input type="text" class="form-control" value="{{client_data.address}}"  name = "address">
+                                </div>
+                                
+                            </div>
+                            <div class="separator separator-light"></div>
+                            <div class="row">
+                                <div class="col-xxl-6">
+                                    <h6>Client Email</h6>
+                                    <input type="text" class="form-control" value="{{client_data.email}}"  name = "email">
+                                </div>
+                                <div class="col-xxl-6">
+                                    <h6>Contact Number</h6>
+                                    <input type="text" class="form-control" value="{{client_data.contact}}"  name = "contact">
+                                </div>
+                                
+                            </div>
+                            <div class="separator separator-light"></div>
+                            <a href="#" ><button class="btn btn-primary ms-2 d-sm-inline-block d-none">save</button></a>
+                        </form>
+                    </div>
+                </div>
+                
+            <div>
+
+        </div>
+    </div>
+</div>
+{% include 'footer.html' %}

@@ -1,0 +1,77 @@
+{% load static %}{% include 'header.html' %}
+<!-- Main Content -->
+<div class="hk-pg-wrapper">
+	<div class="container-xxl">
+		<!-- Page Header -->
+		<div class="hk-pg-header pg-header-wth-tab pt-7">
+			<div class="d-flex">
+				<div class="d-flex flex-wrap justify-content-between flex-1">
+					<div class="mb-lg-0 mb-2 me-8">
+						<h1 class="pg-title">Welcome back</h1>
+						<p>Welcome to SPELL CRM Dashboard.</p>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+		<!-- /Page Header -->
+		<!-- /Add other contents below -->
+		<div class="tab-content">
+            <div class="tab-pane fade show active" id="tab_block_1">
+                <div class="row">
+                    <div class="col-xxl-12 col-lg-8 col-md-7 mb-md-4 mb-3">
+                        <div class="card card-border mb-0 h-100">
+                            <div class="card-header card-header-action">
+                                <h6>Clients</h6>
+                                <div class="card-action-wrap">
+                                    <a href="{% url 'add_client' %}">
+                                    <button class="btn btn-sm btn-primary ms-3"><span><span class="icon"><span class="feather-icon"><i data-feather="plus"></i></span></span><span class="btn-text">Add new</span></span></button>
+                                </a>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="contact-list-view">
+                                    <table class="table nowrap w-100 mb-5">
+                                        <thead>
+                                            <tr>
+                                                <th>Client Name</th>
+                                                <th>Contact Number</th>
+                                                <th>Email</th>
+                                                <th>Address</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for customer in customer %}
+                                            <tr>
+                                                <td>{{customer.client_name}}</td>
+                                                <td>{{customer.contact}}</td>
+                                                <td>{{customer.email}}</td>
+                                                <td>{{customer.address}}</td>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="d-flex">
+                                                            <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" href="{% url 'edit_client' id=customer.id %}"><span class="btn-icon-wrap"><span class="feather-icon"><i data-feather="edit"></i></span></span></a>
+                                                            <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover del-button" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Delete" href="{% url 'delete_client' id=customer.id %}"><span class="btn-icon-wrap"><span class="feather-icon"><i data-feather="trash-2"></i></span></span></a>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 mb-md-4 mb-3">
+                        
+                    </div>
+                </div>	
+            </div>
+        </div>
+	</div>
+</div>
+{% include 'footer.html' %}
