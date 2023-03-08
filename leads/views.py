@@ -3,7 +3,7 @@ from .models import *
 import pandas as pd
 from django.contrib import messages, auth
 from django.contrib.auth.models import User
-from features.views import *
+from account.views import *
 # Create your views here.
 
 def check_permission(request):

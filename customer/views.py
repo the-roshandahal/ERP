@@ -1,7 +1,8 @@
 from django.shortcuts import render,redirect
 from.models import *
 from django.contrib import messages, auth
-from features.views import *
+from account.views import *
+from account.models import *
 
 # Create your views here.
 def check_permission(request):

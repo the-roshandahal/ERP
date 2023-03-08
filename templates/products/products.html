@@ -43,8 +43,8 @@
                     <td>{{products.product_quantity}}</td>
                     
                     <td>
-                        <a href="#" class="btn btn-icon btn-rounded btn-flush-primary flush-soft-hover" data-bs-toggle="tooltip" data-bs-original-title="Edit"><span class="icon"><span class="feather-icon"><i data-feather="edit-3"></i></span></span></a>
-                        <a href="#" class="btn btn-icon btn-rounded btn-flush-danger flush-soft-hover" data-bs-toggle="tooltip" data-bs-original-title="Delete"><span class="icon"><span class="feather-icon"><i data-feather="trash-2"></i></span></span></a>
+                        <a href="#" class="btn btn-icon btn-rounded btn-flush-primary flush-soft-hover" data-bs-toggle="tooltip" data-bs-original-title="Edit" ><span class="icon"><span class="feather-icon"><i data-feather="edit-3"></i></span></span></a>
+                        <a href="{% url 'delete_product' id=products.id %}" class="btn btn-icon btn-rounded btn-flush-danger flush-soft-hover" data-bs-toggle="tooltip" data-bs-original-title="Delete" ><span class="icon"><span class="feather-icon"><i data-feather="trash-2"></i></span></span></a>
                     </td>
                 </tr>
                 {% endfor %}

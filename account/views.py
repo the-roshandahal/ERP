@@ -276,3 +276,9 @@ def delete_company_user(request,id):
     else:
         messages.info(request, "Unauthorized access.")
         return redirect(home)
+    
+
+
+
+def page_not_found_view(request, exception):
+    return render(request, "error404.html")

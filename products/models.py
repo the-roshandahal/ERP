@@ -25,8 +25,8 @@ class Product(models.Model):
     product_price = models.FloatField()
     product_quantity = models.IntegerField(null = True, blank = True)
     product_description = models.TextField(null = True, blank = True)
-    product_category = models.OneToOneField(ProductCategory, on_delete=models.SET_NULL, blank=True, null=True,)
-    product_unit = models.OneToOneField(ProductUnit, on_delete=models.SET_NULL, blank=True, null=True,)
+    product_category = models.ForeignKey(ProductCategory, on_delete=models.SET_NULL, blank=True, null=True,)
+    product_unit = models.ForeignKey(ProductUnit, on_delete=models.SET_NULL, blank=True, null=True,)
     def __str__(self):
         return self.product_title
     class Meta:
