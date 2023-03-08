@@ -9,6 +9,7 @@ from django.core.paginator import Paginator
 import datetime
 
 
+
 # Create your views here.
 def login(request):
     if request.user.is_authenticated:
