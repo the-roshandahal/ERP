@@ -23,13 +23,15 @@ def check_permission(request):
         permissions.append('delete')
     return permissions
 
-def stage(request):
+def crm_setup(request):
     if 'read' in check_permission(request):
         lead_stage = LeadStage.objects.all()
+        lead_source = LeadSource.objects.all()
         context = {
+            'lead_source':lead_source,
             'lead_stage':lead_stage,
         }
-        return render (request,'leads/stage.html',context)
+        return render (request,'leads/crm_setup.html',context)
     else:
         messages.info(request, "Unauthorized access.")
         return redirect(home)
@@ -40,9 +42,9 @@ def create_stage(request):
             lead_stage = request.POST['lead_stage']
             LeadStage.objects.create(stage=lead_stage)
             messages.info(request, "Lead Stage Created Successfully.")
-            return redirect('stage')
+            return redirect('crm_setup')
         else:
-            return redirect('stage')
+            return redirect('crm_setup')
     else:
         messages.info(request, "Unauthorized access.")
         return redirect(home)
@@ -53,22 +55,10 @@ def delete_stage(request,id):
         deleted_role = stage_data.stage
         stage_data.delete()
         messages.info(request, f"{deleted_role} Deleted Successfully")
-        return redirect('stage')
+        return redirect('crm_setup')
     else:
         messages.info(request, "Unauthorized access.")
         return redirect(home)
-
-def source(request):
-    if 'create' in check_permission(request):
-        lead_source = LeadSource.objects.all()
-        context = {
-            'lead_source':lead_source,
-        }
-        return render (request,'leads/source.html',context)
-    else:
-        messages.info(request, "Unauthorized access.")
-        return redirect(home)
-
 
 def create_source(request):
     if 'create' in check_permission(request):
@@ -76,9 +66,9 @@ def create_source(request):
             lead_source = request.POST['lead_source']
             LeadSource.objects.create(source=lead_source)
             messages.info(request, "Lead Source Created Successfully.")
-            return redirect('source')
+            return redirect('crm_setup')
         else:
-            return redirect('source')
+            return redirect('crm_setup')
     else:
         messages.info(request, "Unauthorized access.")
         return redirect(home)
@@ -90,7 +80,7 @@ def delete_source(request,id):
         deleted_role = source_data.source
         source_data.delete()
         messages.info(request, f"{deleted_role} Deleted Successfully")
-        return redirect('source')
+        return redirect('crm_setup')
     else:
         messages.info(request, "Unauthorized access.")
         return redirect(home)

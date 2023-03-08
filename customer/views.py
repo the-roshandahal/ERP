@@ -3,7 +3,7 @@ from.models import *
 from django.contrib import messages, auth
 from account.views import *
 from account.models import *
-
+from finance.models import *
 # Create your views here.
 def check_permission(request):
     logged_in_user = User.objects.get(username=request.user)
@@ -87,6 +87,22 @@ def delete_client(request,id):
         delete_client.delete()
         messages.info(request, f"{deleted_client} Deleted Successfully")
         return redirect('client')
+    else:
+        messages.info(request, "Unauthorized access.")
+        return redirect(home)
+    
+
+def view_client(request,id):
+    if 'read' in check_permission(request):
+        client = Customer.objects.get(id=id)
+        invoices = Invoice.objects.filter(customer=id)
+        receipts = Receipt.objects.filter(customer=id)
+        context = {
+            'client': client,
+            'invoices': invoices,
+            'receipts': receipts,
+        }
+        return render(request,'client/view_client.html', context)
     else:
         messages.info(request, "Unauthorized access.")
         return redirect(home)

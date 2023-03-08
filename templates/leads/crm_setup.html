@@ -1,0 +1,209 @@
+{% load static %}{% include 'header.html' %}
+<!-- Main Content -->
+<div class="hk-pg-wrapper">
+	<div class="container-xxl">
+		<!-- Page Header -->
+		<div class="hk-pg-header pg-header-wth-tab pt-7">
+			<div class="d-flex">
+				<div class="d-flex flex-wrap justify-content-between flex-1">
+					<div class="mb-lg-0 mb-2 me-8">
+						<h1 class="pg-title">Lead Stages</h1>
+					</div>
+					<div class="mb-lg-0 mb-2 me-8">
+						<button type="button" class="btn btn-success btn-animated"  data-bs-toggle="modal" data-bs-target="#createUserModal">Create Stage</button>
+					</div>
+					<div class="modal fade" id="createUserModal" tabindex="-1" role="dialog" aria-labelledby="createUserModal" aria-hidden="true">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<form action="{% url 'create_stage' %}" method="POST">
+									{% csrf_token %}
+									<div class="modal-header">
+										<h5 class="modal-title" id="createUserModal">Create Stage</h5>
+										<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										</button>
+									</div>
+									<div class="modal-body">
+										<div class="col-md-12 mb-3">
+											<label for="">Stage Name</label>
+											<input type="text" class="form-control"  placeholder="Initial" name='lead_stage'>
+										</div>
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+										<button type="submit" class="btn btn-primary">Add</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+		<!-- /Page Header -->
+		<!-- /Add other contents below -->
+		<div class="container mt-5">
+            														
+            <div class="row">
+                <div class="table-responsive">
+					<table class="table nowrap table-advance">
+						<thead>
+							<tr>
+								<th></th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for lead_stage in lead_stage %}
+							<tr class="mt-1">
+								
+								<td><span class="badge badge-lg badge-light">{{lead_stage.stage}}</span></td>
+								<td>
+									<div  class="d-flex align-items-center justify-content-end">
+										<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" href="#"><span class="icon"><span class="feather-icon"><i data-feather="edit-2"></i></span></span></a>
+										<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="modal" data-bs-target="#exampleModalCenter{{lead_stage.id}}" href=""><span class="icon"><span class="feather-icon"><i data-feather="archive"></i></span></span></a>
+									</div>
+								</td>
+							</tr>
+							{% endfor %}
+							{% for lead_stage in lead_stage %}
+							<div class="modal fade" id="exampleModalCenter{{lead_stage.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter{{lead_stage.id}}" aria-hidden="true">
+								<div class="modal-dialog modal-dialog-centered" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title">Delete Stage</h5>
+											<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+										</div>
+										<div class="modal-body">
+											<p>Are you sure you want to delete this stage?</p>
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+											<a href="{% url 'delete_stage' id=lead_stage.id %}"><button type="button" class="btn btn-primary">Delete</button></a>
+										</div>
+									</div>
+								</div>
+							</div>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+            </div>										
+        </div>
+		<div class="hk-pg-header pg-header-wth-tab pt-7">
+			<div class="d-flex">
+				<div class="d-flex flex-wrap justify-content-between flex-1">
+					<div class="mb-lg-0 mb-2 me-8">
+						<h1 class="pg-title">Lead Sources</h1>
+					</div>
+					<div class="mb-lg-0 mb-2 me-8">
+						<button type="button" class="btn btn-success btn-animated"  data-bs-toggle="modal" data-bs-target="#createUserModalSource">Create Source</button>
+					</div>
+					<div class="modal fade" id="createUserModalSource" tabindex="-1" role="dialog" aria-labelledby="createUserModalSource" aria-hidden="true">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<form action="{% url 'create_source' %}" method="POST">
+									{% csrf_token %}
+									<div class="modal-header">
+										<h5 class="modal-title" id="createUserModalSource">Create Source</h5>
+										<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										</button>
+									</div>
+									<div class="modal-body">
+										<div class="col-md-12 mb-3">
+											<label for="">Source Name</label>
+											<input type="text" class="form-control"  placeholder="Facebook" name='lead_source'>
+										</div>
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+										<button type="submit" class="btn btn-primary">Add</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+		<div class="container mt-5">
+            														
+            <div class="row">
+                <div class="table-responsive">
+					<table class="table nowrap table-advance">
+						<thead>
+							<tr>
+								<th></th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for lead_source in lead_source %}
+							<tr class="mt-1">
+								
+								<td><span class="badge badge-lg badge-light">{{lead_source.source}}</span></td>
+								<td>
+									<div  class="d-flex align-items-center justify-content-end">
+										<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" href="#"><span class="icon"><span class="feather-icon"><i data-feather="edit-2"></i></span></span></a>
+										<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="modal" data-bs-target="#exampleModalCenter{{lead_source.id}}" href=""><span class="icon"><span class="feather-icon"><i data-feather="archive"></i></span></span></a>
+									</div>
+								</td>
+							</tr>
+							{% endfor %}
+							{% for lead_source in lead_source %}
+							<div class="modal fade" id="exampleModalCenter{{lead_source.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter{{lead_source.id}}" aria-hidden="true">
+								<div class="modal-dialog modal-dialog-centered" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title">Delete Lead Source</h5>
+											<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+										</div>
+										<div class="modal-body">
+											<p>Are you sure you want to delete this source?</p>
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+											<a href="{% url 'delete_source' id=lead_source.id %}"><button type="button" class="btn btn-primary">Delete</button></a>
+										</div>
+									</div>
+								</div>
+							</div>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+            </div>										
+        </div>
+	</div>
+</div>
+
+
+{% for lead_source in lead_source %}
+<div class="modal fade" id="exampleModalCenter{{lead_source.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter{{lead_source.id}}" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Delete Lead Source</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<p>Are you sure you want to delete this source?</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+				<a href="{% url 'delete_source' id=lead_source.id %}"><button type="button" class="btn btn-primary">Delete</button></a>
+			</div>
+		</div>
+	</div>
+</div>
+{% endfor %}
+{% include 'footer.html' %}

@@ -11,15 +11,15 @@
 						<p>Welcome to SPELL CRM Dashboard.</p>
 					</div>
 					<div class="mb-lg-0 mb-2 me-8">
-						<button type="button" class="btn btn-success btn-animated"  data-bs-toggle="modal" data-bs-target="#createUserModal">Create Source</button>
+						<button type="button" class="btn btn-success btn-animated"  data-bs-toggle="modal" data-bs-target="#createUserModalSource">Create Source</button>
 					</div>
-					<div class="modal fade" id="createUserModal" tabindex="-1" role="dialog" aria-labelledby="createUserModal" aria-hidden="true">
+					<div class="modal fade" id="createUserModalSource" tabindex="-1" role="dialog" aria-labelledby="createUserModalSource" aria-hidden="true">
 						<div class="modal-dialog" role="document">
 							<div class="modal-content">
 								<form action="{% url 'create_source' %}" method="POST">
 									{% csrf_token %}
 									<div class="modal-header">
-										<h5 class="modal-title" id="createUserModal">Create Source</h5>
+										<h5 class="modal-title" id="createUserModalSource">Create Source</h5>
 										<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
 											<span aria-hidden="true">&times;</span>
 										</button>
