@@ -27,6 +27,7 @@
                 <tr>
                     <th>Title</th>
                     <th>Type</th>
+                    <th>Category</th>
                     <th>Price</th>
                     <th>Available Quantity</th>
                     <th>Action</th>
@@ -37,6 +38,7 @@
                 <tr>
                     <td>{{products.product_title}}</td>
                     <td>{{products.product_type}}</td>
+                    <td>{{products.product_category}}</td>
                     <td>{{products.product_price}}</td>
                     <td>{{products.product_quantity}}</td>
                     
@@ -76,6 +78,28 @@
                                 <select class="form-select" name="product_type" required="">
                                     <option value="product">product</option>
                                     <option value="service">service</option>
+                                </select>
+                            </div>  
+                        </div>
+                        <div class="col-xxl-6 mb-xxl-0 mb-4">
+                            <h6>Category</h6>
+                            <div class="form-group">
+                                <select class="form-select" name="product_category" required="">
+                                    <option value="product">Select category</option>
+                                    {% for category in category %}
+                                    <option value="{{category.id}}">{{category.product_category}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>  
+                        </div>
+                        <div class="col-xxl-6 mb-xxl-0 mb-4">
+                            <h6>Unit</h6>
+                            <div class="form-group">
+                                <select class="form-select" name="product_unit" required="">
+                                    <option value="product">Select unit</option>
+                                    {% for unit in unit %}
+                                    <option value="{{unit.id}}">{{unit.product_unit}}</option>
+                                    {% endfor %}
                                 </select>
                             </div>  
                         </div>
