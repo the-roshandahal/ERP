@@ -1,0 +1,82 @@
+{% include 'header.html' %}
+
+<div class="hk-pg-wrapper pb-0">
+    <div class="hk-pg-body py-0">
+        <div class="invoiceapp-wrap invoiceapp-setting-active">
+            <div class="invoice-body">
+                <div class="container">
+                    <div class="create-invoice-wrap mt-xxl-5 p-md-5 p-3">
+                        <div class="separator separator-light"></div>
+                        <form action="{% url 'create_receipt' %}" method="POST">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-xxl-6 mb-xxl-0 mb-4">
+                                    <h6>Billed To</h6>
+                                        <div class="form-group">
+                                            <select class="form-select" name="customer" required>
+                                                <option value="">Select Client</option>
+                                                {% for customer in customer %}
+                                                <option value = '{{customer.id}}'>{{customer.client_name}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <a class="d-inline-flex align-items-center" data-bs-toggle="modal" data-bs-target="#billed_info" href="{% url 'add_client' %}">
+                                        <i class="ri-add-box-line me-1"></i> Add new client </a>
+                                </div>
+
+                                <div class="col-xxl-6 mb-xxl-0 mb-4">
+                                    <h6>Payment Method </h6>
+                                    <div class="form-group">
+                                        <select class="form-select" name="payment_method" id="packageS">
+                                            <option value="esewa">Esewa</option>
+                                            <option value="cash">Cash</option>
+                                            <option value="bank transfer">Bank Transfer</option>
+                                            
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="separator separator-light"></div>
+
+
+
+                            <div class="row">
+                                <div class="col-xxl-6">
+                                    <h6 class="float-right">Paid Amount</h6>
+                                </div>
+                                <div class="col-xxl-6">
+                                    <input type="text" class="form-control" name = "paid_amount">
+                                </div>
+                            </div>
+                            <div class="separator separator-light"></div>
+
+                            <div class="row">
+                                <div class="col-xxl-6">
+                                    <h6>Payment Receipt</h6>
+                                </div>
+                                <div class="col-xxl-6">
+                                    <input type="file" class="form-control" name="payment_receipt">
+                                </div>
+                            </div>
+                            <div class="separator separator-light"></div>
+
+                            <div class="row">
+                                <div class="col-xxl-6">
+                                    <h6>Remarks</h6>
+                                </div>
+                                <div class="col-xxl-6">
+                                    <textarea class="form-control" rows="6" placeholder="Write an internal note" name="remarks"></textarea>
+                                </div>
+                            </div>
+                            <a href="#" ><button class="btn btn-primary ms-2 d-sm-inline-block d-none">save</button></a>
+                        </form>
+                    </div>
+                </div>
+                
+            <div>
+
+        </div>
+    </div>
+</div>
+{% include 'footer.html' %}
+ 

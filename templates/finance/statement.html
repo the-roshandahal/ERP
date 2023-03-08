@@ -1,0 +1,34 @@
+{% include 'header.html' %}
+
+<div class="hk-pg-wrapper pb-0">
+    <div class="hk-pg-body py-0">
+        <div class="invoiceapp-wrap">
+            <div class="invoiceapp-detail-wrap">
+                <div class="container">
+                    <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">#ID</th>
+                        <th scope="col">Customer</th>
+                        <th scope="col">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        {% for customer in customer %}
+                      <tr>
+                        <td>{{customer.id}}</td>
+                        <td>{{customer.client_name}}</td>
+                        <td><a href="{% url 'single_statement' id=customer.id %}" class="font-weight-bold">View Statement</a></td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% include 'footer.html' %}

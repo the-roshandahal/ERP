@@ -1,0 +1,101 @@
+{% include 'header.html' %}
+
+
+<div class="hk-pg-wrapper pb-0">
+    <div class="hk-pg-body py-0">
+        <div class="invoiceapp-wrap">
+            <div class="invoiceapp-detail-wrap">
+                <div class="container">
+                    
+<div class= "text-center">
+    <p class="text-center">Statement Details</p>
+  <button type="submit" class="btn btn-primary mt-2 mb-2 " onclick="CreatePDFfromHTML()">Print Statement</button>
+  </div>
+  
+  
+  <div class="container html-content">
+      <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Date</th>
+          <th scope="col">Transactions</th>
+          <th scope="col">Details</th>
+          <th scope="col">Amount</th>
+          <th scope="col">Payments</th>
+          <th scope="col">Balance</th>
+        </tr>
+      </thead>
+      <tbody>
+          {% for statement in statements %}
+        <tr>
+          <th scope="row">{{statement.created}}</th>
+          <td>{{statement.transaction}}</td>
+          <td>{{statement.details}}</td>
+  
+          {% if statement.amount %}
+          <td>Rs.{{statement.amount}}</td>
+          {% else %}
+          <td>-</td>
+          {% endif %}
+          
+  
+          {% if statement.payment %}
+          <td>Rs.{{statement.payment}}</td>
+          {% else %}
+          <td>-</td>
+          {% endif %}
+  
+  
+          {% if statement.balance %}
+          <td>Rs.{{statement.balance}}</td>
+          {% else %}
+          <td>-</td>
+          {% endif %}
+        </tr>
+       
+        {% endfor %}
+        <tr>
+          <th ></th>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>Balance Due</td>
+          <td>Rs.{{balance_due}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script>
+  function CreatePDFfromHTML() {
+      var HTML_Width = $(".html-content").width();
+      var HTML_Height = $(".html-content").height();
+      var top_left_margin = 2;
+      var PDF_Width = HTML_Width + (top_left_margin * 2);
+      var PDF_Height = (PDF_Width * 1.5) + (top_left_margin * 2);
+      var canvas_image_width = HTML_Width;
+      var canvas_image_height = HTML_Height;
+  
+      var totalPDFPages = Math.ceil(HTML_Height / PDF_Height) - 1;
+  
+      html2canvas($(".html-content")[0]).then(function (canvas) {
+          var imgData = canvas.toDataURL("image/jpeg", 1.0);
+          var pdf = new jsPDF('p', 'pt', [PDF_Width, PDF_Height]);
+          pdf.addImage(imgData, 'JPG', top_left_margin, top_left_margin, canvas_image_width, canvas_image_height);
+          for (var i = 1; i <= totalPDFPages; i++) { 
+              pdf.addPage(PDF_Width, PDF_Height);
+              pdf.addImage(imgData, 'JPG', top_left_margin, -(PDF_Height*i)+(top_left_margin*4),canvas_image_width,canvas_image_height);
+          }
+          pdf.save("{{customer}} Statement.pdf");
+      });
+  }
+</script>
+{% include 'footer.html' %}

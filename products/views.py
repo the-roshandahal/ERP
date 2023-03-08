@@ -48,13 +48,16 @@ def add_product(request):
             product_description = request.POST["product_description"]
             product_price = request.POST["product_price"]
             product_quantity = request.POST["product_quantity"]
+            is_vatable = request.POST.get('is_vatable', 0)
+
             category = request.POST["product_category"]
             unit = request.POST["product_unit"]
             product_category = ProductCategory.objects.get(id=category)
             product_unit = ProductUnit.objects.get(id=unit)
             
             Product.objects.create(product_type=product_type,product_title=product_title, product_description=product_description, 
-                                product_price=product_price, product_quantity=product_quantity,product_category=product_category,product_unit=product_unit)
+                                product_price=product_price, product_quantity=product_quantity,is_vatable=is_vatable, 
+                                product_category=product_category,product_unit=product_unit)
             return redirect(products)
         else:
             return render (request,'products/add_product.html')

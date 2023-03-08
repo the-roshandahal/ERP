@@ -1,0 +1,178 @@
+
+{% include 'header.html' %}              
+{% load static %}
+<div class="invoiceapp-content">
+    <div class="invoiceapp-detail-wrap html-content">
+        <div class="invoice-body">
+            <div class="nicescroll-bar">
+                <div class="container">
+                    <div class="template-invoice-wrap mt-xxl-5 p-md-5 p-3">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-5 order-md-0 order-1">
+                                <img src="{% static 'logo.png' %}" alt="logo" height="80">
+                            </div>
+                            <div class="col-lg-4 offset-lg-5 offset-md-3 col-md-4 mb-md-0 mb-2">
+                                <h2 class="d-flex justify-content-md-end mb-0">Invoice #{{invoice.id}}</h2>
+                            </div>	
+                        </div>	
+                        <div class="row mt-4">
+                            <div class="col-md-4 order-md-0 order-1">
+                                <div class="address-wrap">
+                                    <h6>Spell Innovation</h6>
+                                    <p>Baneshwor 10, Kathmandu</p>
+                                    <p>Pipalbot Marga, Baneshwor Height</p>
+                                    <p>spellinnovation@gmail.com</p>
+                                    <p>01-5910781</p>
+                                </div>
+                            </div>
+                            <div class="col-md-5 offset-md-3 mb-4 mb-md-0">
+                                <div class="d-flex justify-content-md-end">
+                                    <div class="text-md-end me-3">
+                                        
+                                        <div class="mb-1">Invoice Date*</div>
+                                        <div class="mb-1">Due Date*</div>
+                                        <div>Created By</div>
+                                    </div>
+                                    <div class="text-dark">
+                                        
+                                        <div class="mb-1">{{invoice.created}}</div>
+                                        <div class="mb-1">{{invoice.created}}</div>
+                                        <div>{{invoice.created_by}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="separator separator-light"></div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <h6 class="text-uppercase fs-7 mb-2">Billed To</h6>
+                                <div class="Billto-wrap">
+                                    <h6>{{invoice.customer.client_name}}</h6>
+                                    <p>{{invoice.customer.address}}</p>
+                                    <p>{{invoice.customer.contact}}</p>
+                                    <p>{{invoice.customer.email}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="table-wrap mt-6">
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead class="thead-primary">
+                                        <tr>
+                                            <th  colspan="4">Item</th>
+                                            <th class="text-end">Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for product in invoice.product.all %}
+                                        <tr>
+                                            <td class="w-70" colspan="4">
+                                                <h6>{{product.product_title}}</h6>
+                                            </td>
+                                            <td class="w-20 text-end text-dark">Rs. {{product.product_price}}</td>
+                                        </tr>
+                                        {% endfor %}
+                                        {% if invoice.misc_name and invoice.misc_amount %}
+                                        <tr>
+                                            <td class="w-70" colspan="4">
+                                                <h6>{{invoice.misc_name}}</h6>
+                                            </td>
+                                            <td class="w-20 text-end text-dark">Rs. {{invoice.misc_amount}}</td>
+                                        </tr>
+                                        {% endif %}
+
+                                        {% if invoice.deduction_name and invoice.deduction_amount %}
+                                        <tr>
+                                            <td class="w-70" colspan="4">
+                                                <h6>{{invoice.deduction_name}}</h6>
+                                            </td>
+                                            <td class="w-20 text-end text-dark">Rs. - {{invoice.deduction_amount}}</td>
+                                        </tr>
+                                        {% endif %}
+                                        <tr>
+                                            <td colspan="4" class="border-0 text-end ">Subtotal</td>
+                                            <td class="text-end text-dark">Rs. 0</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="4" class="border-0 text-end ">Discount</td>
+                                            <td class="text-end text-dark">Rs. {{invoice.discount}}</td>
+                                        </tr>
+                                        
+                                        <tr class="border-0">
+                                            <td colspan="4" class="text-dark border text-end ">Total</td>
+                                            <td class="text-end text-dark border">Rs. 0</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="4" class="border-0 text-end ">13% VAT</td>
+                                            <td class="text-end text-dark">Rs. {{invoice.vat_amount}}</td>
+                                        </tr>
+                                        <tr class="border-0">
+                                            <td colspan="4" class="text-dark border text-end ">Grand Total</td>
+                                            <td class="text-end text-dark border">Rs. {{invoice.invoice_amount}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>	
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <h6>Note to client</h6>
+                                <p>Please make the payment by any of the following methods for order confirmation. </p>
+                                <p>
+                                    <strong>1.</strong> Esewa ID: 9860846037 <br>
+                                    <strong>2.</strong> Khalti ID: 9860846037 <br>
+                                    <strong> 3.</strong> Bank Account Deposit <br>
+                                    Account name: Spell Innovation Private Limited<br>
+                                    Account Number:2901010000769<br>
+                                    Bank Name: Global IME Bank <br>
+                                    Branch Name: Baneshwor 
+                                    </p>
+                                    {% comment %} <img src="{% static 'qr.png' %}" alt="qr code" height="300"> {% endcomment %}
+                            </div>
+                            <div class="col-lg-6">
+                                <h6>Terms & Conditions</h6>
+                                <ol class="ps-3">
+                                    <li>Please pay within 2 days from the date of invoice, overdue interest @ 14% will be charged on delayed payments.</li>
+                                    <li>Please share a screenshot of the payment receipt after payment.</li>
+                                    <li>This is a digital invoice and can't be used for legal purposes.</li>
+                                </ol>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class= "text-center">
+        <p class="text-center">Generated on {{invoice.created}} </p>
+      <button type="submit" class="btn btn-primary mt-2 mb-2 " onclick="CreatePDFfromHTML()">Print Invoice</button>
+    </div>
+</div>
+
+                      <script>
+                    function CreatePDFfromHTML() {
+                            var HTML_Width = $(".html-content").width();
+                            var HTML_Height = $(".html-content").height();
+                            var top_left_margin = 2;
+                            var PDF_Width = HTML_Width + (top_left_margin * 2);
+                            var PDF_Height = (PDF_Width * 1.5) + (top_left_margin * 2);
+                            var canvas_image_width = HTML_Width;
+                            var canvas_image_height = HTML_Height;
+                        
+                            var totalPDFPages = Math.ceil(HTML_Height / PDF_Height) - 1;
+                        
+                            html2canvas($(".html-content")[0]).then(function (canvas) {
+                                var imgData = canvas.toDataURL("image/jpeg", 1.0);
+                                var pdf = new jsPDF('p', 'pt', [PDF_Width, PDF_Height]);
+                                pdf.addImage(imgData, 'JPG', top_left_margin, top_left_margin, canvas_image_width, canvas_image_height);
+                                for (var i = 1; i <= totalPDFPages; i++) { 
+                                    pdf.addPage(PDF_Width, PDF_Height);
+                                    pdf.addImage(imgData, 'JPG', top_left_margin, -(PDF_Height*i)+(top_left_margin*4),canvas_image_width,canvas_image_height);
+                                }
+                                pdf.save("spell_innovation_invoice_{{invoice.id}}.pdf");
+                            });
+                        }
+                    </script>
+             
+{% include 'footer.html' %} 

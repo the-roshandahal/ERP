@@ -25,10 +25,8 @@ def check_permission(request):
 
 def client(request):
     if 'read' in check_permission(request):
-        package = Package.objects.all()
         customer = Customer.objects.all()
         context = {
-            'package': package,
             'customer': customer
         }
         return render(request,'client/client.html', context)

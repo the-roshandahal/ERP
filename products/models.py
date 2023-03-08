@@ -27,6 +27,7 @@ class Product(models.Model):
     product_description = models.TextField(null = True, blank = True)
     product_category = models.ForeignKey(ProductCategory, on_delete=models.SET_NULL, blank=True, null=True,)
     product_unit = models.ForeignKey(ProductUnit, on_delete=models.SET_NULL, blank=True, null=True,)
+    is_vatable = models.BooleanField(default=True)
     def __str__(self):
         return self.product_title
     class Meta:

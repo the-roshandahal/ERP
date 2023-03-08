@@ -30,6 +30,7 @@
                     <th>Category</th>
                     <th>Price</th>
                     <th>Available Quantity</th>
+                    <th>Is Vatable</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -41,6 +42,7 @@
                     <td>{{products.product_category}}</td>
                     <td>{{products.product_price}}</td>
                     <td>{{products.product_quantity}}</td>
+                    <td>{% if products.is_vatable == True %}Yes {% else %}No{% endif %}</td>
                     
                     <td>
                         <a href="#" class="btn btn-icon btn-rounded btn-flush-primary flush-soft-hover" data-bs-toggle="tooltip" data-bs-original-title="Edit" ><span class="icon"><span class="feather-icon"><i data-feather="edit-3"></i></span></span></a>
@@ -122,10 +124,19 @@
                                 <input type="number" class="form-control" name = "product_quantity" required>
                             </div>
                         </div>
+
+                        
+
                         <div class="col-xxl-12 mb-xxl-0 mb-4">
                             <h6>Description</h6>
                             <div class="form-group">
                                 <textarea class="form-control" rows="6" placeholder="Write an internal note" name="product_description" autocomplete="off"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-xxl-12 mb-xxl-0 mb-4">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="is_vatable" checked value="True">
+                                <label class="form-check-label" for="customCheck2">Is Vatable?</label>
                             </div>
                         </div>
                     </div>

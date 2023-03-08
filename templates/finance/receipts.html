@@ -1,3 +1,71 @@
-<h1>
-    receipt
-</h1>
+{% include 'header.html' %}
+
+<div class="hk-pg-wrapper pb-0">
+    <div class="hk-pg-body py-0">
+        <div class="invoiceapp-wrap">
+            <div class="invoiceapp-detail-wrap">
+                <div class="invoice-body">
+                    <div class= "container">
+                        <!-- Page Header -->
+                        <div class="hk-pg-header pg-header-wth-tab pt-7">
+                            <div class="d-flex">
+                                <div class="d-flex flex-wrap justify-content-between flex-1">
+                                    <div class="mb-lg-0 mb-2 me-8">
+                                        <h1 class="pg-title">Recent Receipts</h1>
+                                        <p>Welcome to SPELL CRM Dashboard.</p>
+                                    </div>
+                                    <div>
+                                        <a href="{% url 'create_receipt' %}"><button type="button" class="btn btn-success">Create Receipt</button></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /Page Header -->
+                        <div class="invoice-list-view">
+                            <table class="table nowrap w-100 mb-5">
+                                <thead>
+                                    <tr>
+                                        <th>Receipt #</th>
+                                        <th>Client Name</th>
+                                        <th>Payment Method</th>
+                                        <th>Paid Amount</th>
+                                        <th>Created By</th>
+                                        <th>Receipt Date</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for receipts in receipts %}
+                                    <tr>
+                                        <td><a href="#" class="table-link-text link-high-em">{{receipts.id}}</a></td>
+                                        <td>{{receipts.customer}}</td>
+                                        <td>{{receipts.payment_method}}</td>
+                                        <td>Rs.{{receipts.paid_amount}}</td>
+                                        <td>{{receipts.created_by}}</td>
+                                        <td>{{receipts.created}}</td>
+                                        
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="d-flex">
+                                                    <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="View" href="{% url 'view_receipt' id=receipts.id %}"><span class="btn-icon-wrap"><span class="feather-icon"><i data-feather="eye"></i></span></span></a>
+                                                    {% comment %} <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" href=""><span class="btn-icon-wrap"><span class="feather-icon"><i data-feather="edit"></i></span></span></a>
+                                                    <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover del-button" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Delete" href="#"><span class="btn-icon-wrap"><span class="feather-icon"><i data-feather="trash-2"></i></span></span></a> {% endcomment %}
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        
+                        </div>
+                    
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Page Body -->
+</div>
+
+{% include 'footer.html' %}

@@ -1,0 +1,253 @@
+{% include 'header.html' %}
+
+<div class="hk-pg-wrapper pb-0">
+    <div class="hk-pg-body py-0">
+        <div class="invoiceapp-wrap invoiceapp-setting-active">
+            <div class="invoice-body">
+                <div class="container">
+                    <div class="create-invoice-wrap mt-xxl-5 p-md-5 p-3">
+                        <div class="separator separator-light"></div>
+                        <form action="{% url 'create_invoice' %}" method="POST">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-xxl-4 mb-xxl-0 mb-4">
+                                    <h6>Billed To</h6>
+                                        <div class="form-group">
+                                            <select class="form-select" name="customer" required>
+                                                <option value="">Select Customer</option>
+                                                {% for customer in customer %}
+                                                <option value = '{{customer.id}}'>{{customer.client_name}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <a class="d-inline-flex align-items-center" data-bs-toggle="modal" data-bs-target="#billed_info" href="{% url 'add_client' %}">
+                                        <i class="ri-add-box-line me-1"></i> Add new client </a>
+                                </div>
+
+                                <div class="col-xxl-4 mb-xxl-0 mb-4">
+                                    <h6>Select Product/Service</h6>
+                                    <div class="form-group">
+                                        <select class="form-select" name="selected_product" id="packageS">
+                                            <option value="" data-id="0" selected>Select Product/Service</option>
+                                            {% for product in product %}
+                                            <option value="{{product.id}}" data-id="{{product.product_price}}">{{product.product_title}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <a class="d-inline-flex align-items-center" data-bs-toggle="modal" data-bs-target="#billed_info" href="{% url 'products' %}">
+                                    <i class="ri-add-box-line me-1"></i> Add new product </a>
+                                </div>
+
+                                <div class="col-xxl-2 mb-xxl-0 mb-4">
+                                    <h6>Amount</h6>
+                                    <p >Rs. <span id="id_package_price" value="0">0</span></p>
+                                </div>
+
+                                <div class="col-xxl-2 mb-xxl-0 mb-4">
+                                    <h6>Add Item</h6>
+                                    <span class="badge badge-info"><i class="ri-add-box-line me-1"></i> Add Item</span>
+                                </div>
+
+                            </div>
+                            <div class="separator separator-light"></div>
+                            <div class="row">
+                                <div class="col-xxl-6">
+                                    <h6>Miscellaneous</h6>
+                                    <input type="text" class="form-control" name = "misc_name">
+                                </div>
+                                <div class="col-xxl-6">
+                                    <h6>Miscellaneous Amount</h6>
+                                    <input type="number"
+                                    class="form-control"
+                                    id="misc_amount_id"
+                                    placeholder="Miscellaneous Amount"
+                                    name = "misc_amount"
+                                    value = 0>
+                                </div>
+                            </div>
+
+                            <div class="separator separator-light"></div>
+                            <div class="row">
+                                <div class="col-xxl-6">
+                                    <h6>Deduction</h6>
+                                    <input type="text" class="form-control" name = "deduction_name">
+                                </div>
+                                <div class="col-xxl-6">
+                                    <h6>Deduction Amount</h6>
+                                    <input type="number"
+                                    class="form-control"
+                                    placeholder="Deduction Amount"
+                                    name = "deduction_amount"
+                                    id="deduction_amount"
+                                    value = 0>
+                                </div>
+                            </div>
+
+
+                            <div class="separator separator-light"></div>
+
+                            <div class="row">
+                                <div class="col-xxl-6">
+                                    <h6 class="float-right">Sub Total</h6>
+                                </div>
+                                <div class="col-xxl-6">
+                                    <p >Rs. <span id="sub">0</span></p>
+                                </div>
+                            </div>
+                            <div class="separator separator-light"></div>
+
+                            <div class="row">
+                                <div class="col-xxl-6">
+                                    <h6>Discount Amount</h6>
+                                </div>
+                                <div class="col-xxl-6">
+                                    <input type="number" class="form-control" placeholder="Discount Amount" name="discount" id ="disAmt" value = 0>
+                                </div>
+                            </div>
+                            <div class="separator separator-light"></div>
+
+                            <div class="row">
+                                <div class="col-xxl-6">
+                                    <h6>Total</h6>
+                                </div>
+                                <div class="col-xxl-6">
+                                    <p >Rs. <span id="total">0</span></p>
+                                </div>
+                            </div>
+                            <div class="separator separator-light"></div>
+
+                            {% comment %} <div class="row">
+                                <div class="col-xxl-6">
+                                    <h6><input class="form-check-input checkbox_check me-2" type="checkbox" name="is_vatable" value ="1" id="isVat">Add VAT </h6>
+                                </div>
+                                <div class="col-xxl-6">
+                                    <p> Vat Amount Rs.<span id="vatAmt">0</span></p>
+                                </div>
+                            </div>
+                            <div class="separator separator-light"></div> {% endcomment %}
+
+                            <div class="row">
+                                <div class="col-xxl-6">
+                                    <h6>Grand Total</h6>
+                                </div>
+                                <div class="col-xxl-6">
+                                    <p >Rs. <span id="grandTotal">0</span></p>
+                                </div>
+                            </div>
+                            <div class="separator separator-light"></div>
+
+                            <div class="row">
+                                <div class="col-xxl-6">
+                                    <h6>Remarks</h6>
+                                </div>
+                                <div class="col-xxl-6">
+                                    <textarea class="form-control" rows="6" placeholder="Write an internal note" name="remarks"></textarea>
+                                </div>
+                            </div>
+                            <a href="#" ><button class="btn btn-primary ms-2 d-sm-inline-block d-none">Create Invoice</button></a>
+                        </form>
+                    </div>
+                </div>
+                
+            <div>
+
+        </div>
+    </div>
+</div>
+<script>
+    
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
+<script type="text/javascript" src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+     <script>
+        $(document).ready(function(){
+            $('#packageS').on('change',function(){
+                var selected=$('#packageS').find(":selected").data('id');
+                $('#id_package_price').text(selected);
+                $('#id_package_price').val(selected);
+
+                var misc_amount=$('#misc_amount_id').val();
+                var deduction_amount=$('#deduction_amount').val();
+                var id_package_price=$('#id_package_price').val();
+                {% comment %} console.log(misc_amount,id_package_price); {% endcomment %}
+                calculateSub(misc_amount,id_package_price,deduction_amount);
+                $( "#isVat" ).trigger( "change" );
+            });
+        });
+        $(document).on('input','#misc_amount_id',function(){
+            var misc_amount=$('#misc_amount_id').val();
+            var selected=$('#packageS').find(":selected").data('id');
+            var deduction_amount=$('#deduction_amount').val();
+            calculateSub(misc_amount,selected,deduction_amount);
+            $( "#isVat" ).trigger( "change" );
+          });
+        $(document).on('input','#deduction_amount',function(){
+            var misc_amount=$('#misc_amount_id').val();
+            var selected=$('#packageS').find(":selected").data('id');
+            var deduction_amount=$('#deduction_amount').val();
+            calculateSub(misc_amount,selected,deduction_amount);
+            $( "#isVat" ).trigger( "change" );
+          });
+        
+      
+          function calculateSub(misc,pack,deduction_amount){
+            var subtotal=parseInt(misc)+parseInt(pack)-parseInt(deduction_amount);
+            $('#sub').html(subtotal);
+            $('#grandTotal').html(subtotal);
+            calculateDis();
+            {% comment %} calculateVat(subtotal) {% endcomment %}
+          }
+          $(document).on('input','#disAmt',function(){
+            calculateDis();
+          })
+          function calculateDis(){
+            {% comment %} console.log('cal dis'); {% endcomment %}
+            var subtotal=$('#sub').text();
+            var disAmt=$('#disAmt').val();
+            {% comment %} console.log('sub=',subtotal,'ds=',disAmt); {% endcomment %}
+            var total=subtotal-disAmt;
+            $('#total').text(total);
+            $( "#isVat" ).trigger( "change" );
+            $('#grandTotal').text(total);
+        }
+          function calculateVat(vat){
+
+              var total= $('#total').text();
+              var vatAmt=vat*parseInt(total);
+              
+              var grandToal=vatAmt+parseInt(total);
+              
+            console.log(vatAmt,grandToal);
+            $('#vatAmt').text(vatAmt);
+            $('#grandTotal').text(grandToal); 
+        }
+        
+        $(document).on('change','#isVat',function(){
+            
+            if ($('input.checkbox_check').is(':checked')) {
+                var subtotal=$('#total').text();
+                {% comment %} console.log('if subtotal=',subtotal); {% endcomment %}
+                calculateVat(0.13);
+            }else{
+                var subtotal=$('#total').text();
+                console.log('else subtotal=',subtotal);
+                calculateVat(parseInt(0));
+            }
+        })
+    </script>
+</script>
+<!-- /Main Content -->
+{% include 'footer.html' %}
