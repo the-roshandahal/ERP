@@ -21,69 +21,49 @@
 
 		<!-- /Add other contents below -->
 		<div class="invoice-body mt-3">
-			<div class="container">
-				<div class="invoice-list-view">
-					<table class="table nowrap w-100 mb-5">
-						<thead>
-							<tr>
-								<th>Invoice</th>
-								<th>Customer</th>
-								<th>Issue Date</th>
-								<th>Due Date</th>
-								<th>Invoice Amount</th>
-								<th>Created By</th>
-								<th>Actions</th>
-							</tr>
-						</thead>
-						<tbody>
-							{% for invoices in invoices %}
-							<tr>
-								<td><a href="#" class="table-link-text link-high-em">{{invoices.id}}</a></td>
-								<td>{{invoices.customer}}</td>
-								<td>{{invoices.created}}</td>
-								<td>{{invoices.created}}</td>
-								<td>Rs. {{invoices.invoice_amount}}</td>
-								<td>{{invoices.created_by}}</td>
-								
-								<td>
-									<div class="d-flex align-items-center">
-										<div class="d-flex">
-											<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="View" href="{% url 'view_invoice' id=invoices.id %}"><span class="btn-icon-wrap"><span class="feather-icon"><i data-feather="eye"></i></span></span></a>
-											{% comment %} <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" href="#"><span class="btn-icon-wrap"><span class="feather-icon"><i data-feather="edit"></i></span></span></a>
-											<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover del-button" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Delete" href="#"><span class="btn-icon-wrap"><span class="feather-icon"><i data-feather="trash-2"></i></span></span></a> {% endcomment %}
-										</div>
-									</div>
-								</td>
-							</tr>
-							{% endfor %}
-						</tbody>
-					</table>
-				
-				</div>
-			
-			</div>
-		</div>
-		
-	</div>
-</div>
-
-
-
-<div class="modal fade" id="exampleModalLarge01" tabindex="-1" role="dialog" aria-labelledby="exampleModalLarge01" aria-hidden="true">
-	<div class="modal-dialog modal-lg" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title">Modal title</h5>
-				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<div class="modal-body">
-				<p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary">Save changes</button>
+			<div class="row">
+				<table id="datable_1" class="table nowrap w-100 mb-5">
+					<thead>
+						<tr>
+							<th>
+								<span class="form-check">
+									<input type="checkbox" class="form-check-input check-select-all" id="customCheck1">
+									<label class="form-check-label" for="customCheck1"></label>
+								</span>
+							</th>
+							<th>Invoice</th>
+							<th>Customer</th>
+							<th>Issue Date</th>
+							<th>Due Date</th>
+							<th>Invoice Amount</th>
+							<th>Created By</th>
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for invoices in invoices %}
+						<tr>
+							<td>
+								<span class="form-check mb-0" style="display:none;" >
+									<input type="checkbox" class="form-check-input check-select" name="selected_invoice" id="chk_sel_1" 
+									value="1">
+									<label class="form-check-label" for="chk_sel_1"></label>
+								</span>
+							</td>
+							<td><a href="#" class="table-link-text link-high-em">{{invoices.id}}</a></td>
+							<td>{{invoices.customer}}</td>
+							<td>{{invoices.created}}</td>
+							<td>{{invoices.created}}</td>
+							<td>Rs. {{invoices.invoice_amount}}</td>
+							<td>{{invoices.created_by}}</td>
+							
+							<td>
+								<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="View" href="{% url 'view_invoice' id=invoices.id %}"><span class="btn-icon-wrap"><span class="feather-icon"><i data-feather="eye"></i></span></span></a>
+							</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
 			</div>
 		</div>
 	</div>

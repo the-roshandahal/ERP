@@ -5,10 +5,10 @@ $(function() {
 	if ($("#datable_1").length > 0) {
 		/*Checkbox Add*/
 		var tdCnt=0;
-		$('table tr').each(function(){
-			$('<span class="form-check mb-0"><input type="checkbox" class="form-check-input check-select" id="chk_sel_'+tdCnt+'"><label class="form-check-label" for="chk_sel_'+tdCnt+'"></label></span>').appendTo($(this).find("td:first-child"));
-			tdCnt++;
-		});
+		// $('table tr').each(function(){
+		// 	$('<span class="form-check mb-0"><input type="checkbox" class="form-check-input check-select" id="chk_sel_'+tdCnt+'"><label class="form-check-label" for="chk_sel_'+tdCnt+'"></label></span>').appendTo($(this).find("td:first-child"));
+		// 	tdCnt++;
+		// });
 		var targetDt = $('#datable_1').DataTable({
 			"dom": '<"row"<"col-7 mb-3"<"invoice-toolbar-left">><"col-5 mb-3"<"invoice-toolbar-right"flip>>><"row"<"col-sm-12"t>><"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
 			"ordering": true,
