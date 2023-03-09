@@ -4,27 +4,12 @@ import pandas as pd
 from django.contrib import messages, auth
 from django.contrib.auth.models import User
 from account.views import *
+
+from account.context_processors import custom_data_views
 # Create your views here.
 
-def check_permission(request):
-    logged_in_user = User.objects.get(username=request.user)
-    user = CompanyUser.objects.get(user=logged_in_user)
-    role=Role.objects.get(role=user.permission)
-    permission=Permission.objects.get(role=role)
-    permissions = []
-
-    if permission.create_leads:
-        permissions.append('create')
-    if permission.read_leads:
-        permissions.append('read')
-    if permission.update_leads:
-        permissions.append('update')
-    if permission.delete_leads:
-        permissions.append('delete')
-    return permissions
-
 def crm_setup(request):
-    if 'read' in check_permission(request):
+    if 'read_leads' in custom_data_views(request):
         lead_stage = LeadStage.objects.all()
         lead_source = LeadSource.objects.all()
         context = {
@@ -37,7 +22,7 @@ def crm_setup(request):
         return redirect(home)
 
 def create_stage(request):
-    if 'create' in check_permission(request):
+    if 'create_leads' in custom_data_views(request):
         if request.method =="POST":
             lead_stage = request.POST['lead_stage']
             LeadStage.objects.create(stage=lead_stage)
@@ -50,7 +35,7 @@ def create_stage(request):
         return redirect(home)
     
 def delete_stage(request,id):
-    if 'delete' in check_permission(request):
+    if 'delete_leads' in custom_data_views(request):
         stage_data = LeadStage.objects.get(id=id)
         deleted_role = stage_data.stage
         stage_data.delete()
@@ -61,7 +46,7 @@ def delete_stage(request,id):
         return redirect(home)
 
 def create_source(request):
-    if 'create' in check_permission(request):
+    if 'create_leads' in custom_data_views(request):
         if request.method =="POST":
             lead_source = request.POST['lead_source']
             LeadSource.objects.create(source=lead_source)
@@ -75,7 +60,7 @@ def create_source(request):
 
    
 def delete_source(request,id):
-    if 'delete' in check_permission(request):
+    if 'delete_leads' in custom_data_views(request):
         source_data = LeadSource.objects.get(id=id)
         deleted_role = source_data.source
         source_data.delete()
@@ -87,7 +72,7 @@ def delete_source(request,id):
 
 
 def leads(request):
-    if 'read' in check_permission(request):
+    if 'read_leads' in custom_data_views(request):
         logged_in_user = User.objects.get(username=request.user)
         company_user = CompanyUser.objects.get(user=logged_in_user)
         leads = Leads.objects.filter(active=1).order_by('created')
@@ -126,7 +111,7 @@ def leads(request):
         return redirect(home)
 
 def add_lead(request):
-    if 'create' in check_permission(request):
+    if 'create_leads' in custom_data_views(request):
         if request.method =="POST":
             title = request.POST['title']
             lead_name = request.POST['lead_name']
@@ -152,7 +137,7 @@ def add_lead(request):
         return redirect(home)
     
 def delete_lead(request,id):
-    if 'delete' in check_permission(request):
+    if 'delete_leads' in custom_data_views(request):
         lead = Leads.objects.get(id=id)
         lead.delete()
         messages.info(request, "Lead Deleted")
@@ -162,7 +147,7 @@ def delete_lead(request,id):
         return redirect(home)
 
 def view_lead(request,id):
-    if 'read' in check_permission(request):
+    if 'read_leads' in custom_data_views(request):
         lead = Leads.objects.get(id=id)
         lead_calls = LeadCall.objects.filter(lead=id)
         lead_activity = LeadLog.objects.filter(lead=id)
@@ -202,7 +187,7 @@ def view_lead(request,id):
         return redirect('home')
     
 def update_users(request,id):
-    if 'update' in check_permission(request):
+    if 'update_leads' in custom_data_views(request):
         if request.method =='POST':
             assigned_to = request.POST.getlist("assigned_to")
             lead = Leads.objects.get(id=id)
@@ -225,7 +210,7 @@ def update_users(request,id):
 
 
 def add_note(request,id):
-    if 'update' in check_permission(request):
+    if 'update_leads' in custom_data_views(request):
         assigned_lead = Leads.objects.get(id=id)
         lead_assigned_users=assigned_lead.assigned_to.all()
         logged_in_user = User.objects.get(username=request.user)
@@ -265,7 +250,7 @@ def add_note(request,id):
 
 
 def add_call(request,id):
-    if 'update' in check_permission(request):
+    if 'update_leads' in custom_data_views(request):
         assigned_lead = Leads.objects.get(id=id)
         lead_assigned_users=assigned_lead.assigned_to.all()
         logged_in_user = User.objects.get(username=request.user)
@@ -301,7 +286,7 @@ def add_call(request,id):
 
 
 def add_file(request,id):
-    if 'update' in check_permission(request):
+    if 'update_leads' in custom_data_views(request):
         assigned_lead = Leads.objects.get(id=id)
         lead_assigned_users=assigned_lead.assigned_to.all()
         logged_in_user = User.objects.get(username=request.user)
@@ -337,7 +322,7 @@ def add_file(request,id):
 
  
 def update_lead_status(request,id):
-    if 'update' in check_permission(request):
+    if 'update_leads' in custom_data_views(request):
         assigned_lead = Leads.objects.get(id=id)
         assignedddd=assigned_lead.assigned_to.all()
         logged_in_user = User.objects.get(username=request.user)
@@ -370,7 +355,7 @@ def update_lead_status(request,id):
         return redirect('home')
     
 def edit_lead(request,id):
-    if 'update' in check_permission(request):
+    if 'update_leads' in custom_data_views(request):
         if request.method == 'POST':
             lead_data = Leads.objects.get(id=id)
             lead_data.title = request.POST.get("title")
@@ -396,7 +381,7 @@ def edit_lead(request,id):
 
 
 def close_lead(request,id):
-    if 'update' in check_permission(request):
+    if 'update_leads' in custom_data_views(request):
         assigned_lead = Leads.objects.get(id=id)
         assignedddd=assigned_lead.assigned_to.all()
         logged_in_user = User.objects.get(username=request.user)
@@ -427,7 +412,7 @@ def close_lead(request,id):
 
 
 def reopen_lead(request,id):
-    if 'update' in check_permission(request):
+    if 'update_leads' in custom_data_views(request):
         assigned_lead = Leads.objects.get(id=id)
         assignedddd=assigned_lead.assigned_to.all()
         logged_in_user = User.objects.get(username=request.user)

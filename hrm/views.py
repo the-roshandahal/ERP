@@ -7,34 +7,18 @@ from account.views import *
 import datetime
 from django.core.paginator import Paginator
 
+from account.context_processors import custom_data_views
 # Create your views here.
 
-def check_permission(request):
-    logged_in_user = User.objects.get(username=request.user)
-    user = CompanyUser.objects.get(user=logged_in_user)
-    role=Role.objects.get(role=user.permission)
-    permission=Permission.objects.get(role=role)
-    permissions = []
-
-    if permission.create_hrm:
-        permissions.append('create')
-    if permission.read_hrm:
-        permissions.append('read')
-    if permission.update_hrm:
-        permissions.append('update')
-    if permission.delete_hrm:
-        permissions.append('delete')
-    return permissions
-
 def hrm(request):
-    if 'read' in check_permission(request):
+    if 'read_hrm' in custom_data_views(request):
         return render (request,'hrm/hrm.html')
     else:
         messages.info(request, "Unauthorized access.")
         return redirect(home)
 
 def hrm_setup(request):
-    if 'read' in check_permission(request):
+    if 'read_hrm' in custom_data_views(request):
         month = MonthSetup.objects.all()
         year = YearSetup.objects.all()
         context = {
@@ -47,7 +31,7 @@ def hrm_setup(request):
         return redirect(home)
 
 def add_year(request):
-    if 'create' in check_permission(request):
+    if 'create_hrm' in custom_data_views(request):
         if request.method =="POST":
             year = request.POST['year']
             if YearSetup.objects.filter(year=year).exists():
@@ -63,7 +47,7 @@ def add_year(request):
     
 
 def add_month(request):
-    if 'create' in check_permission(request):
+    if 'create_hrm' in custom_data_views(request):
         if request.method =="POST":
             year = request.POST['year']
             month = request.POST['month']
@@ -80,7 +64,7 @@ def add_month(request):
 
 
 def employees(request):
-    if 'read' in check_permission(request):
+    if 'read_hrm' in custom_data_views(request):
         employees = Employee.objects.all()
         context = {
             'employees':employees,
@@ -92,7 +76,7 @@ def employees(request):
 
 
 def add_employee(request):
-    if 'create' in check_permission(request):
+    if 'create_hrm' in custom_data_views(request):
         if request.method=="POST":
             name = request.POST['name']
             position = request.POST['position']
@@ -111,7 +95,7 @@ def add_employee(request):
 
 
 def attendance (request):
-    if 'read' in check_permission(request):
+    if 'read_hrm' in custom_data_views(request):
         employees = Employee.objects.all()
         current_datetime = datetime.date.today()  
         leaves = Leave.objects.all()
@@ -128,7 +112,7 @@ def attendance (request):
 
     
 def add_leave(request):
-    if 'create' in check_permission(request):
+    if 'create_hrm' in custom_data_views(request):
         if request.method=="POST":
             reason = request.POST['reason']
             emp = request.POST['employee']
@@ -165,7 +149,7 @@ def add_leave(request):
 
 
 def salary (request):
-    if 'create' in check_permission(request):
+    if 'create_hrm' in custom_data_views(request):
         if request.method == 'POST':
             month = request.POST['month']
 

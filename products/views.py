@@ -5,27 +5,12 @@ from account.views import *
 from account.models import *
 from django.contrib.auth.models import User
 
+from account.context_processors import custom_data_views
 # Create your views here.
-def check_permission(request):
-    logged_in_user = User.objects.get(username=request.user)
-    user = CompanyUser.objects.get(user=logged_in_user)
-    role=Role.objects.get(role=user.permission)
-    permission=Permission.objects.get(role=role)
-    permissions = []
 
-    if permission.create_products:
-        permissions.append('create')
-    if permission.read_products:
-        permissions.append('read')
-    if permission.update_products:
-        permissions.append('update')
-    if permission.delete_products:
-        permissions.append('delete')
-    return permissions
-
-    
+ 
 def products(request):
-    if 'read' in check_permission(request):
+    if 'read_products' in custom_data_views(request):
         products = Product.objects.all()
         category = ProductCategory.objects.all()
         unit = ProductUnit.objects.all()
@@ -41,7 +26,7 @@ def products(request):
 
 
 def add_product(request):
-    if 'create' in check_permission(request):
+    if 'create_products' in custom_data_views(request):
         if request.method == "POST":
             product_type = request.POST["product_type"]
             product_title = request.POST["product_title"]
@@ -67,7 +52,7 @@ def add_product(request):
 
 
 def edit_product(request,id):
-    if 'update' in check_permission(request):
+    if 'update_products' in custom_data_views(request):
         return render (request,'products/edit_product.html')
     else:
         messages.info(request, "Unauthorized access.")
@@ -75,7 +60,7 @@ def edit_product(request,id):
 
 
 def delete_product(request,id):
-    if 'delete' in check_permission(request):
+    if 'delete_products' in custom_data_views(request):
         product = Product.objects.get(id=id)
         product.delete()
         messages.info(request, "Product Deleted Successfully")
@@ -86,7 +71,7 @@ def delete_product(request,id):
 
 
 def product_setup(request):
-    if 'read' in check_permission(request):
+    if 'read_products' in custom_data_views(request):
         category = ProductCategory.objects.all()
         unit = ProductUnit.objects.all()
         context = {
@@ -100,7 +85,7 @@ def product_setup(request):
     
 
 def add_product_category(request):
-    if 'create' in check_permission(request):
+    if 'create_products' in custom_data_views(request):
         if request.method =="POST":
             product_category = request.POST['product_category']
             if ProductCategory.objects.filter(product_category=product_category).exists():
@@ -115,7 +100,7 @@ def add_product_category(request):
         return redirect(home)
         
 def edit_product_category(request,id):
-    if 'update' in check_permission(request):
+    if 'update_products' in custom_data_views(request):
         return render (request,'products/delete_product.html')
     else:
         messages.info(request, "Unauthorized access.")
@@ -123,7 +108,7 @@ def edit_product_category(request,id):
     
 
 def delete_product_category(request,id):
-    if 'delete' in check_permission(request):
+    if 'delete_products' in custom_data_views(request):
         category = ProductCategory.objects.get(id=id)
         category.delete()
         messages.info(request, "Product Category Deleted Successfully")
@@ -135,7 +120,7 @@ def delete_product_category(request,id):
 
 
 def add_product_unit(request):
-    if 'create' in check_permission(request):
+    if 'create_products' in custom_data_views(request):
         if request.method =="POST":
             product_unit = request.POST['product_unit']
             if ProductUnit.objects.filter(product_unit=product_unit).exists():
@@ -152,7 +137,7 @@ def add_product_unit(request):
 
 
 def edit_product_unit(request,id):
-    if 'update' in check_permission(request):
+    if 'update_products' in custom_data_views(request):
         return render (request,'products/delete_product.html')
     else:
         messages.info(request, "Unauthorized access.")
@@ -160,7 +145,7 @@ def edit_product_unit(request,id):
 
 
 def delete_product_unit(request,id):
-    if 'delete' in check_permission(request):
+    if 'delete_products' in custom_data_views(request):
         unit = ProductUnit.objects.get(id=id)
         unit.delete()
         messages.info(request, "Product Unit Deleted Successfully")

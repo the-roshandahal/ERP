@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 import datetime
 
-
+from .context_processors import custom_data_views
 
 # Create your views here.
 def login(request):
@@ -45,28 +45,8 @@ def home(request):
     else:
         return redirect('login')
 
-
-def check_permission(request):
-    logged_in_user = User.objects.get(username=request.user)
-    user = CompanyUser.objects.get(user=logged_in_user)
-    role=Role.objects.get(role=user.permission)
-    permission=Permission.objects.get(role=role)
-    permissions = []
-
-    if permission.create_account:
-        permissions.append('create')
-    if permission.read_account:
-        permissions.append('read')
-    if permission.update_account:
-        permissions.append('update')
-    if permission.delete_account:
-        permissions.append('delete')
-    return permissions
-
-
-
 def role(request):
-    if 'read' in check_permission(request):
+    if 'read_account' in custom_data_views(request):
         roles = Permission.objects.all()
         context = {
             'roles':roles,
@@ -78,7 +58,7 @@ def role(request):
     
 
 def create_role(request):
-    if 'create' in check_permission(request):
+    if 'create_account' in custom_data_views(request):
         if request.method == "POST":
             role = request.POST["role"]
             create_finance = request.POST.get('create_finance', 0)
@@ -132,7 +112,7 @@ def create_role(request):
     
 
 def edit_role(request, id):
-    if 'update' in check_permission(request):
+    if 'update_account' in custom_data_views(request):
         permission = Permission.objects.get(id=id)
         new_role = Role.objects.get(role = permission.role)
         if request.method == "POST":
@@ -180,7 +160,7 @@ def edit_role(request, id):
         return redirect(home)
 
 def delete_role(request,id):
-    if 'delete' in check_permission(request):
+    if 'delete_account' in custom_data_views(request):
         role_data = Role.objects.get(id=id)
         print(role_data)
         deleted_role = role_data.role
@@ -193,7 +173,7 @@ def delete_role(request,id):
 
 
 def company_user(request):
-    if 'read' in check_permission(request):
+    if 'read_account' in custom_data_views(request):
         company_users = CompanyUser.objects.all()
         roles = Role.objects.all()
         context = {
@@ -207,7 +187,7 @@ def company_user(request):
     
 
 def create_company_user(request):
-    if 'create' in check_permission(request):
+    if 'create_account' in custom_data_views(request):
         if request.method=="POST":
             username = request.POST['username']
             password = request.POST['password']
@@ -230,7 +210,7 @@ def create_company_user(request):
 
 
 def edit_company_user(request,id):
-    if 'update' in check_permission(request):
+    if 'update_account' in custom_data_views(request):
         if request.method =="POST":
             username = request.POST['username']
             email = request.POST['email']
@@ -263,7 +243,7 @@ def edit_company_user(request,id):
     
 
 def delete_company_user(request,id):
-    if 'delete' in check_permission(request):
+    if 'delete_account' in custom_data_views(request):
         user_data = CompanyUser.objects.get(id=id)
         user = User.objects.get(username=user_data.user.username)
         print(user)

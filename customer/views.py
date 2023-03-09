@@ -4,27 +4,13 @@ from django.contrib import messages, auth
 from account.views import *
 from account.models import *
 from finance.models import *
+from account.context_processors import custom_data_views
 # Create your views here.
-def check_permission(request):
-    logged_in_user = User.objects.get(username=request.user)
-    user = CompanyUser.objects.get(user=logged_in_user)
-    role=Role.objects.get(role=user.permission)
-    permission=Permission.objects.get(role=role)
-    permissions = []
 
-    if permission.create_leads:
-        permissions.append('create')
-    if permission.read_leads:
-        permissions.append('read')
-    if permission.update_leads:
-        permissions.append('update')
-    if permission.delete_leads:
-        permissions.append('delete')
-    return permissions
 
 
 def client(request):
-    if 'read' in check_permission(request):
+    if 'read_finance' in custom_data_views(request):
         customer = Customer.objects.all()
         context = {
             'customer': customer
@@ -37,7 +23,7 @@ def client(request):
 
 
 def add_client(request):
-    if 'create' in check_permission(request):
+    if 'create_finance' in custom_data_views(request):
         if request.method == "POST":
             client_name = request.POST["client_name"]
             address = request.POST["address"]
@@ -54,7 +40,7 @@ def add_client(request):
     
 
 def edit_client(request,id):
-    if 'update' in check_permission(request):
+    if 'update_finance' in custom_data_views(request):
         if request.method == "POST":
             client_name = request.POST["client_name"]
             address = request.POST["address"]
@@ -81,7 +67,7 @@ def edit_client(request,id):
         return redirect(home)
     
 def delete_client(request,id):
-    if 'delete' in check_permission(request):
+    if 'delete_finance' in custom_data_views(request):
         delete_client = Customer.objects.get(id=id)
         deleted_client = delete_client
         delete_client.delete()
@@ -93,7 +79,7 @@ def delete_client(request,id):
     
 
 def view_client(request,id):
-    if 'read' in check_permission(request):
+    if 'read_finance' in custom_data_views(request):
         client = Customer.objects.get(id=id)
         invoices = Invoice.objects.filter(customer=id)
         receipts = Receipt.objects.filter(customer=id)

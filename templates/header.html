@@ -148,6 +148,7 @@
 								<span>Features</span>
 							</div>
 							<ul class="navbar-nav flex-column">
+								{% if 'account' in permissions %}
 								<li class="nav-item">
 									<a class="nav-link" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#dash_chat_role">
 										<span class="nav-icon-wrap">
@@ -176,7 +177,8 @@
 										</li>	
 									</ul>	
 								</li>	
-
+								{% endif %}
+								{% if 'leads' in permissions %}
 								<li class="nav-item">
 									<a class="nav-link" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#dash_chat_lead">
 										<span class="nav-icon-wrap">
@@ -203,6 +205,8 @@
 										</li>	
 									</ul>	
 								</li>
+								{% endif %}
+								{% if 'hrm' in permissions %}
 								<li class="nav-item">
 									<a class="nav-link" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#dash_chat">
 										<span class="nav-icon-wrap">
@@ -240,6 +244,8 @@
 										</li>	
 									</ul>	
 								</li>
+								{% endif %}
+								{% if 'products' in permissions %}
 								<li class="nav-item">
 									<a class="nav-link" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#dash_chat_service">
 										<span class="nav-icon-wrap">
@@ -271,6 +277,8 @@
 										</li>	
 									</ul>	
 								</li>
+								{% endif %}
+								{% if 'finance' in permissions %}
 								<li class="nav-item">
 									<a class="nav-link" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#dash_chat_customer">
 										<span class="nav-icon-wrap">
@@ -304,7 +312,8 @@
 											</ul>	
 										</li>	
 									</ul>	
-								</li>	
+								</li>
+								{% endif %}
 									
 							</ul>
 						</div>

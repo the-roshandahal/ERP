@@ -7,29 +7,12 @@ from account.models import *
 from products.models import *
 from customer.models import *
 from .models import *
+from account.context_processors import custom_data_views
 # Create your views here.
 
-def check_permission(request):
-    logged_in_user = User.objects.get(username=request.user)
-    user = CompanyUser.objects.get(user=logged_in_user)
-    role=Role.objects.get(role=user.permission)
-    permission=Permission.objects.get(role=role)
-    permissions = []
-
-    if permission.create_finance:
-        permissions.append('create')
-    if permission.read_finance:
-        permissions.append('read')
-    if permission.update_finance:
-        permissions.append('update')
-    if permission.delete_finance:
-        permissions.append('delete')
-    return permissions
-
-    
 
 def invoice(request):
-    if 'read' in check_permission(request):
+    if 'read_finance' in custom_data_views(request):
         invoices = Invoice.objects.all()
         print(invoices)
         context={
@@ -43,7 +26,7 @@ def invoice(request):
 
 
 def create_invoice(request):
-    if 'create' in check_permission(request):
+    if 'create_finance' in custom_data_views(request):
         if request.method == "POST":
             customer = request.POST["customer"]
             selected_product = request.POST.getlist("selected_product")
@@ -119,7 +102,7 @@ def create_invoice(request):
     
 
 def view_invoice(request, id):
-    if 'read' in check_permission(request):
+    if 'read_finance' in custom_data_views(request):
         invoice = Invoice.objects.get(id=id)
         context = {
             'invoice': invoice,
@@ -132,7 +115,7 @@ def view_invoice(request, id):
     
 
 def statement(request):
-    if 'read' in check_permission(request):
+    if 'read_finance' in custom_data_views(request):
         customer = Customer.objects.all()
         context = {
             'customer': customer
@@ -144,7 +127,7 @@ def statement(request):
 
 
 def single_statement(request, id):
-    if 'read' in check_permission(request):
+    if 'read_finance' in custom_data_views(request):
         statements = Statement.objects.filter(customer=id)
 
         calc_statements = Statement.objects.filter(customer=id)
@@ -177,7 +160,7 @@ def single_statement(request, id):
 
 
 def receipt(request):
-    if 'read' in check_permission(request):
+    if 'read_finance' in custom_data_views(request):
         receipts = Receipt.objects.all()
         searched_receipts = receipts
         query = request.GET.get("query", "")
@@ -204,7 +187,7 @@ def receipt(request):
 
 
 def create_receipt(request):
-    if 'create' in check_permission(request):
+    if 'create_finance' in custom_data_views(request):
         if request.method == "POST":
             customer = request.POST["customer"]
             payment_method = request.POST["payment_method"]
@@ -246,7 +229,7 @@ def create_receipt(request):
 
 
 def view_receipt(request, id):
-    if 'read' in check_permission(request):
+    if 'read_finance' in custom_data_views(request):
         receipt = Receipt.objects.get(id=id)
         context = {
             'receipt': receipt,

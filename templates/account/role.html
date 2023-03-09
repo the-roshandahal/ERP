@@ -10,9 +10,11 @@
 						<h1 class="pg-title">Welcome back</h1>
 						<p>Welcome to SPELL CRM Dashboard.</p>
 					</div>
+					{% if 'create_account' in permissions %}
 					<div class="mb-lg-0 mb-2 me-8">
 						<button type="button" class="btn btn-success btn-animated"  data-bs-toggle="modal" data-bs-target="#createUserModal">Create Role</button>
 					</div>
+					{% endif %}
 					<div class="modal fade" id="createUserModal" tabindex="-1" role="dialog" aria-labelledby="createUserModal" aria-hidden="true">
 						<div class="modal-dialog" role="document">
 							<div class="modal-content">
@@ -217,21 +219,29 @@
 							<tr>
 								<th>Role</th>
 								<th>ID</th>
-								<th></th>
+								<th>Actions</th>
 							</tr>
 						</thead>
 						<tbody>
 							{% for roles in roles %}
 							<tr class="mt-1">
-								
 								<td><span class="badge badge-lg badge-light">{{roles.role}}</span></td>
 								<td><span class="badge badge-lg badge-light">{{roles.role_id}}</span></td>
+								{% if 'update_account' or 'delete_account' in permissions  %}
 								<td>
-									<div  class="d-flex align-items-center justify-content-end">
+									<div  class="d-flex">
+										{% if 'update_account' in permissions  %}
 										<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" href="{% url 'edit_role' id=roles.id %}"><span class="icon"><span class="feather-icon"><i data-feather="edit-2"></i></span></span></a>
+										{% endif %}
+										{% if 'delete_account' in permissions  %}
 										<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="modal" data-bs-target="#exampleModalCenter{{roles.id}}" href=""><span class="icon"><span class="feather-icon"><i data-feather="archive"></i></span></span></a>
+										{% endif %}
 									</div>
 								</td>
+								{% else %}
+								<td>----</td>
+								{% endif %}
+
 							</tr>
 							{% endfor %}
 							{% for roles in roles %}
