@@ -1,0 +1,140 @@
+{% load static %}{% include 'header.html' %}
+
+		
+
+		<!-- Main Content -->
+		<div class="hk-pg-wrapper">
+			<div class="container-xxl">
+				<!-- Page Header -->
+				<div class="hk-pg-header pg-header-wth-tab pt-7">
+					<div class="d-flex">
+						<div class="d-flex flex-wrap justify-content-between flex-1">
+							<div class="mb-lg-0 mb-2 me-8">
+								<h1 class="pg-title">Welcome back</h1>
+								<p>Add your log.</p>
+							</div>
+							
+						</div>
+					</div>
+				</div>
+				<!-- /Page Header -->
+
+				<!-- Page Body -->
+				<div class="hk-pg-body">
+					<div class="tab-content">
+						<div class="tab-pane fade show active" id="tab_block_1">
+							<div class="row">
+								<div class="col-xxl-12 col-lg-8 col-md-7 mb-md-4 mb-3">
+									<div class="card card-border mb-0 h-100">
+										<div class="card-header card-header-action">
+											<h6>Log Sheet</h6>
+											<div class="card-action-wrap">
+                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalCenter">
+                                                    <i class="zmdi zmdi-edit"></i>Add Log
+                                                </button>
+
+                                                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title">Add Relation</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <form action="{% url 'add_log_sheet' %}" method="POST">
+                                                                {% csrf_token %}
+                                                                <div class="modal-body">
+                                                                        <div class="row">
+                                                                            <div class="col-xxl-12">
+                                                                                <h6>Punch In Time</h6>
+                                                                                <input type="time" class="form-control" name = "punch_in_time" required>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row">
+                                                                            <div class="col-xxl-12">
+                                                                                <h6>Punch Out Time</h6>
+                                                                                <input type="time" class="form-control" name = "punch_out_time" required>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="separator separator-light"></div>
+
+                                                                        <div class="row">
+                                                                            <div class="col-xxl-12">
+                                                                                <h6>Tasks Performed</h6>
+                                                                                <textarea class="form-control" rows="6" placeholder="Write an internal note" name="tasks" required></textarea>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="separator separator-light"></div>
+                                                                        <div class="row">
+                                                                            <div class="col-xxl-12">
+                                                                                <h6>Meetings Attended (If Any)</h6>
+                                                                                <textarea class="form-control" rows="6" placeholder="Write an internal note" name="meetings"></textarea>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="separator separator-light"></div>
+                                                                        <div class="row">
+                                                                            <div class="col-xxl-12">
+                                                                                <h6>Remarks</h6>
+                                                                                <textarea class="form-control" rows="6" placeholder="Write an internal note" name="remarks"></textarea>
+                                                                            </div>
+                                                                        </div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                    <a href="#" ><button class="btn btn-primary ms-2 d-sm-inline-block d-none">Save</button></a>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>	
+                                            </a>
+											</div>
+										</div>
+										<div class="card-body">
+											<div class="contact-list-view table-responsive">
+												<table id="dtHorizontalVerticalExample" class="table table-bordered table-sm ">
+													<thead>
+														<tr>
+															<th>Date</th>
+															<th>Punch In</th>
+															<th>Punch Out</th>
+															<th>Tasks Performed</th>
+															<th>Meetings Attended (If Any)</th>
+															<th>Remarks/Questions</th>
+														</tr>
+													</thead>
+													<tbody>
+														{% for log_sheet in log_sheet %}
+														<tr >
+                                                            <td>{{log_sheet.created|date}}</td>
+                                                            <td>{{log_sheet.punch_in_time}}</td>
+															<td>{{log_sheet.punch_out_time}}</td>
+															<td class="text-break">{{log_sheet.tasks}}</td>
+															<td class="text-break">{{log_sheet.meetings}}</td>
+                                                            <td class="text-break">{{log_sheet.remarks}}</td>
+														</tr>
+														{% endfor %}
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12 mb-md-4 mb-3">
+									
+								</div>
+							</div>	
+						</div>
+					</div>
+				</div>
+				<!-- /Page Body -->		
+			</div>
+		</div>
+		<!-- /Main Content -->
+	</div>
+    <!-- /Wrapper -->
+	
+	{% include 'footer.html' %}

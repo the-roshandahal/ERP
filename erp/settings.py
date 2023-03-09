@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'customer',
     'hrm',
     'products',
+    'features',
 ]
 
 MIDDLEWARE = [

@@ -10,6 +10,7 @@
 						<h1 class="pg-title">Welcome back</h1>
 						<p>Welcome to SPELL CRM Dashboard.</p>
 					</div>
+					{% if 'create_account' in permissions %}
 					<div class="mb-lg-0 mb-2 me-8">
 						<button type="button" class="btn btn-success  btn-animated" data-bs-toggle="modal" data-bs-target="#createUserModal">Create User</button>
 					</div>
@@ -88,7 +89,7 @@
 							</div>
 						</div>
 					</div>
-					
+					{% endif %}
 				</div>
 			</div>
 		</div>
@@ -129,12 +130,18 @@
 								<td class="text-truncate">{{company_users.user.email}}</td>
 								<td class="text-truncate">{{company_users.user.username}}</td>
 								<td><span class="badge badge-lg badge-light">{{company_users.permission.role}}</span></td>
+								{% if 'update_account' or 'delete_account' in permissions %}
 								<td>
 									<div  class="d-flex align-items-center justify-content-end">
+										{% if 'update_account' in permissions %}
 										<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" href="{% url 'edit_company_user' id=company_users.id %}"><span class="icon"><span class="feather-icon"><i data-feather="edit-2"></i></span></span></a>
+										{% endif %}
+										{% if 'delete_account' in permissions %}
 										<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="modal" data-bs-target="#exampleModalCenter{{company_users.id}}" href=""><span class="icon"><span class="feather-icon"><i data-feather="archive"></i></span></span></a>
+										{% endif %}
 									</div>
 								</td>
+								{% endif %}
 							</tr>
 							{% endfor %}
 							{% for company_users in company_users %}

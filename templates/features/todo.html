@@ -1,0 +1,277 @@
+{% load static %}{% include 'header.html' %}
+
+		
+
+		<!-- Main Content -->
+		<div class="hk-pg-wrapper">
+			<div class="container-xxl">
+
+				<!-- Page Body -->
+				<div class="hk-pg-body">
+					<div class="tab-content">
+						<div class="tab-pane fade show active" id="tab_block_1">
+							<div class="row">
+								<div class="col-xxl-12 col-lg-8 col-md-7 mb-md-4 mb-3">
+									<div class="card card-border mb-0 h-100">
+										<div class="card-header card-header-action">
+											<h6>To Do</h6>
+											<div class="card-action-wrap">
+                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalCenter">
+                                                    <i class="zmdi zmdi-edit"></i>Add Task
+                                                </button>
+
+                                                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title">Add Task</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <form action="{% url 'add_todo' %}" method="POST">
+                                                                {% csrf_token %}
+                                                                <div class="modal-body">                                                                        
+                                                                    <div class="row">
+                                                                        <div class="col-xxl-12">
+                                                                            <h6>Task</h6>
+                                                                            <textarea class="form-control" rows="6" placeholder="Describe your task.." name="task"></textarea>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="separator separator-light"></div>
+
+                                                                    <div class="row">
+                                                                        <div class="col-xxl-12">
+                                                                            <h6>Deadline</h6>
+                                                                            <input type="date" class="form-control" name = "deadline" required>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="separator separator-light"></div>
+
+                                                                    <div class="row">
+                                                                        <div class="col-xxl-12 mb-xxl-0 mb-4">
+                                                                            <h6>Select Priority</h6>
+                                                                                <div class="form-group">
+                                                                                    <select class="form-select" name="priority" required="">
+                                                                                        <option value="high" selected>High</option>
+                                                                                        <option value="medium">Medium</option>
+                                                                                        <option value="low">Low</option>
+                                                                                    </select>
+                                                                                </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="separator separator-light"></div>
+                                                                    <div class="row">
+                                                                        <div class="col-xxl-12">
+                                                                            <h6>Assign To</h6>
+                                                                            {% for users in users %}
+                                                                              <div class="form-check">
+                                                                                <input class="form-check-input" name="selected" type="checkbox" value="{{users.id}}" id="flexCheckChecked" {%if users.username == request.user.username%}checked{%endif%}>
+                                                                                <label class="form-check-label" for="flexCheckChecked">
+                                                                                    {{users.user.username}}
+                                                                                </label>
+                                                                              </div>
+                                                                              {% endfor %}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                    <a href="#" ><button class="btn btn-primary ms-2 d-sm-inline-block d-none">Save</button></a>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>	
+                                            </a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- /Page Body -->		
+                <ul class="nav nav-tabs nav-icon nav-light">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-bs-toggle="tab" href="#tab_block_12">
+                            <span class="nav-icon-wrap"><span class="feather-icon"><i data-feather="check-circle"></i></span></span>
+                            <span class="nav-link-text">Active Tasks</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#tab_block_22">
+                            <span class="nav-icon-wrap"><span class="feather-icon"><i data-feather="file-text"></i></span></span>
+                            <span class="nav-link-text">Completed</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#tab_block_23">
+                            <span class="nav-icon-wrap"><span class="feather-icon"><i data-feather="file-text"></i></span></span>
+                            <span class="nav-link-text">My Tasks</span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="tab_block_12">
+                        {% if undone_todo or reassigned_todo %}
+                        <div class="card-body">
+                            <div class="contact-list-view table-responsive">
+                                <table class="table nowrap table-advance">
+                                    <thead>
+                                        <tr>
+                                            <th >Assigned Date</th>
+                                            <th >Task</th>
+                                            <th >Deadline</th>
+                                            <th >From</th>
+                                            <th >Priority</th>
+                                            <th>Status</th>
+                                            <th>Action</th>
+                                            
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for reassigned_todo in reassigned_todo %}
+                                        <tr>
+                                            <td>{{reassigned_todo.date|date}}</td>
+                                            <td>{{reassigned_todo.task}}</td>
+                                            <td>{{reassigned_todo.deadline}}</td>
+                                            <td>{{reassigned_todo.task_from}}</td>
+                                            <td>{{reassigned_todo.priority}}</td>
+                                            <td>{{reassigned_todo.status}}</td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="d-flex">
+                                                        <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Change Status" href="{% url 'change_status' id=reassigned_todo.id %}"><span class="btn-icon-wrap"><span class="feather-icon"><i class="bi bi-list-check"></i></span></span></a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                        {% for undone_todo in undone_todo %}
+                                        <tr>
+                                            <td>{{undone_todo.date|date}}</td>
+                                            <td>{{undone_todo.task}}</td>
+                                            <td>{{undone_todo.deadline}}</td>
+                                            <td>{{undone_todo.task_from}}</td>
+                                            <td>{{undone_todo.priority}}</td>
+                                            <td>{{undone_todo.status}}</td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="d-flex">
+                                                        <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Change Status" href="{% url 'change_status' id=undone_todo.id %}"><span class="btn-icon-wrap"><span class="feather-icon"><i class="bi bi-list-check"></i></span></span></a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        {% else %}
+                        <p>You dont have any active tasks.</p>
+                        {%endif%}
+                    </div>
+                    <div class="tab-pane fade" id="tab_block_22">
+                        {% if done_todo %}
+                        <div class="card-body">
+                            <div class="contact-list-view table-responsive">
+                                <table class="table nowrap table-advance">
+                                    <thead>
+                                        <tr>
+                                            <th >Assigned Date</th>
+                                            <th >Task</th>
+                                            <th >Deadline</th>
+                                            <th >From</th>
+                                            <th >Priority</th>
+                                            <th>Status</th>
+                                            
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for done_todo in done_todo %}
+                                        <tr>
+                                            <td>{{done_todo.date|date}}</td>
+                                            <td>{{done_todo.task}}</td>
+                                            <td>{{done_todo.deadline}}</td>
+                                            <td>{{done_todo.task_from}}</td>
+                                            <td>{{done_todo.priority}}</td>
+                                            <td>{{done_todo.status}}</td>
+                                            
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        {% else %}
+                        <p>You dont have any completed tasks.</p>
+                        {%endif%}
+                    </div>
+
+                    <div class="tab-pane fade" id="tab_block_23">
+                        {% if mytasks %}
+                        <div class="card-body">
+                            <div class="contact-list-view table-responsive">
+                                <table class="table nowrap table-advance">
+                                    <thead>
+                                        <tr>
+                                            <th >Assigned Date</th>
+                                            <th >Task</th>
+                                            <th >Deadline</th>
+                                            <th >Assigned To</th>
+                                            <th >Priority</th>
+                                            <th>Status</th>
+                                            <th>Action</th>
+                                            
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for mytasks in mytasks %}
+                                        <tr>
+                                            <td>{{mytasks.date|date}}</td>
+                                            <td>{{mytasks.task}}</td>
+                                            <td>{{mytasks.deadline}}</td>
+                                            <td>{{mytasks.task_to}}</td>
+                                            <td>{{mytasks.priority}}</td>
+                                            <td>{{mytasks.status}}</td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="d-flex">
+                                                        <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Change Status" href="{% url 'change_status' id=mytasks.id %}"><span class="btn-icon-wrap"><span class="feather-icon"><i class="bi bi-list-check"></i></span></span></a>
+                                                    </div>
+                                                    {%if mytasks.status == 'done' %}
+                                                    <div class="d-flex">
+                                                        <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Reassign Task" href="{% url 'reassign' id=mytasks.id %}"><span class="btn-icon-wrap"><span class="feather-icon"><i class="bi bi-arrow-repeat"></i></span></span></a>
+                                                    </div>
+                                                    {% endif %}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        {% else %}
+                        <p>You dont have any tasks.</p>
+                        {%endif%}
+                    </div>
+                </div>
+			</div>
+		</div>
+		<!-- /Main Content -->
+	</div>
+    <!-- /Wrapper -->
+	
+
+    														
+
+													
+
+
+	{% include 'footer.html' %}
