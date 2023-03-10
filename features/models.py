@@ -1,6 +1,11 @@
 from django.contrib.auth.models import User
 from django.db import models
 from account.models import *
+import pytz
+from django.utils import timezone
+
+
+
 # Create your models here.
 
 class LogSheet(models.Model):
@@ -10,7 +15,8 @@ class LogSheet(models.Model):
     tasks = models.TextField(null = True, blank = True)
     meetings = models.TextField(null = True, blank = True)
     remarks = models.TextField(null = True, blank = True)
-    created = models.DateTimeField(auto_now_add=True)
+    # created = models.DateTimeField(default=timezone.now().astimezone(pytz.timezone('Asia/Kathmandu')))
+    created = models.DateField(auto_now_add=True)
 
     def __str__(self):
         return self.user.user.username

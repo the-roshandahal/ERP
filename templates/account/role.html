@@ -2,19 +2,22 @@
 <!-- Main Content -->
 <div class="hk-pg-wrapper">
 	<div class="container-xxl">
-		<!-- Page Header -->
-		<div class="hk-pg-header pg-header-wth-tab pt-7">
+
+		<div class="hk-pg-header">
 			<div class="d-flex">
 				<div class="d-flex flex-wrap justify-content-between flex-1">
-					<div class="mb-lg-0 mb-2 me-8">
-						<h1 class="pg-title">Welcome back</h1>
-						<p>Welcome to SPELL CRM Dashboard.</p>
+					<div class="mb-md-0 mb-2 me-8">
+						<div class="d-flex align-items-center">
+							<h1 class="pg-title">CRM Dashboard</h1>
+							<span class="badge badge-soft-primary ms-3">Badge</span>
+						</div>
+						<p>Good afternoon {{request.user.first_name}}!</p>
+						
 					</div>
 					{% if 'create_account' in permissions %}
-					<div class="mb-lg-0 mb-2 me-8">
-						<button type="button" class="btn btn-success btn-animated"  data-bs-toggle="modal" data-bs-target="#createUserModal">Create Role</button>
+					<div class="pg-header-action-wrap">
+						<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createUserModal">Create Role</button>
 					</div>
-					{% endif %}
 					<div class="modal fade" id="createUserModal" tabindex="-1" role="dialog" aria-labelledby="createUserModal" aria-hidden="true">
 						<div class="modal-dialog" role="document">
 							<div class="modal-content">
@@ -204,11 +207,11 @@
 							</div>
 						</div>
 					</div>
-					
+					{% endif %}
 				</div>
 			</div>
 		</div>
-		<!-- /Page Header -->
+
 		<!-- /Add other contents below -->
 		<div class="container mt-5">
             														

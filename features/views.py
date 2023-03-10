@@ -4,33 +4,35 @@ from django.shortcuts import render, redirect
 from django.shortcuts import render
 from .models import *
 from account.models import *
-
-
+from django.utils import timezone
 
 
 def home(request):
     if request.user.is_authenticated:
         logged_in = CompanyUser.objects.get(user=request.user)
         logs=LogSheet.objects.filter(user=logged_in).order_by('-punch_in_time').first()
-
         punched_in = False
         if logs:
-            if logs.created.date() == date.today():
+            print(logs)
+            print(logs.created)
+            print(date.today())
+            if logs.created == date.today():
                 punched_in = True 
             else:
                 punched_in = False
         else:
             punched_in = False
-
+        print(punched_in)
         punched_out_for_today =False
         if logs:
-            if logs.punch_out_time and logs.created.date() == date.today():
+            if logs.punch_out_time and logs.created == date.today():
                 punched_out_for_today =True
         else:
             punched_out_for_today =False
     
         time_now = datetime.now().time()
-        today_log=LogSheet.objects.filter(user=logged_in)
+        today_log=LogSheet.objects.filter(user=logged_in).order_by('-punch_in_time').first()
+        
         context = {
             'time_now':time_now,
             'today_log':today_log,
@@ -113,7 +115,7 @@ def punch_in(request):
         logged_in = CompanyUser.objects.get(user=request.user)
         logs=LogSheet.objects.filter(user=logged_in).order_by('-punch_in_time').first()
         if logs:
-            if logs.created.date() == date.today():
+            if logs.created == date.today():
                 messages.info(request, "Already punched in for today.")
                 return redirect('home') 
             else:

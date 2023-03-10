@@ -2,53 +2,83 @@
 <!-- Main Content -->
 <div class="hk-pg-wrapper">
 	<div class="container-xxl">
-		<!-- Page Header -->
-		<div class="hk-pg-header pg-header-wth-tab pt-7">
+		<div class="hk-pg-header">
 			<div class="d-flex">
 				<div class="d-flex flex-wrap justify-content-between flex-1">
-					<div class="mb-lg-0 mb-2 me-8">
-						<h1 class="pg-title">Lead Stages</h1>
+					<div class="mb-md-0 mb-2 me-8">
+						<div class="d-flex align-items-center">
+							<h1 class="pg-title">Lead Stages and Sources</h1>
+						</div>
+						<p>Add, Edit or Delete the Lead Setups.</p>
+						
 					</div>
-					{% if 'create_leads' in permissions %}
-					<div class="mb-lg-0 mb-2 me-8">
-						<button type="button" class="btn btn-success btn-animated"  data-bs-toggle="modal" data-bs-target="#createUserModal">Create Stage</button>
-					</div>
-					
-					<div class="modal fade" id="createUserModal" tabindex="-1" role="dialog" aria-labelledby="createUserModal" aria-hidden="true">
-						<div class="modal-dialog" role="document">
-							<div class="modal-content">
-								<form action="{% url 'create_stage' %}" method="POST">
-									{% csrf_token %}
-									<div class="modal-header">
-										<h5 class="modal-title" id="createUserModal">Create Stage</h5>
-										<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-											<span aria-hidden="true">&times;</span>
-										</button>
-									</div>
-									<div class="modal-body">
-										<div class="col-md-12 mb-3">
-											<label for="">Stage Name</label>
-											<input type="text" class="form-control"  placeholder="Initial" name='lead_stage'>
+					<div class="pg-header-action-wrap">
+						{% if 'create_leads' in permissions %}
+						<button class="btn btn-outline-secondary me-3" data-bs-toggle="modal" data-bs-target="#createUserModal">Add  Stage</button>
+						<div class="modal fade" id="createUserModal" tabindex="-1" role="dialog" aria-labelledby="createUserModal" aria-hidden="true">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+									<form action="{% url 'create_stage' %}" method="POST">
+										{% csrf_token %}
+										<div class="modal-header">
+											<h5 class="modal-title" id="createUserModal">Create Stage</h5>
+											<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
 										</div>
-									</div>
-									<div class="modal-footer">
-										<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-										<button type="submit" class="btn btn-primary">Add</button>
-									</div>
-								</form>
+										<div class="modal-body">
+											<div class="col-md-12 mb-3">
+												<label for="">Stage Name</label>
+												<input type="text" class="form-control"  placeholder="Initial" name='lead_stage'>
+											</div>
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+											<button type="submit" class="btn btn-primary">Add</button>
+										</div>
+									</form>
+								</div>
 							</div>
 						</div>
+
+
+						<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createUserModalSource">Add  Source</button>
+						<div class="modal fade" id="createUserModalSource" tabindex="-1" role="dialog" aria-labelledby="createUserModalSource" aria-hidden="true">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+									<form action="{% url 'create_source' %}" method="POST">
+										{% csrf_token %}
+										<div class="modal-header">
+											<h5 class="modal-title" id="createUserModalSource">Create Source</h5>
+											<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+										</div>
+										<div class="modal-body">
+											<div class="col-md-12 mb-3">
+												<label for="">Source Name</label>
+												<input type="text" class="form-control"  placeholder="Facebook" name='lead_source'>
+											</div>
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+											<button type="submit" class="btn btn-primary">Add</button>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+						{% endif %}
 					</div>
-					{% endif %}
 				</div>
 			</div>
 		</div>
-		<!-- /Page Header -->
+
 		<!-- /Add other contents below -->
 		<div class="container mt-5">												
             <div class="row">
                 <div class="table-responsive">
-					<table class="table nowrap table-advance">
+					<table class="table nowrap">
 						<thead>
 							<tr>
 								<th>Stage</th>
@@ -57,7 +87,7 @@
 						</thead>
 						<tbody>
 							{% for lead_stage in lead_stage %}
-							<tr class="mt-1">
+							<tr>
 								
 								<td><span class="badge badge-lg badge-light">{{lead_stage.stage}}</span></td>
 								<td>
@@ -102,52 +132,13 @@
 				</div>
             </div>										
         </div>
-		<div class="hk-pg-header pg-header-wth-tab pt-7">
-			<div class="d-flex">
-				<div class="d-flex flex-wrap justify-content-between flex-1">
-					<div class="mb-lg-0 mb-2 me-8">
-						<h1 class="pg-title">Lead Sources</h1>
-					</div>
-					<div class="mb-lg-0 mb-2 me-8">
-						<button type="button" class="btn btn-success btn-animated"  data-bs-toggle="modal" data-bs-target="#createUserModalSource">Create Source</button>
-					</div>
-					<div class="modal fade" id="createUserModalSource" tabindex="-1" role="dialog" aria-labelledby="createUserModalSource" aria-hidden="true">
-						<div class="modal-dialog" role="document">
-							<div class="modal-content">
-								<form action="{% url 'create_source' %}" method="POST">
-									{% csrf_token %}
-									<div class="modal-header">
-										<h5 class="modal-title" id="createUserModalSource">Create Source</h5>
-										<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-											<span aria-hidden="true">&times;</span>
-										</button>
-									</div>
-									<div class="modal-body">
-										<div class="col-md-12 mb-3">
-											<label for="">Source Name</label>
-											<input type="text" class="form-control"  placeholder="Facebook" name='lead_source'>
-										</div>
-									</div>
-									<div class="modal-footer">
-										<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-										<button type="submit" class="btn btn-primary">Add</button>
-									</div>
-								</form>
-							</div>
-						</div>
-					</div>
-					
-				</div>
-			</div>
-		</div>
-		<div class="container mt-5">
-            														
+		<div class="container mt-5">												
             <div class="row">
                 <div class="table-responsive">
-					<table class="table nowrap table-advance">
+					<table class="table nowrap">
 						<thead>
 							<tr>
-								<th></th>
+								<th>Source</th>
 								<th></th>
 							</tr>
 						</thead>

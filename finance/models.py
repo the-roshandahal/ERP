@@ -8,7 +8,7 @@ from products.models import *
 PAYMENT_CHOICES = (('bank_transfer','bank_transfer'),('esewa','esewa'),('cash','cash'))
 class Invoice(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    product = models.ManyToManyField(Product, null = True, blank = True)
+    product = models.ManyToManyField(Product)
     
     misc_name = models.CharField(max_length=255,null = True, blank = True)
     misc_amount = models.FloatField(null = True, blank = True)

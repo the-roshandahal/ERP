@@ -2,17 +2,21 @@
 <!-- Main Content -->
 <div class="hk-pg-wrapper">
 	<div class="container-xxl">
-		<!-- Page Header -->
-		<div class="hk-pg-header pg-header-wth-tab pt-7">
+
+		<div class="hk-pg-header">
 			<div class="d-flex">
 				<div class="d-flex flex-wrap justify-content-between flex-1">
-					<div class="mb-lg-0 mb-2 me-8">
-						<h1 class="pg-title">Welcome back</h1>
-						<p>Welcome to SPELL CRM Dashboard.</p>
+					<div class="mb-md-0 mb-2 me-8">
+						<div class="d-flex align-items-center">
+							<h1 class="pg-title">CRM Dashboard</h1>
+							<span class="badge badge-soft-primary ms-3">Badge</span>
+						</div>
+						<p>Good afternoon {{request.user.first_name}}!</p>
+						
 					</div>
 					{% if 'create_leads' in permissions %}
-					<div class="mb-lg-0 mb-2 me-8">
-						<button type="button" class="btn btn-success  btn-animated" data-bs-toggle="modal" data-bs-target="#createUserModal">Create Lead</button>
+					<div class="pg-header-action-wrap">
+						<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createUserModal">Create Lead</button>
 					</div>
 					<div class="modal fade" id="createUserModal" tabindex="-1" role="dialog" aria-labelledby="createUserModal" aria-hidden="true">
 						<div class="modal-dialog modal-dialog-centered" role="document">
@@ -117,185 +121,179 @@
 				</div>
 			</div>
 		</div>
-		<!-- /Page Header -->
+
 		<!-- /Add other contents below -->
-		<ul class="nav nav-justified nav-light nav-tabs nav-segmented-tabs">
-			<li class="nav-item">
-				<a class="nav-link active" data-bs-toggle="tab" href="#my_leads">
-					<span class="nav-link-text">My Leads</span>
-				</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" data-bs-toggle="tab" href="#active_leads">
-					<span class="nav-link-text">Active Leads</span>
-				</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" data-bs-toggle="tab" href="#closed_leads">
-					<span class="nav-link-text">Closed Leads</span>
-				</a>
-			</li>
-		</ul>
-		<div class="tab-content">
-			<div class="tab-pane fade show active" id="my_leads">
-				<div class="row">
-					<div class="table-responsive">
-						<table class="table nowrap table-advance">
-							<thead>
-								<tr>
-									<th class="mnw-150p">Title</th>
-									<th class="mnw-150p">Name</th>
-									<th class="mnw-200p">Email</th>
-									<th class="mnw-150p">stage</th>
-									<th></th>
-								</tr>
-							</thead>
-							<tbody>
-								{% for my_leads in my_leads %}
-								<tr>
-									<td class="text-truncate">
-										<div class="media align-items-center">
-											<div class="media-head me-3">
-												<div class="avatar avatar-xs">
-													<img src="{% static 'user.png' %}" alt="user" class="avatar-img">
+		<div class="container mt-5"></div>
+			<ul class="nav nav-justified nav-light nav-tabs nav-segmented-tabs">
+				<li class="nav-item">
+					<a class="nav-link active" data-bs-toggle="tab" href="#my_leads">
+						<span class="nav-link-text">My Leads</span>
+					</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" data-bs-toggle="tab" href="#active_leads">
+						<span class="nav-link-text">Active Leads</span>
+					</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" data-bs-toggle="tab" href="#closed_leads">
+						<span class="nav-link-text">Closed Leads</span>
+					</a>
+				</li>
+			</ul>
+			<div class="tab-content">
+				<div class="tab-pane fade show active" id="my_leads">
+					<div class="row">
+						<div class="table-responsive">
+							<table class="table nowrap">
+								<thead>
+									<tr>
+										<th class="mnw-150p">Title</th>
+										<th class="mnw-150p">Name</th>
+										<th class="mnw-200p">Email</th>
+										<th class="mnw-150p">stage</th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for my_leads in my_leads %}
+									<tr>
+										<td class="text-truncate">
+											<div class="media align-items-center">
+												<div class="media-head me-3">
+													<div class="avatar avatar-xs">
+														<img src="{% static 'user.png' %}" alt="user" class="avatar-img">
+													</div>
+												</div>
+												<div class="media-body mnw-0">
+													<a href="#" class="table-link-text text-high-em text-truncate mb-0">{{my_leads.title}}</a>
 												</div>
 											</div>
-											<div class="media-body mnw-0">
-												<a href="#" class="table-link-text text-high-em text-truncate mb-0">{{my_leads.title}}</a>
-											</div>
-										</div>
-									</td>
-									<td class="text-truncate">{{my_leads.lead_name}}</td>
-									<td class="text-truncate">{{my_leads.email}}</td>
-									<td><span class="badge badge-lg badge-light">{{my_leads.stage}}</span></td>
-									
-									<td>
-										{% if 'create_leads' in permissions %}
-										<div  class="d-flex align-items-center justify-content-end">
-											<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="View" href="{% url 'view_lead' id=my_leads.id %}"><span class="icon"><span class="feather-icon"><i data-feather="eye"></i></span></span></a>
-										</div>
+										</td>
+										<td class="text-truncate">{{my_leads.lead_name}}</td>
+										<td class="text-truncate">{{my_leads.email}}</td>
+										<td><span class="badge badge-lg badge-light">{{my_leads.stage}}</span></td>
 										
-                                        {% else %}
-                                        <p>---</p>
-										{% endif %}
-									</td>
-								</tr>
-								{% endfor %}
-							</tbody>
-						</table>
+										<td>
+											{% if 'create_leads' in permissions %}
+											<div  class="d-flex align-items-center justify-content-end">
+												<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="View" href="{% url 'view_lead' id=my_leads.id %}"><span class="icon"><span class="feather-icon"><i data-feather="eye"></i></span></span></a>
+											</div>
+											
+											{% else %}
+											<p>---</p>
+											{% endif %}
+										</td>
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+						
 					</div>
-					
 				</div>
-			</div>
-			<div class="tab-pane fade" id="active_leads">
-				<div class="row">
-					<div class="table-responsive">
-						<table class="table nowrap table-advance">
-							<thead>
-								<tr>
-									<th class="mnw-150p">Title</th>
-									<th class="mnw-150p">Name</th>
-									<th class="mnw-200p">Email</th>
-									<th class="mnw-150p">stage</th>
-									<th class="mnw-150p">Assigned To</th>
-									<th></th>
-								</tr>
-							</thead>
-							<tbody>
-								{% for leads in leads %}
-								<tr>
-									<td class="text-truncate">
-										<div class="media align-items-center">
-											<div class="media-head me-3">
-												<div class="avatar avatar-xs">
-													<img src="{% static 'user.png' %}" alt="user" class="avatar-img">
+				<div class="tab-pane fade" id="active_leads">
+					<div class="row">
+						<div class="table-responsive">
+							<table class="table nowrap">
+								<thead>
+									<tr>
+										<th class="mnw-150p">Title</th>
+										<th class="mnw-150p">Name</th>
+										<th class="mnw-200p">Email</th>
+										<th class="mnw-150p">stage</th>
+										<th class="mnw-150p">Assigned To</th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for leads in leads %}
+									<tr>
+										<td class="text-truncate">
+											<div class="media align-items-center">
+												<div class="media-head me-3">
+													<div class="avatar avatar-xs">
+														<img src="{% static 'user.png' %}" alt="user" class="avatar-img">
+													</div>
+												</div>
+												<div class="media-body mnw-0">
+													<a href="#" class="table-link-text text-high-em text-truncate mb-0">{{leads.title}}</a>
 												</div>
 											</div>
-											<div class="media-body mnw-0">
-												<a href="#" class="table-link-text text-high-em text-truncate mb-0">{{leads.title}}</a>
+										</td>
+										<td class="text-truncate">{{leads.lead_name}}</td>
+										<td class="text-truncate">{{leads.email}}</td>
+										<td><span class="badge badge-lg badge-light">{{leads.stage}}</span></td>
+										<td>
+											{% for leads in leads.assigned_to.all %}
+											<span class="badge badge-soft-primary mb-1">{{leads.user.first_name}} {{leads.user.last_name}}</span><br>
+											{% endfor %}
+										</td>
+										<td>
+											<div  class="d-flex align-items-center justify-content-end">
+												<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="View" href="{% url 'view_lead' id=leads.id %}"><span class="icon"><span class="feather-icon"><i data-feather="eye"></i></span></span></a>
 											</div>
-										</div>
-									</td>
-									<td class="text-truncate">{{leads.lead_name}}</td>
-									<td class="text-truncate">{{leads.email}}</td>
-									<td><span class="badge badge-lg badge-light">{{leads.stage}}</span></td>
-									<td>
-										{% for leads in leads.assigned_to.all %}
-										<span class="badge badge-soft-primary mb-1">{{leads.user.first_name}} {{leads.user.last_name}}</span><br>
-										{% endfor %}
-									</td>
-									<td>
-										<div  class="d-flex align-items-center justify-content-end">
-											<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="View" href="{% url 'view_lead' id=leads.id %}"><span class="icon"><span class="feather-icon"><i data-feather="eye"></i></span></span></a>
-										</div>
-									</td>
-								</tr>
-								{% endfor %}
-							</tbody>
-						</table>
+										</td>
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+						
 					</div>
-					
 				</div>
-			</div>
-			<div class="tab-pane fade" id="closed_leads">
-				<div class="row">
-					<div class="table-responsive">
-						<table class="table nowrap table-advance">
-							<thead>
-								<tr>
-									<th class="mnw-150p">Title</th>
-									<th class="mnw-150p">Name</th>
-									<th class="mnw-200p">Email</th>
-									<th class="mnw-150p">stage</th>
-									<th class="mnw-150p">Assigned To</th>
-									<th></th>
-								</tr>
-							</thead>
-							<tbody>
-								{% for closed_leads in closed_leads %}
-								<tr>
-									<td class="text-truncate">
-										<div class="media align-items-center">
-											<div class="media-head me-3">
-												<div class="avatar avatar-xs">
-													<img src="{% static 'user.png' %}" alt="user" class="avatar-img">
+				<div class="tab-pane fade" id="closed_leads">
+					<div class="row">
+						<div class="table-responsive">
+							<table class="table nowrap">
+								<thead>
+									<tr>
+										<th class="mnw-150p">Title</th>
+										<th class="mnw-150p">Name</th>
+										<th class="mnw-200p">Email</th>
+										<th class="mnw-150p">stage</th>
+										<th class="mnw-150p">Assigned To</th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for closed_leads in closed_leads %}
+									<tr>
+										<td class="text-truncate">
+											<div class="media align-items-center">
+												<div class="media-head me-3">
+													<div class="avatar avatar-xs">
+														<img src="{% static 'user.png' %}" alt="user" class="avatar-img">
+													</div>
+												</div>
+												<div class="media-body mnw-0">
+													<a href="#" class="table-link-text text-high-em text-truncate mb-0">{{closed_leads.title}}</a>
 												</div>
 											</div>
-											<div class="media-body mnw-0">
-												<a href="#" class="table-link-text text-high-em text-truncate mb-0">{{closed_leads.title}}</a>
+										</td>
+										<td class="text-truncate">{{closed_leads.lead_name}}</td>
+										<td class="text-truncate">{{closed_leads.email}}</td>
+										<td><span class="badge badge-lg badge-light">{{closed_leads.stage}}</span></td>
+										<td>
+											{% for closed_leads in closed_leads.assigned_to.all %}
+											<span class="badge badge-soft-primary mb-1">{{closed_leads.user.first_name}} {{closed_leads.user.last_name}}</span><br>
+											{% endfor %}
+										</td>
+										<td>
+											<div  class="d-flex align-items-center justify-content-end">
+												<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="View" href="{% url 'view_lead' id=closed_leads.id %}"><span class="icon"><span class="feather-icon"><i data-feather="eye"></i></span></span></a>
 											</div>
-										</div>
-									</td>
-									<td class="text-truncate">{{closed_leads.lead_name}}</td>
-									<td class="text-truncate">{{closed_leads.email}}</td>
-									<td><span class="badge badge-lg badge-light">{{closed_leads.stage}}</span></td>
-									<td>
-										{% for closed_leads in closed_leads.assigned_to.all %}
-										<span class="badge badge-soft-primary mb-1">{{closed_leads.user.first_name}} {{closed_leads.user.last_name}}</span><br>
-										{% endfor %}
-									</td>
-									<td>
-										<div  class="d-flex align-items-center justify-content-end">
-											<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="View" href="{% url 'view_lead' id=closed_leads.id %}"><span class="icon"><span class="feather-icon"><i data-feather="eye"></i></span></span></a>
-										</div>
-									</td>
-								</tr>
-								{% endfor %}
-							</tbody>
-						</table>
+										</td>
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+						
 					</div>
-					
 				</div>
 			</div>
-		</div>
-																
-		
-														
-        <div class="container mt-5">
-            														
-            
-													
-        </div>
+		 </div>
 		
 	</div>
 </div>
