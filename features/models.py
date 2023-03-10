@@ -6,17 +6,18 @@ from account.models import *
 class LogSheet(models.Model):
     user = models.ForeignKey(CompanyUser, on_delete=models.CASCADE)
     punch_in_time = models.TimeField()
-    punch_out_time = models.TimeField()
-    tasks = models.TextField()
+    punch_out_time = models.TimeField(null = True, blank = True)
+    tasks = models.TextField(null = True, blank = True)
     meetings = models.TextField(null = True, blank = True)
     remarks = models.TextField(null = True, blank = True)
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.user.username
+        return self.user.user.username
 
     class Meta:
         verbose_name_plural = "08. Log Sheet"
+
 
 
 class ToDo(models.Model):

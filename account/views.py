@@ -13,7 +13,7 @@ from .context_processors import custom_data_views
 # Create your views here.
 def login(request):
     if request.user.is_authenticated:
-        return redirect(home)
+        return redirect('home')
     else:
         if request.method == "POST":
             username = request.POST["username"]
@@ -31,7 +31,7 @@ def login(request):
             if user is not None:
                 auth.login(request, user)
                 messages.info(request, "Logged in successfully.")
-                return redirect(home)
+                return redirect('home')
         else:
             return render (request,'account/login.html')
 
@@ -39,11 +39,7 @@ def logout(request):
     auth.logout(request)
     return redirect(login)
 
-def home(request):
-    if request.user.is_authenticated:
-        return render (request,'index.html') 
-    else:
-        return redirect('login')
+
 
 def role(request):
     if 'read_account' in custom_data_views(request):
@@ -54,7 +50,7 @@ def role(request):
         return render (request,'account/role.html',context)
     else:
         messages.info(request, "Unauthorized access.")
-        return redirect(home)
+        return redirect('home')
     
 
 def create_role(request):
@@ -108,7 +104,7 @@ def create_role(request):
             return redirect('role')
     else:
         messages.info(request, "Unauthorized access.")
-        return redirect(home)
+        return redirect('home')
     
 
 def edit_role(request, id):
@@ -157,7 +153,7 @@ def edit_role(request, id):
             return render(request, 'account/edit_role.html',context)
     else:
         messages.info(request, "Unauthorized access.")
-        return redirect(home)
+        return redirect('home')
 
 def delete_role(request,id):
     if 'delete_account' in custom_data_views(request):
@@ -169,7 +165,7 @@ def delete_role(request,id):
         return redirect('role')
     else:
         messages.info(request, "Unauthorized access.")
-        return redirect(home)
+        return redirect('home')
 
 
 def company_user(request):
@@ -183,7 +179,7 @@ def company_user(request):
         return render (request,'account/company_user.html',context)
     else:
         messages.info(request, "Unauthorized access.")
-        return redirect(home)
+        return redirect('home')
     
 
 def create_company_user(request):
@@ -204,7 +200,7 @@ def create_company_user(request):
             return redirect('company_user')
     else:
         messages.info(request, "Unauthorized access.")
-        return redirect(home)
+        return redirect('home')
     
 
 
@@ -239,7 +235,7 @@ def edit_company_user(request,id):
             return render (request,'account/edit_company_user.html',context)
     else:
         messages.info(request, "Unauthorized access.")
-        return redirect(home)
+        return redirect('home')
     
 
 def delete_company_user(request,id):
@@ -256,7 +252,7 @@ def delete_company_user(request,id):
         return redirect('company_user')
     else:
         messages.info(request, "Unauthorized access.")
-        return redirect(home)
+        return redirect('home')
     
 
 
