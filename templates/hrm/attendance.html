@@ -28,11 +28,13 @@
 									<div class="card card-border mb-0 h-100">
 										<div class="card-header card-header-action">
 											<h6>Employees Absent today</h6>
+											{% if 'update_hrm' in permissions %}
 											<div class="card-action-wrap">
                                                 <button type="button" class="btn btn-primary"  data-bs-toggle="modal" data-bs-target="#exampleModalCenterrrrrr">
                                                     <i class="zmdi zmdi-edit"></i>Add Leave
                                                 </button>
                                             </div>
+											{% endif %}
 
                                                
 										</div>
@@ -67,13 +69,6 @@
 									<div class="card card-border mb-0 h-100">
 										<div class="card-header card-header-action">
 											<h6>Recent Leaves</h6>
-											<div class="card-action-wrap">
-                                                <button type="button" class="btn btn-primary"  data-bs-toggle="modal" data-bs-target="#exampleModalCenterrrrrr">
-                                                    <i class="zmdi zmdi-edit"></i>Add Leave
-                                                </button>
-                                            </div>
-
-                                               
 										</div>
 										<div class="card-body">
 											<div class="contact-list-view table-responsive text-nowrap">

@@ -10,6 +10,7 @@
 						<h1 class="pg-title">Welcome back</h1>
 						<p>Welcome to SPELL CRM Dashboard.</p>
 					</div>
+					{% if 'create_leads' in permissions %}
 					<div class="mb-lg-0 mb-2 me-8">
 						<button type="button" class="btn btn-success  btn-animated" data-bs-toggle="modal" data-bs-target="#createUserModal">Create Lead</button>
 					</div>
@@ -112,7 +113,7 @@
 							</div>
 						</div>
 					</div>
-					
+					{% endif %}
 				</div>
 			</div>
 		</div>
@@ -169,9 +170,14 @@
 									<td><span class="badge badge-lg badge-light">{{my_leads.stage}}</span></td>
 									
 									<td>
+										{% if 'create_leads' in permissions %}
 										<div  class="d-flex align-items-center justify-content-end">
 											<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="View" href="{% url 'view_lead' id=my_leads.id %}"><span class="icon"><span class="feather-icon"><i data-feather="eye"></i></span></span></a>
 										</div>
+										
+                                        {% else %}
+                                        <p>---</p>
+										{% endif %}
 									</td>
 								</tr>
 								{% endfor %}

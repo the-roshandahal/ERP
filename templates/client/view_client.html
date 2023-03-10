@@ -12,8 +12,14 @@
 						<p>Welcome to SPELL CRM Dashboard.</p>
 					</div>
 					<div class="mb-lg-0 mb-2 me-8">
-                        <a href="{% url 'single_statement' id=client.id %}"><button type="button" class="btn btn-success  btn-animated" data-bs-toggle="modal" data-bs-target="#createUserModal">View Statement</button></a>
-						<button type="button" class="btn btn-success  btn-animated" data-bs-toggle="modal" data-bs-target="#DeleteModal">Delete Client</button>
+                        {% if 'read_finance' in permissions %}
+                        <a href="{% url 'single_statement' id=client.id %}">
+                            <button type="button" class="btn btn-success  btn-animated" data-bs-toggle="modal" data-bs-target="#createUserModal">View Statement</button>
+                        </a>
+                        {% endif %}
+						{% if 'delete_finance' in permissions %}
+                        <button type="button" class="btn btn-success  btn-animated" data-bs-toggle="modal" data-bs-target="#DeleteModal">Delete Client</button>
+                        {% endif %}
 					</div>
 				</div>
 			</div>
@@ -144,9 +150,11 @@
 								<td>
 									<div class="d-flex align-items-center">
 										<div class="d-flex">
+                                            {% if 'read_finance' in permissions %}
 											<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="View" href="{% url 'view_invoice' id=invoices.id %}"><span class="btn-icon-wrap"><span class="feather-icon"><i data-feather="eye"></i></span></span></a>
-											{% comment %} <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" href="#"><span class="btn-icon-wrap"><span class="feather-icon"><i data-feather="edit"></i></span></span></a>
-											<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover del-button" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Delete" href="#"><span class="btn-icon-wrap"><span class="feather-icon"><i data-feather="trash-2"></i></span></span></a> {% endcomment %}
+                                            {% else %}
+                                            <p>---</p>
+                                            {% endif %}
 										</div>
 									</div>
 								</td>
@@ -189,9 +197,11 @@
                                 <td>
                                     <div class="d-flex align-items-center">
                                         <div class="d-flex">
+                                            {% if 'read_finance' in permissions %}
                                             <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="View" href="{% url 'view_receipt' id=receipts.id %}"><span class="btn-icon-wrap"><span class="feather-icon"><i data-feather="eye"></i></span></span></a>
-                                            {% comment %} <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" href=""><span class="btn-icon-wrap"><span class="feather-icon"><i data-feather="edit"></i></span></span></a>
-                                            <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover del-button" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Delete" href="#"><span class="btn-icon-wrap"><span class="feather-icon"><i data-feather="trash-2"></i></span></span></a> {% endcomment %}
+                                            {% else %}
+                                            <p>---</p>
+                                            {% endif %}
                                         </div>
                                     </div>
                                 </td>

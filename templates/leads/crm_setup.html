@@ -9,9 +9,11 @@
 					<div class="mb-lg-0 mb-2 me-8">
 						<h1 class="pg-title">Lead Stages</h1>
 					</div>
+					{% if 'create_leads' in permissions %}
 					<div class="mb-lg-0 mb-2 me-8">
 						<button type="button" class="btn btn-success btn-animated"  data-bs-toggle="modal" data-bs-target="#createUserModal">Create Stage</button>
 					</div>
+					
 					<div class="modal fade" id="createUserModal" tabindex="-1" role="dialog" aria-labelledby="createUserModal" aria-hidden="true">
 						<div class="modal-dialog" role="document">
 							<div class="modal-content">
@@ -37,20 +39,19 @@
 							</div>
 						</div>
 					</div>
-					
+					{% endif %}
 				</div>
 			</div>
 		</div>
 		<!-- /Page Header -->
 		<!-- /Add other contents below -->
-		<div class="container mt-5">
-            														
+		<div class="container mt-5">												
             <div class="row">
                 <div class="table-responsive">
 					<table class="table nowrap table-advance">
 						<thead>
 							<tr>
-								<th></th>
+								<th>Stage</th>
 								<th></th>
 							</tr>
 						</thead>
@@ -61,8 +62,16 @@
 								<td><span class="badge badge-lg badge-light">{{lead_stage.stage}}</span></td>
 								<td>
 									<div  class="d-flex align-items-center justify-content-end">
-										<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" href="#"><span class="icon"><span class="feather-icon"><i data-feather="edit-2"></i></span></span></a>
-										<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="modal" data-bs-target="#exampleModalCenter{{lead_stage.id}}" href=""><span class="icon"><span class="feather-icon"><i data-feather="archive"></i></span></span></a>
+										{% if 'update_leads' in permissions or 'delete_leads' in permissions %}
+											{% if 'update_leads' in permissions%}
+												<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" href="#"><span class="icon"><span class="feather-icon"><i data-feather="edit-2"></i></span></span></a>
+											{% endif %}
+											{% if 'delete_leads' in permissions %}
+												<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="modal" data-bs-target="#exampleModalCenter{{lead_stage.id}}" href=""><span class="icon"><span class="feather-icon"><i data-feather="archive"></i></span></span></a>
+											{% endif %}
+											{% else %}
+											<p>None</p>
+										{% endif %}
 									</div>
 								</td>
 							</tr>
@@ -149,8 +158,13 @@
 								<td><span class="badge badge-lg badge-light">{{lead_source.source}}</span></td>
 								<td>
 									<div  class="d-flex align-items-center justify-content-end">
+									{% if 'manage_leads' in permissions%}
 										<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" href="#"><span class="icon"><span class="feather-icon"><i data-feather="edit-2"></i></span></span></a>
+									{% endif %}
+									{% if 'manage_leads' in permissions %}
 										<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="modal" data-bs-target="#exampleModalCenter{{lead_source.id}}" href=""><span class="icon"><span class="feather-icon"><i data-feather="archive"></i></span></span></a>
+									{% endif %}
+											
 									</div>
 								</td>
 							</tr>

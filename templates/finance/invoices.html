@@ -10,9 +10,11 @@
 						<h1 class="pg-title">Welcome back</h1>
 						<p>Welcome to SPELL CRM Dashboard.</p>
 					</div>
+					{% if 'create_finance' in permissions %}
 					<div>
 						<a href="{% url 'create_invoice' %}"><button type="button" class="btn btn-success">Create Invoice</button></a>
 					</div>
+					{% endif %}
 				</div>
 			</div>
 		</div>
@@ -56,10 +58,13 @@
 							<td>{{invoices.created}}</td>
 							<td>Rs. {{invoices.invoice_amount}}</td>
 							<td>{{invoices.created_by}}</td>
-							
+							{% if 'read_finance' in permissions %}
 							<td>
 								<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="View" href="{% url 'view_invoice' id=invoices.id %}"><span class="btn-icon-wrap"><span class="feather-icon"><i data-feather="eye"></i></span></span></a>
 							</td>
+							{% else %}
+                            <td>---</td>
+							{% endif %}
 						</tr>
 						{% endfor %}
 					</tbody>

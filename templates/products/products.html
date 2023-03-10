@@ -13,10 +13,11 @@
                         <h1 class="pg-title">Welcome back</h1>
                         <p>Create pages using a variety of features that leverage jampack components</p>
                     </div>
+                    {% if 'create_products' in permissions %}
                     <div class="card-action-wrap">
-                            <button class="btn btn-sm btn-primary ms-3" data-bs-toggle="modal" data-bs-target="#createUserModal"><span><span class="icon"><span class="feather-icon"><i data-feather="plus"></i></span></span><span class="btn-text">Add new</span></span></button>
+                        <button class="btn btn-sm btn-primary ms-3" data-bs-toggle="modal" data-bs-target="#createUserModal"><span><span class="icon"><span class="feather-icon"><i data-feather="plus"></i></span></span><span class="btn-text">Add new</span></span></button>
                     </div>
-                    
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -45,8 +46,12 @@
                     <td>{% if products.is_vatable == True %}Yes {% else %}No{% endif %}</td>
                     
                     <td>
+                        {% if 'update_products' in permissions %}
                         <a href="#" class="btn btn-icon btn-rounded btn-flush-primary flush-soft-hover" data-bs-toggle="tooltip" data-bs-original-title="Edit" ><span class="icon"><span class="feather-icon"><i data-feather="edit-3"></i></span></span></a>
+                        {% endif %}
+                        {% if 'delete_products' in permissions %}
                         <a href="{% url 'delete_product' id=products.id %}" class="btn btn-icon btn-rounded btn-flush-danger flush-soft-hover" data-bs-toggle="tooltip" data-bs-original-title="Delete" ><span class="icon"><span class="feather-icon"><i data-feather="trash-2"></i></span></span></a>
+                        {% endif %}
                     </td>
                 </tr>
                 {% endfor %}

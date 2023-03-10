@@ -14,9 +14,11 @@
                                         <h1 class="pg-title">Recent Receipts</h1>
                                         <p>Welcome to SPELL CRM Dashboard.</p>
                                     </div>
+                                    {% if 'read_finance' in permissions %}
                                     <div>
                                         <a href="{% url 'create_receipt' %}"><button type="button" class="btn btn-success">Create Receipt</button></a>
                                     </div>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -56,16 +58,17 @@
                                         <td>Rs.{{receipts.paid_amount}}</td>
                                         <td>{{receipts.created_by}}</td>
                                         <td>{{receipts.created}}</td>
-                                        
+                                        {% if 'read_finance' in permissions %}
                                         <td>
                                             <div class="d-flex align-items-center">
                                                 <div class="d-flex">
                                                     <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="View" href="{% url 'view_receipt' id=receipts.id %}"><span class="btn-icon-wrap"><span class="feather-icon"><i data-feather="eye"></i></span></span></a>
-                                                    {% comment %} <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" href=""><span class="btn-icon-wrap"><span class="feather-icon"><i data-feather="edit"></i></span></span></a>
-                                                    <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover del-button" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Delete" href="#"><span class="btn-icon-wrap"><span class="feather-icon"><i data-feather="trash-2"></i></span></span></a> {% endcomment %}
                                                 </div>
                                             </div>
                                         </td>
+                                        {% else %}
+                                        <td>----</td>
+                                        {% endif %}
                                     </tr>
                                     {% endfor %}
                                 </tbody>

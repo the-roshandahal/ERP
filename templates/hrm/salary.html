@@ -16,12 +16,16 @@
 										<div class="card-header card-header-action">
 											<h6>Salary</h6>
 											<div class="card-action-wrap">
+                                                {% if 'create_hrm' in permissions %}
                                                 <button type="button" class="btn btn-primary mx-2" data-bs-toggle="modal" data-bs-target="#exampleModalCenterAdvance">
                                                     Issue Advance Payment
                                                 </button>
+                                                {% endif %}
+                                                {% if 'create_hrm' in permissions %}
                                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalCenter">
                                                     Generate Salary
                                                 </button>
+                                                {% endif %}
 											</div>
 										</div>
 									</div>
@@ -61,13 +65,6 @@
                                                         <label class="form-check-label" for="chk_sel_1"></label>
                                                     </span>
                                                     {% endif %}
-                                                    
-                                                    {% comment %} <span class="form-check mb-0">
-                                                        <input type="checkbox" class="form-check-input check-select" name="selected_salary" id="chk_sel_1" 
-                                                        value="{{data_list.name}},{{monthhhh}}, {{data_list.leave_deduction}},{{data_list.tax_deduction}},{{data_list.final_salary}}">
-                                                        <label class="form-check-label" for="chk_sel_1"></label>
-                                                    </span> {% endcomment %}
-                                                    
                                                 </td>
                                                 <td>{{data_list.name}}</td>
                                                 <td>{{data_list.total_salary}}</td>

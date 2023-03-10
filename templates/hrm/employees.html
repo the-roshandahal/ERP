@@ -11,9 +11,11 @@
 						<h1 class="pg-title">Welcome back</h1>
 						<p>Welcome to SPELL CRM Dashboard.</p>
 					</div>
+					{% if 'create_hrm' in permissions %}
 					<div class="mb-lg-0 mb-2 me-8">
 						<button type="button" class="btn btn-success  btn-animated" data-bs-toggle="modal" data-bs-target="#exampleModalCenter">Add Employees</button>
 					</div>
+					{% endif %}
 				</div>
 			</div>
 		</div>
@@ -42,15 +44,18 @@
                             <td>{{employees.email}}</td>
                             <td>{{employees.contact}}</td>
                             <td>{{employees.address}}</td>
+							{% if 'read_hrm' in permissions %}
                             <td>
                                 <div class="d-flex align-items-center">
                                     <div class="d-flex">
-                                        <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-placement="top" title="" data-bs-original-title="Edit" href="#"><span class="btn-icon-wrap"><span class="feather-icon"><i class="bi bi-scissors"></i></span></span></a>
+                                        <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-placement="top" title="" data-bs-original-title="Edit" href="#"><span class="btn-icon-wrap"><span class="feather-icon"><i class="bi bi-eye"></i></span></span></a>
                                     </div>
-
-                                    
                                 </div>
                             </td>
+							
+							{% else %}
+							<td>----</td>
+							{% endif %}
                         </tr>
                         {% endfor %}
                     </tbody>
