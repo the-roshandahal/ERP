@@ -1,5 +1,6 @@
 from django.shortcuts import render,redirect
 from .models import *
+from features.models import *
 import pandas as pd
 from django.contrib import messages, auth
 from django.contrib.auth.models import User
@@ -12,10 +13,14 @@ from account.context_processors import custom_data_views
 
 def hrm(request):
     if 'read_hrm' in custom_data_views(request):
-        return render (request,'hrm/hrm.html')
+        att_data=LogSheet.objects.all()
+        context = {
+            'att_data':att_data,
+        }
+        return render (request,'hrm/hrm.html',context)
     else:
         messages.info(request, "Unauthorized access.")
-        return redirect(home)
+        return redirect('home')
 
 def hrm_setup(request):
     if 'read_hrm' in custom_data_views(request):
@@ -28,7 +33,7 @@ def hrm_setup(request):
         return render (request,'hrm/hrm_setup.html',context)
     else:
         messages.info(request, "Unauthorized access.")
-        return redirect(home)
+        return redirect('home')
 
 def add_year(request):
     if 'create_hrm' in custom_data_views(request):
@@ -43,7 +48,7 @@ def add_year(request):
                 return redirect(hrm_setup)
     else:
         messages.info(request, "Unauthorized access.")
-        return redirect(home)
+        return redirect('home')
     
 
 def add_month(request):
@@ -59,7 +64,7 @@ def add_month(request):
             return redirect(hrm_setup)
     else:
         messages.info(request, "Unauthorized access.")
-        return redirect(home)
+        return redirect('home')
     
 
 
@@ -72,7 +77,7 @@ def employees(request):
         return render (request,'hrm/employees.html',context)
     else:
         messages.info(request, "Unauthorized access.")
-        return redirect(home)
+        return redirect('home')
 
 
 def add_employee(request):
@@ -91,7 +96,7 @@ def add_employee(request):
             return redirect('employees')
     else:
         messages.info(request, "Unauthorized access.")
-        return redirect(home)
+        return redirect('home')
 
 
 def attendance (request):
@@ -108,7 +113,7 @@ def attendance (request):
         return render (request, 'hrm/attendance.html',context)
     else:
         messages.info(request, "Unauthorized access.")
-        return redirect(home)
+        return redirect('home')
 
     
 def add_leave(request):
@@ -142,7 +147,7 @@ def add_leave(request):
             return redirect('attendance')
     else:
         messages.info(request, "Unauthorized access.")
-        return redirect(home)
+        return redirect('home')
     
 
 
@@ -284,7 +289,7 @@ def salary (request):
             return render(request,'hrm/salary.html',context)
     else:
         messages.info(request, "Unauthorized access.")
-        return redirect(home)
+        return redirect('home')
 
 
 

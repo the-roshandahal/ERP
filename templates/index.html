@@ -71,12 +71,48 @@
 					</div>
 				</div>
 				{% endif %}
+				{% if punched_in == True and punched_out == True %}
+				<div class="row">
+					<div class="col-lg-6 col-sm-12">
+						<div class="card">
+							<div class="card-header card-header-action">
+								<h6>Shift Ended</h6>
+							</div>
+							<div class="card-body">
+								<h5 class="card-title">See you tomorrow!</h5>
+								<a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalCenter">Your Log</a>
+
+
+								<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter" aria-hidden="true">
+									<div class="modal-dialog modal-dialog-centered" role="document">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h5 class="modal-title">Your Log</h5>
+												<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+													<span aria-hidden="true">&times;</span>
+												</button>
+											</div>
+											<div class="modal-body">
+												<p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
+											</div>
+											<div class="modal-footer">
+												<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+												<button type="button" class="btn btn-primary">Save changes</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				{% endif %}
 			</div>
 		</div>
 																
 		<h4>Permissions</h4>
 		{% for per in permissions %}
-			{{per}} <br>
+			{{per}},
 		{% endfor %}
 	</div>
 </div>

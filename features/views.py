@@ -30,8 +30,10 @@ def home(request):
             punched_out_for_today =False
     
         time_now = datetime.now().time()
+        today_log=LogSheet.objects.filter(user=logged_in)
         context = {
             'time_now':time_now,
+            'today_log':today_log,
             'punched_in':punched_in,
             'punched_out':punched_out_for_today,
         }
@@ -106,33 +108,6 @@ def reassign(request,id):
     messages.info(request, "Status Changed to Resassigned")
     return redirect(todo)
 
-
-def log_sheet(request):
-    logged_in_user=User.objects.get(username=request.user)
-    user = CompanyUser.objects.get(user=logged_in_user)
-    log_sheet=LogSheet.objects.filter(user=user).order_by('-created')
-    context = {
-        'log_sheet':log_sheet,
-    }
-    return render(request,'features/log_sheet.html',context)
-
-
-def add_log_sheet(request):
-    if request.method == "POST":
-        punch_out_time = request.POST["punch_out_time"]
-        punch_in_time = request.POST["punch_in_time"]
-        tasks = request.POST["tasks"]
-        meetings = request.POST["meetings"]
-        remarks = request.POST["remarks"]
-
-        logged_in_user=User.objects.get(username=request.user)
-        user = CompanyUser.objects.get(user=logged_in_user)
-        log_data = LogSheet.objects.create(punch_out_time=punch_out_time,punch_in_time=punch_in_time,tasks=tasks,meetings=meetings,remarks=remarks,user=user)
-        log_data.save()
-        return redirect(log_sheet)
-    else:
-        return redirect(log_sheet)
-    
 def punch_in(request):
     if request.method == 'POST':
         logged_in = CompanyUser.objects.get(user=request.user)
