@@ -4,7 +4,6 @@ from django.shortcuts import render, redirect
 from django.shortcuts import render
 from .models import *
 from account.models import *
-from django.utils import timezone
 
 
 
@@ -14,9 +13,6 @@ def home(request):
         logged_in = CompanyUser.objects.get(user=request.user)
         logs=LogSheet.objects.filter(user=logged_in).order_by('-punch_in_time').first()
 
-        print(logs.punch_in_time)
-        print(logs.punch_out_time)
-        
         punched_in = False
         if logs:
             if logs.created.date() == date.today():
@@ -26,20 +22,18 @@ def home(request):
         else:
             punched_in = False
 
-
-
-        punched_out = False
+        punched_out_for_today =False
         if logs:
-            if logs.created.date() == date.today():
-                punched_out = True 
-            else:
-                punched_out = False
+            if logs.punch_out_time and logs.created.date() == date.today():
+                punched_out_for_today =True
         else:
-            punched_out = False
-
+            punched_out_for_today =False
+    
+        time_now = datetime.now().time()
         context = {
+            'time_now':time_now,
             'punched_in':punched_in,
-            'punched_out':punched_out,
+            'punched_out':punched_out_for_today,
         }
         return render (request,'index.html',context) 
     else:
@@ -149,13 +143,13 @@ def punch_in(request):
                 return redirect('home') 
             else:
                 user = CompanyUser.objects.get(user=request.user)
-                punch = LogSheet(user=user, punch_in_time=timezone.now())
+                punch = LogSheet(user=user, punch_in_time=datetime.now().time())
                 punch.save()
                 messages.info(request, "Punched in successfully.")
                 return redirect('home')
         else:
             user = CompanyUser.objects.get(user=request.user)
-            punch = LogSheet(user=user, punch_in_time=timezone.now())
+            punch = LogSheet(user=user, punch_in_time=datetime.now().time())
             punch.save()
             messages.info(request, "Punched in successfully.")
             return redirect('home') 
@@ -166,7 +160,7 @@ def punch_out(request):
     if request.method == 'POST':
         user = CompanyUser.objects.get(user=request.user)
         punch = LogSheet.objects.filter(user=user).order_by('-punch_in_time').first()
-        punch.punch_out_time = timezone.now()
+        punch.punch_out_time = datetime.now().time()
 
         punch.tasks = request.POST['tasks']
         punch.meetings = request.POST['meetings']
