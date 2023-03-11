@@ -22,7 +22,7 @@ class LogSheet(models.Model):
         return self.user.user.username
 
     class Meta:
-        verbose_name_plural = "08. Log Sheet"
+        verbose_name_plural = "01. Log Sheet"
 
 
 
@@ -36,7 +36,26 @@ class ToDo(models.Model):
     status = models.TextField(default = "incomplete")
 
     def __str__(self):
-        return self.task_to.username
+        return self.task_to.user.username
 
     class Meta:
-        verbose_name_plural = "08. To Do"
+        verbose_name_plural = "02. To Do"
+
+
+
+class Company(models.Model):
+    company_name = models.CharField(max_length=255)
+    company_address = models.CharField(max_length=255)
+    company_email = models.CharField(max_length=255)
+    company_contact_number = models.CharField(max_length=255)
+    company_logo = models.ImageField(upload_to='company_images/')
+    payment_terms = models.TextField()
+    payment_details = models.TextField()
+    created = models.DateField(auto_now_add=True)
+
+
+    def __str__(self):
+        return self.company_name
+
+    class Meta:
+        verbose_name_plural = "03. Company Setup"

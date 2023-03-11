@@ -62,8 +62,11 @@
 						<li class="nav-item">
 							<div class="dropdown ps-2">
 								<a class=" dropdown-toggle no-caret" href="#" role="button" data-bs-display="static" data-bs-toggle="dropdown" data-dropdown-animation data-bs-auto-close="outside" aria-expanded="false">
+									<div class="media-head me-3">
+										
+									</div>
 									<div class="avatar avatar-rounded avatar-xs">
-										<img src="{% static 'fav.png' %}" alt="user" class="avatar-img">
+										<img src="{% static 'user.png' %}" alt="user" class="avatar-img">
 									</div>
 								</a>
 								<div class="dropdown-menu dropdown-menu-end">
@@ -71,7 +74,7 @@
 										<div class="media">
 											<div class="media-head me-2">
 												<div class="avatar avatar-primary avatar-sm avatar-rounded">
-													<span class="initial-wrap">{{request.user.username|truncatechars:3}}</span>
+													<img src="{% static 'user.png' %}" alt="user" class="avatar-img">
 												</div>
 											</div>
 											<div class="media-body">
@@ -97,8 +100,8 @@
 				<!-- Brand -->
 				<div class="menu-header">
 					<span>
-						<a class="navbar-brand" href="#}">
-							<img class="brand-img img-fluid" src="{% static 'logo.png' %}" alt="brand" style="height:30px;" />
+						<a class="navbar-brand" href="">
+							<img class="brand-img img-fluid" src="{{company.company_logo.url}}" alt="{{company.company_name}}" style="height:30px;" />
 						</a>
 						<button class="btn btn-icon btn-rounded btn-flush-dark flush-soft-hover navbar-toggle">
 							<span class="icon">
@@ -140,6 +143,19 @@
 										
 									</a>
 								</li>
+								{% if 'manage_company' in permissions %}
+								  
+								<li class="nav-item">
+									<a class="nav-link" href="{% url 'company_setup' %}" >
+										<span class="nav-icon-wrap">
+											<span class="svg-icon">
+												<i class="bi bi-gear"></i>
+											</span>
+										</span>
+										<span class="nav-link-text">Company Setup</span>
+									</a>	
+								</li>
+								{% endif %}
 							</ul>	
 						</div>
 						<div class="menu-gap"></div>

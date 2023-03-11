@@ -1,14 +1,16 @@
 from .models import *
 from django.template.context_processors import request
-
+from features.models import Company
 
 def custom_data(request):
     permissions = []
+    company=None
     if request.user.is_authenticated:
         logged_in_user = User.objects.get(username=request.user)
         user = CompanyUser.objects.get(user=logged_in_user)
         role=Role.objects.get(role=user.permission)
         permission=Permission.objects.get(role=role)
+        company = Company.objects.all().order_by('-created').first()
         
 
         if permission.create_account or permission.read_account or permission.update_account or permission.delete_account:
@@ -73,10 +75,22 @@ def custom_data(request):
             permissions.append('update_products')
         if permission.delete_products:
             permissions.append('delete_products')
-        return {'permissions': permissions}
-    else:
-        return {'permissions': permissions}
+        
+        
+        if permission.manage_company:
+            permissions.append('manage_company')
 
+
+        return {'permissions': permissions,'company':company}
+    else:
+        return {'permissions': permissions,'company':company}
+
+# def company_details(request):
+#     if request.user.is_authenticated:
+        
+#         return {}
+    # else:
+    #     return redirect('home')
 
 # def exclude_processor(request):
 #     excluded_templates = ['login.html']
@@ -163,6 +177,10 @@ def custom_data_views(request):
             views_permissions.append('update_products')
         if permission.delete_products:
             views_permissions.append('delete_products')
+        
+        
+        if permission.manage_company:
+            views_permissions.append('manage_company')
         
         return views_permissions
     else:

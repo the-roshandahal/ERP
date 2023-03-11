@@ -26,7 +26,8 @@ def login(request):
             if user is not None and user.is_superuser:
                 auth.login(request, user)
                 messages.info(request, "Logged in successfully.")
-                return redirect("admin:index")
+                return redirect('home')
+                # return redirect("admin:index")
 
             if user is not None:
                 auth.login(request, user)
@@ -82,6 +83,7 @@ def create_role(request):
             read_products = request.POST.get('read_products', 0)
             update_products = request.POST.get('update_products', 0)
             delete_products = request.POST.get('delete_products', 0)
+            manage_company = request.POST.get('manage_company', 0)
             try:
                 new_role=Role.objects.create( role = role)
                 new_role.save()
@@ -93,7 +95,8 @@ def create_role(request):
                                         create_account =create_account, read_account =read_account, update_account =update_account,delete_account =delete_account,
                                         create_leads =create_leads, read_leads =read_leads, update_leads =update_leads, delete_leads =delete_leads,manage_leads =manage_leads,
                                         create_hrm =create_hrm, read_hrm =read_hrm, update_hrm =update_hrm, delete_hrm =delete_hrm,
-                                        create_products =create_products, read_products =read_products, update_products =update_products, delete_products =delete_products
+                                        create_products =create_products, read_products =read_products, update_products =update_products, delete_products =delete_products,
+                                        manage_company=manage_company
                                         )
                 return redirect('role')
 
@@ -138,6 +141,7 @@ def edit_role(request, id):
             permission.read_products = request.POST.get('read_products', 0)
             permission.update_products = request.POST.get('update_products', 0)
             permission.delete_products = request.POST.get('delete_products', 0)
+            permission.manage_company = request.POST.get('manage_company', 0)
             try:
                 permission.save()
                 new_role.save()

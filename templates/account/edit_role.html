@@ -195,6 +195,17 @@
                         </div>
                         <div class="separator separator-light"></div>
 
+                        <div class="row">
+                            <label for="">Company</label>
+                            <div class="col mb-1">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="customCheck1" {% if role_data.manage_company == True %}checked{% endif %} name="manage_company" value="1">
+                                    <label class="form-check-label" for="customCheck1">Manage</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="separator separator-light"></div>
+
 
                     </div>
                     <div class="modal-footer">

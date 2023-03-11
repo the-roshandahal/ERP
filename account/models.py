@@ -13,6 +13,7 @@ class Role(models.Model):
 
 class Permission(models.Model):
     role = models.OneToOneField(Role, on_delete=models.CASCADE)
+    manage_company = models.BooleanField(default=0)
     create_finance = models.BooleanField(default=0)
     read_finance = models.BooleanField(default=0)
     update_finance = models.BooleanField(default=0)

@@ -18,7 +18,7 @@ def client(request):
         return render(request,'client/client.html', context)
     else:
         messages.info(request, "Unauthorized access.")
-        return redirect(home)
+        return redirect('home')
     
 
 
@@ -36,7 +36,7 @@ def add_client(request):
             return render(request,'client/add_client.html')
     else:
         messages.info(request, "Unauthorized access.")
-        return redirect(home)
+        return redirect('home')
     
 
 def edit_client(request,id):
@@ -64,7 +64,7 @@ def edit_client(request,id):
             return render(request,'client/edit_client.html',context)
     else:
         messages.info(request, "Unauthorized access.")
-        return redirect(home)
+        return redirect('home')
     
 def delete_client(request,id):
     if 'delete_finance' in custom_data_views(request):
@@ -75,7 +75,7 @@ def delete_client(request,id):
         return redirect('client')
     else:
         messages.info(request, "Unauthorized access.")
-        return redirect(home)
+        return redirect('home')
     
 
 def view_client(request,id):
@@ -91,4 +91,4 @@ def view_client(request,id):
         return render(request,'client/view_client.html', context)
     else:
         messages.info(request, "Unauthorized access.")
-        return redirect(home)
+        return redirect('home')
