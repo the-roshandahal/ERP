@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout as django_logout
 from django.shortcuts import render, redirect
 from .models import *
+from hrm.models import *
 from django.db.models import Q
 from django.contrib import messages, auth
 from django.contrib.auth.models import User
@@ -174,7 +175,7 @@ def delete_role(request,id):
 
 def company_user(request):
     if 'read_account' in custom_data_views(request):
-        company_users = CompanyUser.objects.all()
+        company_users = Employee.objects.all()
         roles = Role.objects.all()
         context = {
             'company_users':company_users,
@@ -184,81 +185,6 @@ def company_user(request):
     else:
         messages.info(request, "Unauthorized access.")
         return redirect('home')
-    
-
-def create_company_user(request):
-    if 'create_account' in custom_data_views(request):
-        if request.method=="POST":
-            username = request.POST['username']
-            password = request.POST['password']
-            email = request.POST['email']
-            first_name = request.POST['first_name']
-            last_name = request.POST['last_name']
-            role = request.POST['role']
-            user=User.objects.create_user(first_name=first_name,last_name=last_name,email=email,password=password,username=username)
-            permission=Permission.objects.get(role=role)
-            CompanyUser.objects.create(user=user,permission=permission)
-            user.save()
-            return redirect('company_user')
-        else:
-            return redirect('company_user')
-    else:
-        messages.info(request, "Unauthorized access.")
-        return redirect('home')
-    
-
-
-
-def edit_company_user(request,id):
-    if 'update_account' in custom_data_views(request):
-        if request.method =="POST":
-            username = request.POST['username']
-            email = request.POST['email']
-            first_name = request.POST['first_name']
-            last_name = request.POST['last_name']
-            role = request.POST['role']
-            user_data = CompanyUser.objects.get(id=id)
-            permission=Permission.objects.get(role=role)
-
-            user = User.objects.get(username=username)
-            user.username=username
-            user.email=email
-            user.first_name=first_name
-            user.last_name=last_name
-            user.save()
-            user_data.permission=permission
-            user_data.save()
-            return redirect('company_user')
-        else:
-            user_data = CompanyUser.objects.get(id=id)
-            roles = Role.objects.all()
-            context={
-                'user_data':user_data,
-                'roles':roles,
-            }
-            return render (request,'account/edit_company_user.html',context)
-    else:
-        messages.info(request, "Unauthorized access.")
-        return redirect('home')
-    
-
-def delete_company_user(request,id):
-    if 'delete_account' in custom_data_views(request):
-        user_data = CompanyUser.objects.get(id=id)
-        user = User.objects.get(username=user_data.user.username)
-        print(user)
-        if (user.is_superuser==True):
-            messages.info(request, "This user can't be deleted.")
-        else:
-            user.delete()
-            user_data.delete()
-            messages.info(request, "User Deleted Successfully")
-        return redirect('company_user')
-    else:
-        messages.info(request, "Unauthorized access.")
-        return redirect('home')
-    
-
 
 
 def page_not_found_view(request, exception):

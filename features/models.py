@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
-from account.models import *
+from hrm.models import *
 import pytz
 from django.utils import timezone
 
@@ -9,7 +9,7 @@ from django.utils import timezone
 # Create your models here.
 
 class LogSheet(models.Model):
-    user = models.ForeignKey(CompanyUser, on_delete=models.CASCADE)
+    user = models.ForeignKey(Employee, on_delete=models.CASCADE)
     punch_in_time = models.TimeField()
     punch_out_time = models.TimeField(null = True, blank = True)
     tasks = models.TextField(null = True, blank = True)
@@ -29,18 +29,17 @@ class LogSheet(models.Model):
 class ToDo(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     task = models.TextField()
-    deadline = models.TextField()
-    task_from = models.TextField()
-    task_to = models.ForeignKey(CompanyUser, on_delete=models.CASCADE)
-    priority = models.TextField()
-    status = models.TextField(default = "incomplete")
+    deadline = models.CharField(max_length=255)
+    task_from = models.CharField(max_length=255)
+    task_to = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    priority = models.CharField(max_length=255)
+    status = models.CharField(max_length=255,default = "incomplete")
 
     def __str__(self):
-        return self.task_to.user.username
+        return self.task
 
     class Meta:
         verbose_name_plural = "02. To Do"
-
 
 
 class Company(models.Model):

@@ -15,9 +15,6 @@ urlpatterns = [
     path("delete_role/<int:id>", views.delete_role, name="delete_role"),
 
     path("company_user/", views.company_user, name="company_user"),
-    path("create_company_user/", views.create_company_user, name="create_company_user"),
-    path("edit_company_user/<int:id>", views.edit_company_user, name="edit_company_user"),
-    path("delete_company_user/<int:id>", views.delete_company_user, name="delete_company_user"),
 
 
     re_path(r"^media/(?P<path>.*)$", serve, {"document_root": settings.MEDIA_ROOT}),

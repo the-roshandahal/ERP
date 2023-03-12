@@ -9,7 +9,7 @@ from account.context_processors import *
 
 def home(request):
     if request.user.is_authenticated:
-        logged_in = CompanyUser.objects.get(user=request.user)
+        logged_in = Employee.objects.get(user=request.user)
         logs=LogSheet.objects.filter(user=logged_in).order_by('-punch_in_time').first()
         punched_in = False
         if logs:
@@ -45,13 +45,13 @@ def home(request):
 
 def todo(request):
     logged_in_user = User.objects.get(username=request.user)
-    company_user = CompanyUser.objects.get(user=logged_in_user)
+    company_user = Employee.objects.get(user=logged_in_user)
     done_todo = ToDo.objects.filter(task_to = company_user, status = 'done').order_by('priority')
     undone_todo = ToDo.objects.filter(task_to = company_user, status = 'incomplete')
     reassigned_todo = ToDo.objects.filter(task_to = company_user, status = 'reassigned')
     mytasks = ToDo.objects.filter(task_from= company_user)
     
-    users = CompanyUser.objects.all()
+    users = Employee.objects.all()
 
     context = {
         'reassigned_todo':reassigned_todo,
@@ -72,9 +72,9 @@ def add_todo(request):
 
 
         logged_in_user = User.objects.get(username=request.user)
-        task_from = CompanyUser.objects.get(user=logged_in_user)
+        task_from = Employee.objects.get(user=logged_in_user)
         for assign_to in assign_to:
-            assign_to = CompanyUser.objects.get(id=assign_to)
+            assign_to = Employee.objects.get(id=assign_to)
             ToDo.objects.create(task=task,deadline=deadline,priority=priority,task_to=assign_to,task_from=task_from)
         return redirect(todo)
     return redirect (todo)
@@ -113,7 +113,7 @@ def reassign(request,id):
 
 def log_sheet(request):
     if request.user.is_authenticated:
-        logged_in = CompanyUser.objects.get(user=request.user)
+        logged_in = Employee.objects.get(user=request.user)
         logs=LogSheet.objects.filter(user=logged_in).order_by('-punch_in_time').first()
         punched_in = False
         if logs:
@@ -150,20 +150,20 @@ def log_sheet(request):
 
 def punch_in(request):
     if request.method == 'POST':
-        logged_in = CompanyUser.objects.get(user=request.user)
+        logged_in = Employee.objects.get(user=request.user)
         logs=LogSheet.objects.filter(user=logged_in).order_by('-punch_in_time').first()
         if logs:
             if logs.created == date.today():
                 messages.info(request, "Already punched in for today.")
                 return redirect('log_sheet') 
             else:
-                user = CompanyUser.objects.get(user=request.user)
+                user = Employee.objects.get(user=request.user)
                 punch = LogSheet(user=user, punch_in_time=datetime.now().time())
                 punch.save()
                 messages.info(request, "Punched in successfully.")
                 return redirect('log_sheet')
         else:
-            user = CompanyUser.objects.get(user=request.user)
+            user = Employee.objects.get(user=request.user)
             punch = LogSheet(user=user, punch_in_time=datetime.now().time())
             punch.save()
             messages.info(request, "Punched in successfully.")
@@ -173,7 +173,7 @@ def punch_in(request):
 
 def punch_out(request):
     if request.method == 'POST':
-        user = CompanyUser.objects.get(user=request.user)
+        user = Employee.objects.get(user=request.user)
         punch = LogSheet.objects.filter(user=user).order_by('-punch_in_time').first()
         punch.punch_out_time = datetime.now().time()
 

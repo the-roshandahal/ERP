@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from account.models import *
+from hrm.models import *
 
 class Leads(models.Model):
     title = models.CharField(max_length=200,null=True, blank=True)
@@ -11,7 +11,7 @@ class Leads(models.Model):
     company_name = models.CharField(max_length=200,null=True, blank=True)
     source = models.CharField(max_length=200,null=True, blank=True)
     stage = models.CharField(max_length=100,null=True, blank=True)
-    assigned_to = models.ManyToManyField(CompanyUser)
+    assigned_to = models.ManyToManyField(Employee)
     active = models.BooleanField(default=1)
     date_modified = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)

@@ -446,7 +446,7 @@
                                     <input class="form-check-input" type="checkbox" value="{{data_list.user.id}}" name="assigned_to" 
                                     {% for lead in lead.assigned_to.all %}{% if data_list.user.id == lead.id %}checked{% endif %}{% endfor %}>
                                     
-                                    <label class="form-check-label">{{data_list.user}} </label>
+                                    <label class="form-check-label">{{data_list.user.user.first_name}} {{data_list.user.user.last_name}} </label>
                                 </div>
                                 {% endfor %}
                                 

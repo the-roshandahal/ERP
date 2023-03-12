@@ -37,7 +37,7 @@
 					<tbody>
 						{% for att_data in att_data %}
 						<tr>
-							<td>{{att_data.user}}</td>
+							<td>{{att_data.user.user.first_name}} {{att_data.user.user.last_name}}</td>
 							<td>{{att_data.punch_in_time}}</td>
 							<td>{{att_data.punch_out_time}}</td>
 							<td>

@@ -102,47 +102,6 @@ def add_designation(request):
         messages.info(request, "Unauthorized access.")
         return redirect('home')
 
-def employees(request):
-    if 'read_hrm' in custom_data_views(request):
-        employees = Employee.objects.all()
-        designation = Designation.objects.all()
-        department = Department.objects.all()
-
-        context = {
-            'employees':employees,
-            'designation':designation,
-            'department':department,
-        }
-        return render (request,'hrm/employees.html',context)
-    else:
-        messages.info(request, "Unauthorized access.")
-        return redirect('home')
-
-
-def add_employee(request):
-    if 'create_hrm' in custom_data_views(request):
-        if request.method=="POST":
-            name = request.POST['name']
-            designation = request.POST['designation']
-            department = request.POST['department']
-            email = request.POST['email']
-            contact = request.POST['contact']
-            address = request.POST['address']
-            salary = request.POST['salary']
-            date_joined = request.POST['date_joined']
-
-            designation = Designation.objects.get(id=designation)
-            department = designation.department
-            
-            Employee.objects.create(name =name,designation =designation,department =department,email =email,contact =contact,address =address,emp_salary =salary,date_joined = date_joined)
-            messages.info(request, "Employee Added Successfully")
-
-            return redirect('employees')
-        else:
-            return render(request,'hrm/add_employee.html')
-    else:
-        messages.info(request, "Unauthorized access.")
-        return redirect('home')
 
 
 def attendance (request):
@@ -386,3 +345,114 @@ def advance_salary(request):
         return redirect('salary')
     else:
         return redirect('salary')
+    
+
+
+
+
+
+
+def employees(request):
+    if 'read_hrm' in custom_data_views(request):
+        employees = Employee.objects.all()
+        context = {
+            'employees':employees,
+        }
+        return render (request,'hrm/employees.html',context)
+    else:
+        messages.info(request, "Unauthorized access.")
+        return redirect('home')
+
+
+def add_employee(request):
+    if 'create_hrm' in custom_data_views(request):
+        if request.method=="POST":
+            designation = request.POST['designation']
+            department = request.POST['department']
+            email = request.POST['email']
+            contact = request.POST['contact']
+            address = request.POST['address']
+            salary = request.POST['salary']
+            date_joined = request.POST['date_joined']
+            
+
+            username = request.POST['username']
+            password = request.POST['password']
+            email = request.POST['email']
+            first_name = request.POST['first_name']
+            last_name = request.POST['last_name']
+
+            role = request.POST['role']
+            user=User.objects.create_user(first_name=first_name,last_name=last_name,email=email,password=password,username=username)
+            permission=Permission.objects.get(role=role)
+            designation = Designation.objects.get(id=designation)
+            department = designation.department
+            
+            Employee.objects.create(user=user,permission=permission,designation =designation,department =department,email =email,contact =contact,address =address,emp_salary =salary,date_joined = date_joined)
+            messages.info(request, "Employee Added Successfully")
+
+            return redirect('employees')
+        else:
+            designation = Designation.objects.all()
+            department = Department.objects.all()
+            roles = Role.objects.all()
+            context = {
+            'roles':roles,
+            'designation':designation,
+            'department':department,
+        }
+            return render(request,'hrm/add_employee.html',context)
+    else:
+        messages.info(request, "Unauthorized access.")
+        return redirect('home')
+
+
+def edit_employee(request,id):
+    if 'update_account' in custom_data_views(request):
+        if request.method =="POST":
+            username = request.POST['username']
+            email = request.POST['email']
+            first_name = request.POST['first_name']
+            last_name = request.POST['last_name']
+            role = request.POST['role']
+            user_data = Employee.objects.get(id=id)
+            permission=Permission.objects.get(role=role)
+
+            user = User.objects.get(username=username)
+            user.username=username
+            user.email=email
+            user.first_name=first_name
+            user.last_name=last_name
+            user.save()
+            user_data.permission=permission
+            user_data.save()
+            return redirect('company_user')
+        else:
+            user_data = Employee.objects.get(id=id)
+            roles = Role.objects.all()
+            context={
+                'user_data':user_data,
+                'roles':roles,
+            }
+            return render (request,'account/edit_company_user.html',context)
+    else:
+        messages.info(request, "Unauthorized access.")
+        return redirect('home')
+    
+
+def delete_employee(request,id):
+    if 'delete_account' in custom_data_views(request):
+        user_data = Employee.objects.get(id=id)
+        user = User.objects.get(username=user_data.user.username)
+        print(user)
+        if (user.is_superuser==True):
+            messages.info(request, "This user can't be deleted.")
+        else:
+            user.delete()
+            user_data.delete()
+            messages.info(request, "User Deleted Successfully")
+        return redirect('employees')
+    else:
+        messages.info(request, "Unauthorized access.")
+        return redirect('home')
+    

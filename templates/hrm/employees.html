@@ -42,7 +42,7 @@
                     <tbody>
                         {% for employees in employees %}
                         <tr>
-                            <strong><td>{{employees.name}}</td></strong>
+                            <strong><td>{{employees.user.first_name}} {{employees.user.last_name}}</td></strong>
                             <td>{{employees.department}}</td>
                             <strong><td>{{employees.designation}}</td></strong>
 							{% if 'read_hrm' in permissions %}
@@ -50,13 +50,13 @@
                                 <div class="d-flex align-items-center">
                                     <div class="d-flex">
                                         {% if 'read_hrm' in permissions %}
-                                        <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" href="#"><span class="btn-icon-wrap"><span class="feather-icon"><i data-feather="edit"></i></span></span></a>
+										<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" href="{% url 'edit_employee' id=employees.id %}"><span class="icon"><span class="feather-icon"><i data-feather="edit-2"></i></span></span></a>
                                         {% endif %}
                                         {% if 'update_hrm' in permissions %}
                                         <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover del-button" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" href="#"><span class="btn-icon-wrap"><span class="feather-icon"><i data-feather="eye"></i></span></span></a>
                                         {% endif %}
                                         {% if 'delete_hrm' in permissions %}
-                                        <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover del-button" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Delete" href="#"><span class="btn-icon-wrap"><span class="feather-icon"><i data-feather="trash-2"></i></span></span></a>
+										<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="modal" data-bs-target="#exampleModalCenter{{employees.id}}" href=""><span class="icon"><span class="feather-icon"><i data-feather="archive"></i></span></span></a>
                                         {% endif %}
                                     </div>
                                 </div>
@@ -73,5 +73,25 @@
         </div>
 	</div>
 </div>
-
+{% for employees in employees %}
+<div class="modal fade" id="exampleModalCenter{{employees.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter{{employees.id}}" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete User</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this user?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <a href="{% url 'delete_employee' id=employees.id %}"><button type="button" class="btn btn-primary">Delete</button></a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
 {% include 'footer.html' %}

@@ -19,7 +19,7 @@ def crm_setup(request):
         return render (request,'leads/crm_setup.html',context)
     else:
         messages.info(request, "Unauthorized access.")
-        return redirect(home)
+        return redirect('home')
 
 def create_stage(request):
     if 'create_leads' in custom_data_views(request):
@@ -32,7 +32,7 @@ def create_stage(request):
             return redirect('crm_setup')
     else:
         messages.info(request, "Unauthorized access.")
-        return redirect(home)
+        return redirect('home')
     
 def delete_stage(request,id):
     if 'delete_leads' in custom_data_views(request):
@@ -43,7 +43,7 @@ def delete_stage(request,id):
         return redirect('crm_setup')
     else:
         messages.info(request, "Unauthorized access.")
-        return redirect(home)
+        return redirect('home')
 
 def create_source(request):
     if 'create_leads' in custom_data_views(request):
@@ -56,7 +56,7 @@ def create_source(request):
             return redirect('crm_setup')
     else:
         messages.info(request, "Unauthorized access.")
-        return redirect(home)
+        return redirect('home')
 
    
 def delete_source(request,id):
@@ -68,29 +68,30 @@ def delete_source(request,id):
         return redirect('crm_setup')
     else:
         messages.info(request, "Unauthorized access.")
-        return redirect(home)
+        return redirect('home')
 
 
 def leads(request):
     if 'read_leads' in custom_data_views(request):
         logged_in_user = User.objects.get(username=request.user)
-        company_user = CompanyUser.objects.get(user=logged_in_user)
+        company_user = Employee.objects.get(user=logged_in_user)
         leads = Leads.objects.filter(active=1).order_by('created')
         closed_leads = Leads.objects.filter(active=0).order_by('created')
         my_leads = Leads.objects.filter(active=1,assigned_to = company_user).order_by('created')
         stage = LeadStage.objects.all()
         source = LeadSource.objects.all()
 
-        filtered_users = CompanyUser.objects.all()
+        filtered_users = Employee.objects.all()
 
         assign_to_user = []
         for filtered_users in filtered_users:
             if (filtered_users.permission.create_leads or filtered_users.permission.read_leads or 
                 filtered_users.permission.update_leads or filtered_users.permission.delete_leads):
                 assign_to_user.append(filtered_users.id)
-        all_users = CompanyUser.objects.all()
+        all_users = Employee.objects.all()
 
         data_list=[]
+        
         for all_users in all_users:
             if all_users.id in assign_to_user:
                 
@@ -108,7 +109,7 @@ def leads(request):
         return render (request,'leads/leads.html',context)
     else:
         messages.info(request, "Unauthorized access.")
-        return redirect(home)
+        return redirect('home')
 
 def add_lead(request):
     if 'create_leads' in custom_data_views(request):
@@ -134,7 +135,7 @@ def add_lead(request):
             return redirect(leads)
     else:
         messages.info(request, "Unauthorized access.")
-        return redirect(home)
+        return redirect('home')
     
 def delete_lead(request,id):
     if 'delete_leads' in custom_data_views(request):
@@ -144,7 +145,7 @@ def delete_lead(request,id):
         return redirect('leads')
     else:
         messages.info(request, "Unauthorized access.")
-        return redirect(home)
+        return redirect('home')
 
 def view_lead(request,id):
     if 'read_leads' in custom_data_views(request):
@@ -155,14 +156,14 @@ def view_lead(request,id):
         lead_files = LeadFiles.objects.filter(leads_id=id)
 
         stage = LeadStage.objects.all()
-        filtered_users = CompanyUser.objects.all()
+        filtered_users = Employee.objects.all()
 
         assign_to_user = []
         for filtered_users in filtered_users:
             if (filtered_users.permission.create_leads or filtered_users.permission.read_leads or 
                 filtered_users.permission.update_leads or filtered_users.permission.delete_leads):
                 assign_to_user.append(filtered_users.id)
-        all_users = CompanyUser.objects.all()
+        all_users = Employee.objects.all()
 
         data_list=[]
         for all_users in all_users:
@@ -377,7 +378,7 @@ def edit_lead(request,id):
             return redirect(view_lead,id)
     else:
         messages.info(request, "Unauthorized access.")
-        return redirect(home)
+        return redirect('home')
 
 
 def close_lead(request,id):
@@ -407,7 +408,7 @@ def close_lead(request,id):
             return redirect(view_lead,id)
     else:
         messages.info(request, "Unauthorized access.")
-        return redirect(home)
+        return redirect('home')
 
 
 
@@ -438,7 +439,7 @@ def reopen_lead(request,id):
             return redirect(view_lead,id)
     else:
         messages.info(request, "Unauthorized access.")
-        return redirect(home)
+        return redirect('home')
 
 
 

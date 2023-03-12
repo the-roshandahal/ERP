@@ -44,13 +44,3 @@ class Permission(models.Model):
     
     class Meta:
         verbose_name_plural = "02. Permissions"
-
-
-class CompanyUser(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    permission = models.ForeignKey(Permission,on_delete=models.CASCADE,null=True, blank=True)
-    def __str__(self):
-        return self.user.username
-    
-    class Meta:
-        verbose_name_plural = "03. Company User"

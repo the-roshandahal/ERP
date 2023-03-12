@@ -94,7 +94,7 @@
                                                     <div class="form-group">
                                                         <select class="form-select" multiple name="assigned_to" required="" >
                                                             {% for data_list in data_list %}
-                                                                <option value="{{data_list.user.id}}">{{data_list.user}}</option>
+                                                                <option value="{{data_list.user.id}}">{{data_list.user.user.first_name}} {{data_list.user.user.last_name}}</option>
                                                             {% endfor %}
                                                         </select>
                                                     </div>

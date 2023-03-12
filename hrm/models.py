@@ -57,7 +57,6 @@ class Employee(models.Model):
     designation = models.ForeignKey(Designation, on_delete=models.CASCADE)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     permission = models.ForeignKey(Permission,on_delete=models.CASCADE,null=True, blank=True)
-    name = models.CharField(max_length=200,null=True, blank=True)
     email = models.CharField(max_length=200,null=True, blank=True)
     contact = models.CharField(max_length=200,null=True, blank=True)
     address = models.CharField(max_length=200,null=True, blank=True)
@@ -66,7 +65,7 @@ class Employee(models.Model):
     date_modified = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
     def __str__(self):
-        return self.name
+        return self.user.first_name
 
     class Meta:
         verbose_name_plural = "01. Employees"

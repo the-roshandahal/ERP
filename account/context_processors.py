@@ -1,4 +1,4 @@
-from .models import *
+from hrm.models import *
 from django.template.context_processors import request
 from features.models import Company
 
@@ -7,7 +7,7 @@ def custom_data(request):
     company=None
     if request.user.is_authenticated:
         logged_in_user = User.objects.get(username=request.user)
-        user = CompanyUser.objects.get(user=logged_in_user)
+        user = Employee.objects.get(user=logged_in_user)
         role=Role.objects.get(role=user.permission)
         permission=Permission.objects.get(role=role)
         company = Company.objects.all().order_by('-created').first()
@@ -111,7 +111,7 @@ def custom_data_views(request):
     views_permissions = []
     if request.user.is_authenticated:
         logged_in_user = User.objects.get(username=request.user)
-        user = CompanyUser.objects.get(user=logged_in_user)
+        user = Employee.objects.get(user=logged_in_user)
         role=Role.objects.get(role=user.permission)
         permission=Permission.objects.get(role=role)
 
