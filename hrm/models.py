@@ -1,9 +1,8 @@
 from django.db import models
+from django.contrib.auth.models import User
+from account.models import *
 # from django.contrib.auth.models import User
 # Create your models here.
-
-
-
 
 class YearSetup(models.Model):
     year = models.CharField(max_length=255)
@@ -54,9 +53,11 @@ class Designation(models.Model):
         verbose_name_plural = "05. Designation"
 
 class Employee(models.Model):
-    name = models.CharField(max_length=200,null=True, blank=True)
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
     designation = models.ForeignKey(Designation, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    permission = models.ForeignKey(Permission,on_delete=models.CASCADE,null=True, blank=True)
+    name = models.CharField(max_length=200,null=True, blank=True)
     email = models.CharField(max_length=200,null=True, blank=True)
     contact = models.CharField(max_length=200,null=True, blank=True)
     address = models.CharField(max_length=200,null=True, blank=True)

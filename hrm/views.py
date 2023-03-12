@@ -138,6 +138,8 @@ def add_employee(request):
             messages.info(request, "Employee Added Successfully")
 
             return redirect('employees')
+        else:
+            return render(request,'hrm/add_employee.html')
     else:
         messages.info(request, "Unauthorized access.")
         return redirect('home')

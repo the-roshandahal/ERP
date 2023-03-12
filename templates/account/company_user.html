@@ -11,95 +11,16 @@
 							<h1 class="pg-title">CRM Dashboard</h1>
 						</div>
 						<p>Good afternoon {{request.user.first_name}}!</p>
-						
 					</div>
 					{% if 'create_account' in permissions %}
 					<div class="pg-header-action-wrap">
-						<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createUserModal">Primary</button>
-					</div>
-					<div class="modal fade" id="createUserModal" tabindex="-1" role="dialog" aria-labelledby="createUserModal" aria-hidden="true">
-						<div class="modal-dialog modal-dialog-centered" role="document">
-							<div class="modal-content">
-								<form action="{% url 'create_company_user' %}" method="POST">
-									{% csrf_token %}
-									<div class="modal-header">
-										<h5 class="modal-title" id="createUserModal">Create Role</h5>
-										<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-											<span aria-hidden="true">&times;</span>
-										</button>
-									</div>
-									<div class="modal-body">
-										<div class="row">
-											<div class="col-md-6 mb-3">
-												<label for="">First Name</label>
-												<input type="text" class="form-control"  placeholder="alex" name='first_name' required>
-											</div>
-											<div class="col-md-6 mb-3">
-												<label for="">Last_name</label>
-												<input type="text" class="form-control"  placeholder="alex" name='last_name' required>
-											</div>
-										</div>
-										<div class="col-md-12 mb-3">
-											<label for="">Email Address</label>
-											<input type="text" class="form-control"  placeholder="alex" name='email' required>
-										</div>
-										
-										<div class="col-md-12 mb-3">
-											<label for="">Username</label>
-											<input type="text" class="form-control"  placeholder="alex" name='username' required>
-										</div>
-										
-										<div class="col-md-12 mb-3">
-											<div class="form-label-group">
-												<label>Password</label>
-												
-											</div>
-											<div class="input-group password-check">
-												<span class="input-affix-wrapper affix-wth-text">
-													<input class="form-control" placeholder="Enter your password" value="{{user_data.user.password}}" type="password" name="password">
-													<a href="#" class="input-suffix text-primary text-uppercase fs-8 fw-medium">
-														<span>Show</span>
-														<span class="d-none">Hide</span>
-													</a>
-												</span>
-												
-											</div>
-										</div>
-										
-										<div class="col-md-12 mb-3">
-											<h6>Select Role</h6>
-											<div class="form-group">
-												<select class="form-select" name="role" required>
-													<option value="" data-id="0" selected>Select Role</option>
-													{% for roles in roles %}
-													<option value="{{roles.id}}" >{{roles.role}}</option>
-													{% endfor %}
-												</select>
-											</div>
-											<a class="d-inline-flex align-items-center" data-bs-toggle="modal" data-bs-target="#billed_info" href="#">
-											<i class="ri-add-box-line me-1"></i> Add new role </a>
-										</div>
-										
-
-
-										
-									</div>
-									<div class="modal-footer">
-										<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-										<button type="submit" class="btn btn-primary">Save</button>
-									</div>
-								</form>
-							</div>
-						</div>
+						<a href="{% url 'add_employee' %}"><button class="btn btn-primary" >Add User</button></a>
 					</div>
 					{% endif %}
 				</div>
 			</div>
-		</div>
-		
-														
-        <div class="container mt-5">
-            														
+		</div>								
+        <div class="container mt-5">											
             <div class="row">
                 <div class="table-responsive">
 					<table class="table nowrap table-advance">

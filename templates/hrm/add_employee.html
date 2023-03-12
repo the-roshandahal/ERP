@@ -1,0 +1,180 @@
+{% load static %}{% include 'header.html' %}
+<!-- Main Content -->
+<div class="hk-pg-wrapper">
+	<div class="container-xxl">
+		<!-- Page Header -->
+		<div class="hk-pg-header">
+			<div class="d-flex">
+				<div class="d-flex flex-wrap justify-content-between flex-1">
+					<div class="mb-md-0 mb-2 me-8">
+						<div class="d-flex align-items-center">
+							<h1 class="pg-title">Welcome</h1>
+							<!-- <span class="badge badge-soft-primary ms-3">Badge</span> -->
+						</div>
+						<p>This is a dummy text for more context.</p>
+						
+					</div>
+					<div class="pg-header-action-wrap">
+						<button class="btn btn-outline-secondary me-3">Secondary</button>
+						{% if 'create_hrm' in permissions %}
+						<button class="btn btn-primary"data-bs-toggle="modal" data-bs-target="#exampleModalCenter">Add Employee</button>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+			
+		</div>
+		<!-- /Page Header -->
+		
+
+		<!-- /Add other contents below -->
+        <div class="card-body">
+            <form action="{% url 'add_employee' %}" method="POST">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="">First Name</label>
+                            <input type="text" class="form-control"  placeholder="alex" name='first_name' required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="">Last Name</label>
+                            <input type="text" class="form-control"  placeholder="alex" name='last_name' required>
+                        </div>
+                    </div>
+
+                    <div class="separator separator-light"></div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Email</h6>
+                            <div class="form-group">
+                                <input type="email" class="form-control" name = "email" required>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <h6>Contact</h6>
+                            <div class="form-group">
+                                <input type="text" class="form-control" name = "contact" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="separator separator-light"></div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Address</h6>
+                            <div class="form-group">
+                                <input type="text" class="form-control" name = "address" required>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <h6>Select Role</h6>
+                            <div class="form-group">
+                                <select class="form-select" name="role" required>
+                                    <option value="" data-id="0" selected>Select Role</option>
+                                    {% for roles in roles %}
+                                    <option value="{{roles.id}}" >{{roles.role}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="separator separator-light"></div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                        <h6>Department</h6>
+                        <select class="form-select" name="department" required id="department-select">
+                            {% for department in department %}
+                            <option value="{{ department.id }}">{{ department.department }}</option>
+                            {% endfor %}
+                        </select>
+                        </div>
+                        
+                        <div class="col-md-6">
+                        <h6>Designation</h6>
+                        <select class="form-select" name="designation" required id="designation-select">
+                            {% for designation in designation %}
+                            <option value="{{ designation.id }}" data-department-id="{{ designation.department.id }}">{{ designation.designation }}</option>
+                            {% endfor %}
+                        </select>
+                        </div>
+                    </div>
+                    <div class="separator separator-light"></div>
+                    
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Salary</h6>
+                            <div class="form-group">
+                                <input type="number" class="form-control" name = "salary" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Date Joined</h6>
+                            <div class="form-group">
+                                <input type="date" class="form-control" name = "date_joined" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="separator separator-light"></div>
+                    
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="">Username</label>
+                            <input type="text" class="form-control"  placeholder="alex" name='username' required>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            
+                            <label>Password</label>
+                            
+                            <div class="input-group password-check">
+                                <span class="input-affix-wrapper affix-wth-text">
+                                    <input class="form-control" placeholder="Enter password" value="{{user_data.user.password}}" type="password" name="password">
+                                    <a href="#" class="input-suffix text-primary text-uppercase fs-8 fw-medium">
+                                        <span>Show</span>
+                                        <span class="d-none">Hide</span>
+                                    </a>
+                                </span>
+                                
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href="{% url 'employees' %}" ><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Back</button></a>
+                    <a href="#" ><button class="btn btn-primary ms-2 d-sm-inline-block d-none">Save</button></a>
+                </div>
+            </form>
+        </div>
+	</div>
+</div>
+
+
+<script>
+	const departmentSelect = document.querySelector('#department-select');
+	const designationSelect = document.querySelector('#designation-select');
+	
+	departmentSelect.addEventListener('change', () => {
+	  const selectedDepartmentId = departmentSelect.value;
+	  const options = designationSelect.querySelectorAll('option');
+	  
+	  options.forEach((option) => {
+		if (option.value && option.dataset.departmentId !== selectedDepartmentId) {
+		  option.disabled = true;
+		  option.selected = false;
+		} else {
+		  option.disabled = false;
+		}
+	  });
+	});
+	</script>
+
+{% include 'footer.html' %}
