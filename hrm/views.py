@@ -26,9 +26,13 @@ def hrm_setup(request):
     if 'read_hrm' in custom_data_views(request):
         month = MonthSetup.objects.all()
         year = YearSetup.objects.all()
+        department = Department.objects.all()
+        designation = Designation.objects.all()
         context = {
             'month':month, 
             'year':year,
+            'department':department, 
+            'designation':designation,
         }
         return render (request,'hrm/hrm_setup.html',context)
     else:
@@ -58,21 +62,56 @@ def add_month(request):
             month = request.POST['month']
             start_date = request.POST['start_date']
             end_date = request.POST['end_date']
+            holidays = request.POST['holidays']
+
             year = YearSetup.objects.get(id=year)
-            MonthSetup.objects.create(year=year,month=month,start_date=start_date,end_date=end_date)
+            month = MonthSetup.objects.create(year=year,month=month,start_date=start_date,end_date=end_date)
+            month.save()
+            date_list = [date.strip() for date in holidays.split(",")]
+            print(date_list)
+            for holiday in date_list:
+                Holidays.objects.create(month = month, holiday = holiday)
+
             messages.info(request, "Year Added Successfully")
             return redirect(hrm_setup)
     else:
         messages.info(request, "Unauthorized access.")
         return redirect('home')
     
+def add_department(request):
+    if 'create_hrm' in custom_data_views(request):
+        if request.method =="POST":
+            department = request.POST['department']
+            Department.objects.create(department=department)
+            messages.info(request, "Department Added Successfully")
+            return redirect(hrm_setup)
+    else:
+        messages.info(request, "Unauthorized access.")
+        return redirect('home')
 
+def add_designation(request):
+    if 'create_hrm' in custom_data_views(request):
+        if request.method =="POST":
+            department = request.POST['department']
+            designation = request.POST['designation']
+            department = Department.objects.get(id=department)
+            Designation.objects.create(department=department,designation=designation)
+            messages.info(request, "Designation Added Successfully")
+            return redirect(hrm_setup)
+    else:
+        messages.info(request, "Unauthorized access.")
+        return redirect('home')
 
 def employees(request):
     if 'read_hrm' in custom_data_views(request):
         employees = Employee.objects.all()
+        designation = Designation.objects.all()
+        department = Department.objects.all()
+
         context = {
             'employees':employees,
+            'designation':designation,
+            'department':department,
         }
         return render (request,'hrm/employees.html',context)
     else:
@@ -84,13 +123,18 @@ def add_employee(request):
     if 'create_hrm' in custom_data_views(request):
         if request.method=="POST":
             name = request.POST['name']
-            position = request.POST['position']
+            designation = request.POST['designation']
+            department = request.POST['department']
             email = request.POST['email']
             contact = request.POST['contact']
             address = request.POST['address']
             salary = request.POST['salary']
             date_joined = request.POST['date_joined']
-            Employee.objects.create(name =name,position =position,email =email,contact =contact,address =address,emp_salary =salary,date_joined = date_joined)
+
+            designation = Designation.objects.get(id=designation)
+            department = designation.department
+            
+            Employee.objects.create(name =name,designation =designation,department =department,email =email,contact =contact,address =address,emp_salary =salary,date_joined = date_joined)
             messages.info(request, "Employee Added Successfully")
 
             return redirect('employees')

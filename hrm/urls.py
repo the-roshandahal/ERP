@@ -18,6 +18,10 @@ urlpatterns = [
     path("pay_salary/", views.pay_salary, name="pay_salary"),
     path("advance_salary/", views.advance_salary, name="advance_salary"),
 
+
+    path("add_designation/", views.add_designation, name="add_designation"),
+    path("add_department/", views.add_department, name="add_department"),
+
     # path("edit_employee/<int:id>", views.edit_employee, name="edit_employee"),
 
 ]

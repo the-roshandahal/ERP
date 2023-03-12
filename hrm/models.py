@@ -3,9 +3,60 @@ from django.db import models
 # Create your models here.
 
 
+
+
+class YearSetup(models.Model):
+    year = models.CharField(max_length=255)
+    def __str__(self):
+        return self.year
+    class Meta:
+        verbose_name_plural = "04. Year"
+
+
+
+class MonthSetup(models.Model):
+    year = models.ForeignKey(YearSetup, on_delete=models.CASCADE)
+    month = models.CharField(max_length=255)
+    start_date = models.DateField()
+    end_date = models.DateField()
+
+    def __str__(self):
+        return f"{self.year.year} - {self.month} ({self.start_date.strftime('%b %d, %Y')})"
+
+
+    class Meta:
+        verbose_name_plural = "05. Month"
+
+class Holidays(models.Model):
+    month = models.ForeignKey(MonthSetup,on_delete=models.CASCADE)
+    holiday = models.DateField(blank=True)
+
+    def __str__(self):
+        return self.month.month
+    class Meta:
+        verbose_name_plural = "05. Holiday"
+
+
+class Department(models.Model):
+    department = models.CharField(max_length=255)
+    def __str__(self):
+        return self.department
+    class Meta:
+        verbose_name_plural = "05. Department"
+
+
+class Designation(models.Model):
+    department = models.ForeignKey(Department, on_delete=models.CASCADE)
+    designation = models.CharField(max_length=255)
+    def __str__(self):
+        return self.designation
+    class Meta:
+        verbose_name_plural = "05. Designation"
+
 class Employee(models.Model):
     name = models.CharField(max_length=200,null=True, blank=True)
-    position = models.CharField(max_length=200,null=True, blank=True)
+    department = models.ForeignKey(Department, on_delete=models.CASCADE)
+    designation = models.ForeignKey(Designation, on_delete=models.CASCADE)
     email = models.CharField(max_length=200,null=True, blank=True)
     contact = models.CharField(max_length=200,null=True, blank=True)
     address = models.CharField(max_length=200,null=True, blank=True)
@@ -19,7 +70,6 @@ class Employee(models.Model):
     class Meta:
         verbose_name_plural = "01. Employees"
 
-
 class Leave(models.Model):
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
     reason = models.CharField(max_length=255,null=True, blank=True)
@@ -30,10 +80,6 @@ class Leave(models.Model):
 
     class Meta:
         verbose_name_plural = "02. Leave"
-
-
-
-
 
 class Salary(models.Model):
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
@@ -51,22 +97,3 @@ class Salary(models.Model):
         verbose_name_plural = "03. Salary"
 
 
-
-class YearSetup(models.Model):
-    year = models.CharField(max_length=255)
-    def __str__(self):
-        return self.year
-    class Meta:
-        verbose_name_plural = "04. Year"
-
-
-
-class MonthSetup(models.Model):
-    year = models.ForeignKey(YearSetup, on_delete=models.CASCADE)
-    month = models.CharField(max_length=255)
-    start_date = models.DateField()
-    end_date = models.DateField()
-    def __str__(self):
-        return self.month
-    class Meta:
-        verbose_name_plural = "05. Month"

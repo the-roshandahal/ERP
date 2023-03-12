@@ -22,9 +22,10 @@
 					</div>
 				</div>
 			</div>
+			
 		</div>
 		<!-- /Page Header -->
-
+		
 
 		<!-- /Add other contents below -->
         <div class="card-body">
@@ -33,10 +34,8 @@
                     <thead>
                         <tr>
                             <th>Employee Name</th>
-                            <th>Position</th>
-                            <th>Email</th>
-                            <th>Contact</th>
-                            <th>Address</th>
+                            <th>Department</th>
+                            <th>Designation</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -44,15 +43,21 @@
                         {% for employees in employees %}
                         <tr>
                             <strong><td>{{employees.name}}</td></strong>
-                            <strong><td>{{employees.position}}</td></strong>
-                            <td>{{employees.email}}</td>
-                            <td>{{employees.contact}}</td>
-                            <td>{{employees.address}}</td>
+                            <td>{{employees.department}}</td>
+                            <strong><td>{{employees.designation}}</td></strong>
 							{% if 'read_hrm' in permissions %}
                             <td>
                                 <div class="d-flex align-items-center">
                                     <div class="d-flex">
-                                        <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-placement="top" title="" data-bs-original-title="Edit" href="#"><span class="btn-icon-wrap"><span class="feather-icon"><i class="bi bi-eye"></i></span></span></a>
+                                        {% if 'read_hrm' in permissions %}
+                                        <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" href="#"><span class="btn-icon-wrap"><span class="feather-icon"><i data-feather="edit"></i></span></span></a>
+                                        {% endif %}
+                                        {% if 'update_hrm' in permissions %}
+                                        <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover del-button" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" href="#"><span class="btn-icon-wrap"><span class="feather-icon"><i data-feather="eye"></i></span></span></a>
+                                        {% endif %}
+                                        {% if 'delete_hrm' in permissions %}
+                                        <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover del-button" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Delete" href="#"><span class="btn-icon-wrap"><span class="feather-icon"><i data-feather="trash-2"></i></span></span></a>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </td>
@@ -66,8 +71,35 @@
                 </table>
             </div>
         </div>
+		
+
+	
+
 	</div>
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter" aria-hidden="true">
@@ -91,22 +123,25 @@
 						</div>
 					</div>
 					<div class="separator separator-light"></div>
-					
-					
+
 					<div class="row">
 						<div class="col-xxl-6 mb-xxl-0 mb-4">
-							<h6>Employee Position</h6>
-							<div class="form-group">
-								<input type="text" class="form-control" name = "position" required>
-							</div>
+						  <h6>Department</h6>
+						  <select class="form-select" name="department" required id="department-select">
+							{% for department in department %}
+							  <option value="{{ department.id }}">{{ department.department }}</option>
+							{% endfor %}
+						  </select>
 						</div>
 						<div class="col-xxl-6 mb-xxl-0 mb-4">
-							<h6>Date Joined</h6>
-							<div class="form-group">
-								<input type="date" class="form-control" name = "date_joined" required>
-							</div>
+						  <h6>Designation</h6>
+						  <select class="form-select" name="designation" required id="designation-select">
+							{% for designation in designation %}
+							  <option value="{{ designation.id }}" data-department-id="{{ designation.department.id }}">{{ designation.designation }}</option>
+							{% endfor %}
+						  </select>
 						</div>
-					</div>
+					  </div>
 					<div class="separator separator-light"></div>
 
 
@@ -144,6 +179,17 @@
 						</div>
 					</div>
 					<div class="separator separator-light"></div>
+					
+					
+					<div class="row">
+						<div class="col-xxl-6 mb-xxl-0 mb-4">
+							<h6>Date Joined</h6>
+							<div class="form-group">
+								<input type="date" class="form-control" name = "date_joined" required>
+							</div>
+						</div>
+					</div>
+					<div class="separator separator-light"></div>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -154,5 +200,23 @@
 	</div>
 </div>	
 
+<script>
+	const departmentSelect = document.querySelector('#department-select');
+	const designationSelect = document.querySelector('#designation-select');
+	
+	departmentSelect.addEventListener('change', () => {
+	  const selectedDepartmentId = departmentSelect.value;
+	  const options = designationSelect.querySelectorAll('option');
+	  
+	  options.forEach((option) => {
+		if (option.value && option.dataset.departmentId !== selectedDepartmentId) {
+		  option.disabled = true;
+		  option.selected = false;
+		} else {
+		  option.disabled = false;
+		}
+	  });
+	});
+	</script>
 
 {% include 'footer.html' %}
