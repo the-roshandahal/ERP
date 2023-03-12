@@ -1,154 +1,87 @@
 {% load static %}{% include 'header.html' %}
-
-		
-
-		<!-- Main Content -->
-		<div class="hk-pg-wrapper">
-			<div class="container-xxl">
-				<!-- Page Header -->
-				<div class="hk-pg-header pg-header-wth-tab pt-7">
-					<div class="d-flex">
-						<div class="d-flex flex-wrap justify-content-between flex-1">
-							<div class="mb-lg-0 mb-2 me-8">
-								<h1 class="pg-title">Welcome back</h1>
-								<p>Create pages using a variety of features that leverage jampack components</p>
-							</div>
-							
+<!-- Main Content -->
+<div class="hk-pg-wrapper">
+	<div class="container-xxl">
+		<!-- Page Header -->
+																		
+		<div class="hk-pg-header">
+			<div class="d-flex">
+				<div class="d-flex flex-wrap justify-content-between flex-1">
+					<div class="mb-md-0 mb-2 me-8">
+						<div class="d-flex align-items-center">
+							<h1 class="pg-title">Welcome</h1>
+							<!-- <span class="badge badge-soft-primary ms-3">Badge</span> -->
 						</div>
+						<p>This is a dummy text for more context.</p>
+						
 					</div>
 				</div>
-				<!-- /Page Header -->
-
-				<!-- Page Body -->
-				<div class="hk-pg-body">
-					<div class="tab-content">
-						<div class="tab-pane fade show active" id="tab_block_1">
-							<div class="row">
-								<div class="col-xxl-12 col-lg-8 col-md-7 mb-md-4 mb-3">
-									<div class="card card-border mb-0 h-100">
-										<div class="card-header card-header-action">
-											<h6>Employees Absent today</h6>
-											{% if 'update_hrm' in permissions %}
-											<div class="card-action-wrap">
-                                                <button type="button" class="btn btn-primary"  data-bs-toggle="modal" data-bs-target="#exampleModalCenterrrrrr">
-                                                    <i class="zmdi zmdi-edit"></i>Add Leave
-                                                </button>
-                                            </div>
-											{% endif %}
-
-                                               
-										</div>
-										<div class="card-body">
-											<div class="contact-list-view table-responsive text-nowrap">
-												<table class="table w-100 mb-5">
-													<thead>
-														<tr>
-															<th>Employee Name</th>
-															<th>Reason</th>
-														</tr>
-													</thead>
-													<tbody>
-														{% for today_leave in today_leave %}
-														<tr>
-                                                            <strong><td>{{today_leave.employee.name}}</td></strong>
-															<td>{{today_leave.reason}}</td>
-                                                    
-														</tr>
-														{% endfor %}
-													</tbody>
-												</table>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-
-
-							<div class="row">
-								<div class="col-xxl-12 col-lg-8 col-md-7 mb-md-4 mb-3">
-									<div class="card card-border mb-0 h-100">
-										<div class="card-header card-header-action">
-											<h6>Recent Leaves</h6>
-										</div>
-										<div class="card-body">
-											<div class="contact-list-view table-responsive text-nowrap">
-												<table class="table w-100 mb-5">
-													<thead>
-														<tr>
-															<th>Employee Name</th>
-															<th>Reason</th>
-															<th>Date</th>
-														</tr>
-													</thead>
-													<tbody>
-														{% for leaves in leaves %}
-														<tr>
-                                                            <strong><td>{{leaves.employee.name}}</td></strong>
-															<td>{{leaves.reason}}</td>
-															<td>{{leaves.created}}</td>
-                                                    
-														</tr>
-														{% endfor %}
-													</tbody>
-												</table>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-
-                            <div class="modal fade" id="exampleModalCenterrrrrr" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterrrrrr" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title">Add Leave</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <form action="{% url 'add_leave' %}" method="POST">
-                                            {% csrf_token %}
-                                            <div class="modal-body">
-                                                <div class="row">
-                                                    <div class="col-xxl-12 mb-xxl-0 mb-4">
-                                                        <h6>Select Employee</h6>
-                                                        <div class="form-group">
-                                                            <select class="form-select" name="employee" required>
-                                                                {% for employees in employees %}
-                                                                <option value = '{{employees.id}}'>{{employees.name}}</option>
-                                                                {% endfor %}
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-xxl-12 mb-xxl-0 mb-4">
-                                                        <h6>Reason for Leave</h6>
-                                                        <div class="form-group">
-                                                            <input type="text" class="form-control" name = "reason" required>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="separator separator-light"></div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                <a href="#" ><button class="btn btn-primary ms-2 d-sm-inline-block d-none">Save</button></a>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-
-
-						</div>
-					</div>
-				</div>
-				<!-- /Page Body -->		
 			</div>
 		</div>
-		<!-- /Main Content -->
+															
+		<!-- /Page Header -->
+
+
+		<!-- /Add other contents below -->
+		<div class="card-body">
+			<div class="contact-list-view">
+				<table class="table nowrap w-100 mb-5">
+					<thead>
+						<tr>
+							<th>Employee</th>
+							<th>Punch In</th>
+							<th>Punch Out</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for att_data in att_data %}
+						<tr>
+							<td>{{att_data.user.user.first_name}} {{att_data.user.user.last_name}}</td>
+							<td>{{att_data.punch_in_time}}</td>
+							<td>{{att_data.punch_out_time}}</td>
+							<td>
+								<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="modal" data-bs-target="#exampleModalCenter{{att_data.id}}" data-bs-placement="top" title="" data-bs-original-title="View"><span class="btn-icon-wrap"><span class="feather-icon"><i data-feather="eye"></i></span></span></a>
+							</td>
+							
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
 	</div>
-    <!-- /Wrapper -->
-	
-	{% include 'footer.html' %}
+</div>
+{% for att_data in att_data %}
+<div class="modal fade" id="exampleModalCenter{{att_data.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter{{att_data.id}}" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Log Details</h4>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+
+				<h6>Punched In : </h6> <span>{{att_data.punch_in_time}}</span>
+				<div class="separator separator-light"></div>
+				<h6>Punched Out : </h6> <span>{{att_data.punch_out_time}}</span>
+				<div class="separator separator-light"></div>
+				<h6>Tasks</h6>
+				<p>{{att_data.tasks}}</p>
+				<div class="separator separator-light"></div>
+				<h6>Meetings</h6>
+				<p>{{att_data.meetings}}</p>
+				<div class="separator separator-light"></div>
+				<h6>Remarks</h6>
+				<p>{{att_data.remarks}}</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+{% endfor %}
+{% include 'footer.html' %}

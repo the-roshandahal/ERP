@@ -91,7 +91,7 @@ class Salary(models.Model):
     type = models.CharField(max_length=255,null=True, blank=True, default='salary')
     created = models.DateField(auto_now_add=True)
     def __str__(self):
-        return self.employee.name
+        return self.employee.user.first_name
 
     class Meta:
         verbose_name_plural = "03. Salary"

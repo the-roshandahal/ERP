@@ -10,7 +10,24 @@
 						<div class="d-flex align-items-center">
 							<h1 class="pg-title">CRM Dashboard</h1>
 						</div>
-						<p>Good afternoon {{request.user.first_name}}!</p>
+						<p id="greeting"></p>
+
+						<script>
+							const now = new Date();
+							const hour = now.getHours();
+					
+							let greeting;
+					
+							if (hour < 12) {
+								greeting = "Good Morning";
+							} else if (hour < 18) {
+								greeting = "Good Afternoon";
+							} else {
+								greeting = "Good Evening";
+							}
+					
+							document.getElementById("greeting").innerHTML = greeting + " {{request.user.first_name}}!";
+						</script>
 					</div>
 					{% if 'create_account' in permissions %}
 					<div class="pg-header-action-wrap">
@@ -19,48 +36,51 @@
 					{% endif %}
 				</div>
 			</div>
-		</div>								
-        <div class="container mt-5">											
-            <div class="row">
-                <div class="table-responsive">
-					<table class="table nowrap table-advance">
-						<thead>
-							<tr>
-								<th class="mnw-150p">Name</th>
-								<th class="mnw-200p">Email address</th>
-								<th class="mnw-150p">Username</th>
-								<th>Role</th>
-							</tr>
-						</thead>
-						<tbody>
-							{% for company_users in company_users %}
-							<tr>
-								<td class="text-truncate">
-									<div class="media align-items-center">
-										<div class="media-head me-3">
-											<div class="avatar avatar-xs">
-												<img src="{% static 'user.png' %}" alt="user" class="avatar-img">
-											</div>
-										</div>
-										<div class="media-body mnw-0">
-											<a href="#" class="table-link-text text-high-em text-truncate mb-0">{{company_users.user.first_name}} {{company_users.user.last_name}}</a>
-										</div>
-									</div>
-								</td>
-								<td class="text-truncate">{{company_users.user.email}}</td>
-								<td class="text-truncate">{{company_users.user.username}}</td>
-								<td><span class="badge badge-lg badge-light">{{company_users.permission.role}}</span></td>
-								
-							</tr>
-							{% endfor %}
-						</tbody>
-					</table>
-				</div>
-                
-            </div>
-													
-        </div>
+		</div>
 		
+		
+
+		<div class="invoice-body mt-3">
+			<div class="row">
+				<table id="datable_1" class="table nowrap w-100 mb-5">
+					<thead>
+						<tr>
+							<th>
+								<span class="form-check">
+									<input type="checkbox" class="form-check-input check-select-all" id="customCheck1">
+									<label class="form-check-label" for="customCheck1"></label>
+								</span>
+							</th>
+							<th>ID</th>
+							<th>Name</th>
+							<th>Role</th>
+							<th>Email Address</th>
+							<th>Department</th>
+							<th>Designation</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for company_users in company_users %}
+						<tr>
+							<td>
+								<span class="form-check mb-0" style="display:none;" >
+									<input type="checkbox" class="form-check-input check-select" name="selected_invoice" id="chk_sel_1" 
+									value="1">
+									<label class="form-check-label" for="chk_sel_1"></label>
+								</span>
+							</td>
+							<td><a href="#" class="table-link-text link-high-em">{{company_users.id}}</a></td>
+							<td>{{company_users.user.first_name}} {{company_users.user.last_name}}</td>
+							<td>{{company_users.permission}}</td>
+							<td>{{company_users.email}}</td>
+							<td>{{company_users.department}}</td>
+							<td>{{company_users.designation}}</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
 	</div>
 </div>
 {% include 'footer.html' %}

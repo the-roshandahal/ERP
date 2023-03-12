@@ -22,48 +22,61 @@
             </div>
         </div>
         <!-- /Page Header -->
-        														
-        <table class="table table-hover table-striped mb-0">
-            <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Type</th>
-                    <th>Category</th>
-                    <th>Price</th>
-                    <th>Available Quantity</th>
-                    <th>Is Vatable</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for products in products %}
-                <tr>
-                    <td>{{products.product_title}}</td>
-                    <td>{{products.product_type}}</td>
-                    <td>{{products.product_category}}</td>
-                    <td>{{products.product_price}}</td>
-                    <td>{{products.product_quantity}}</td>
-                    <td>{% if products.is_vatable == True %}Yes {% else %}No{% endif %}</td>
-                    
-                    <td>
-                        {% if 'update_products' in permissions %}
-                        <a href="#" class="btn btn-icon btn-rounded btn-flush-primary flush-soft-hover" data-bs-toggle="tooltip" data-bs-original-title="Edit" ><span class="icon"><span class="feather-icon"><i data-feather="edit-3"></i></span></span></a>
-                        {% endif %}
-                        {% if 'delete_products' in permissions %}
-                        <a href="{% url 'delete_product' id=products.id %}" class="btn btn-icon btn-rounded btn-flush-danger flush-soft-hover" data-bs-toggle="tooltip" data-bs-original-title="Delete" ><span class="icon"><span class="feather-icon"><i data-feather="trash-2"></i></span></span></a>
-                        {% endif %}
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-                                                        
-        														
-        
+
+        <div class="invoice-body mt-3">
+			<div class="row">
+				<table id="datable_1" class="table nowrap w-100 mb-5">
+					<thead>
+						<tr>
+							<th>
+								<span class="form-check">
+									<input type="checkbox" class="form-check-input check-select-all" id="customCheck1">
+									<label class="form-check-label" for="customCheck1"></label>
+								</span>
+							</th>
+							<th>Title</th>
+                            <th>Type</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Available Quantity</th>
+                            <th>Is Vatable</th>
+                            <th>Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for products in products %}
+						<tr>
+							<td>
+								<span class="form-check mb-0" style="display:none;" >
+									<input type="checkbox" class="form-check-input check-select" name="selected_invoice" id="chk_sel_1" 
+									value="1">
+									<label class="form-check-label" for="chk_sel_1"></label>
+								</span>
+							</td>
+							<td>{{products.product_title}}</td>
+                            <td>{{products.product_type}}</td>
+                            <td>{{products.product_category}}</td>
+                            <td>{{products.product_price}}</td>
+                            <td>{{products.product_quantity}}</td>
+                            <td>{% if products.is_vatable == True %}Yes {% else %}No{% endif %}</td>
+                            
+                            <td>
+                                {% if 'update_products' in permissions %}
+                                <a href="#" class="btn btn-icon btn-rounded btn-flush-primary flush-soft-hover" data-bs-toggle="tooltip" data-bs-original-title="Edit" ><span class="icon"><span class="feather-icon"><i data-feather="edit-3"></i></span></span></a>
+                                {% endif %}
+                                {% if 'delete_products' in permissions %}
+                                <a href="{% url 'delete_product' id=products.id %}" class="btn btn-icon btn-rounded btn-flush-danger flush-soft-hover" data-bs-toggle="tooltip" data-bs-original-title="Delete" ><span class="icon"><span class="feather-icon"><i data-feather="trash-2"></i></span></span></a>
+                                {% endif %}
+                            </td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
     </div>
-<!-- /Main Content -->
 </div>
-<!-- /Wrapper -->
+
 	
 
 <div class="modal fade" id="createUserModal" tabindex="-1" role="dialog" aria-labelledby="createUserModal" aria-hidden="true">

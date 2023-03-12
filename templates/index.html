@@ -11,24 +11,33 @@
 							<h1 class="pg-title">CRM Dashboard</h1>
 							<span class="badge badge-soft-primary ms-3">Badge</span>
 						</div>
-						<p>Good afternoon {{request.user.first_name}}!</p>
+						<p id="greeting"></p>
+
+						<script>
+							const now = new Date();
+							const hour = now.getHours();
+					
+							let greeting;
+					
+							if (hour < 12) {
+								greeting = "Good Morning";
+							} else if (hour < 18) {
+								greeting = "Good Afternoon";
+							} else {
+								greeting = "Good Evening";
+							}
+					
+							document.getElementById("greeting").innerHTML = greeting + " {{request.user.first_name}}!";
+						</script>
 						
 					</div>
-					<div class="pg-header-action-wrap">
+					{% comment %} <div class="pg-header-action-wrap">
 						<button class="btn btn-outline-secondary me-3">Secondary</button>
 						<button class="btn btn-primary">Primary</button>
-					</div>
+					</div> {% endcomment %}
 				</div>
 			</div>
 		</div>											
-		<!-- /Page Header -->
-		<!-- /Add other contents below -->
-		{{company.company_name}}
-																
-		<!-- <h4>Permissions</h4>
-		{% for per in permissions %}
-			{{per}},
-		{% endfor %} -->
 	</div>
 </div>
 {% include 'footer.html' %}

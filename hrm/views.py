@@ -106,14 +106,9 @@ def add_designation(request):
 
 def attendance (request):
     if 'read_hrm' in custom_data_views(request):
-        employees = Employee.objects.all()
-        current_datetime = datetime.date.today()  
-        leaves = Leave.objects.all()
-        today_leave = Leave.objects.filter(created=current_datetime)
+        att_data=LogSheet.objects.all()
         context = {
-            'employees':employees,
-            'leaves':leaves,
-            'today_leave':today_leave
+            'att_data':att_data,
         }
         return render (request, 'hrm/attendance.html',context)
     else:
@@ -121,42 +116,6 @@ def attendance (request):
         return redirect('home')
 
     
-def add_leave(request):
-    if 'create_hrm' in custom_data_views(request):
-        if request.method=="POST":
-            reason = request.POST['reason']
-            emp = request.POST['employee']
-            employe = Employee.objects.get(id=emp)
-            current_datetime = datetime.date.today()
-            print(current_datetime)
-
-            if Leave.objects.filter(employee = employe):
-                leaves = Leave.objects.filter(employee = employe).order_by('-created')[0]
-                print(leaves.created)
-            else:
-                leaves=None
-
-            if leaves:
-                if leaves.created ==current_datetime:
-                    messages.info(request,f"Already added for today ({current_datetime})")
-                    return redirect('attendance')
-                else:
-                    Leave.objects.create(employee=employe,reason =reason)
-                    messages.info(request, "Leave Added Successfully")
-                    return redirect('attendance')
-            else:
-                Leave.objects.create(employee=employe,reason =reason)
-                messages.info(request, "Leave Added Successfully")
-                return redirect('attendance')
-        else:
-            return redirect('attendance')
-    else:
-        messages.info(request, "Unauthorized access.")
-        return redirect('home')
-    
-
-
-
 
 def salary (request):
     if 'create_hrm' in custom_data_views(request):
@@ -456,3 +415,44 @@ def delete_employee(request,id):
         messages.info(request, "Unauthorized access.")
         return redirect('home')
     
+
+
+
+
+
+# def add_leave(request):
+#     if 'create_hrm' in custom_data_views(request):
+#         if request.method=="POST":
+#             reason = request.POST['reason']
+#             emp = request.POST['employee']
+#             employe = Employee.objects.get(id=emp)
+#             current_datetime = datetime.date.today()
+#             print(current_datetime)
+
+#             if Leave.objects.filter(employee = employe):
+#                 leaves = Leave.objects.filter(employee = employe).order_by('-created')[0]
+#                 print(leaves.created)
+#             else:
+#                 leaves=None
+
+#             if leaves:
+#                 if leaves.created ==current_datetime:
+#                     messages.info(request,f"Already added for today ({current_datetime})")
+#                     return redirect('attendance')
+#                 else:
+#                     Leave.objects.create(employee=employe,reason =reason)
+#                     messages.info(request, "Leave Added Successfully")
+#                     return redirect('attendance')
+#             else:
+#                 Leave.objects.create(employee=employe,reason =reason)
+#                 messages.info(request, "Leave Added Successfully")
+#                 return redirect('attendance')
+#         else:
+#             return redirect('attendance')
+#     else:
+#         messages.info(request, "Unauthorized access.")
+#         return redirect('home')
+    
+
+
+

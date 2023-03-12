@@ -19,10 +19,10 @@ urlpatterns = [
     path("delete_employee/<int:id>", views.delete_employee, name="delete_employee"),
 
     path("attendance/", views.attendance, name="attendance"),
-    path("add_leave/", views.add_leave, name="add_leave"),
     path("salary/", views.salary, name="salary"),
     path("pay_salary/", views.pay_salary, name="pay_salary"),
     path("advance_salary/", views.advance_salary, name="advance_salary"),
+    # path("add_leave/", views.add_leave, name="add_leave"),
 
 
 
