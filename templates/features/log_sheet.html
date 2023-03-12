@@ -1,0 +1,134 @@
+{% load static %}{% include 'header.html' %}
+<!-- Main Content -->
+<div class="hk-pg-wrapper">
+	<div class="container-xxl">
+		<!-- Page Header -->												
+		<div class="hk-pg-header">
+			<div class="d-flex">
+				<div class="d-flex flex-wrap justify-content-between flex-1">
+					<div class="mb-md-0 mb-2 me-8">
+						<div class="d-flex align-items-center">
+							<h1 class="pg-title">CRM Dashboard</h1>
+							<span class="badge badge-soft-primary ms-3">Badge</span>
+						</div>
+						<p>Good afternoon {{request.user.first_name}}!</p>
+						
+					</div>
+					<div class="pg-header-action-wrap">
+						<button class="btn btn-outline-secondary me-3">Secondary</button>
+						<button class="btn btn-primary">Primary</button>
+					</div>
+				</div>
+			</div>
+		</div>
+															
+		<!-- /Page Header -->
+
+
+		<!-- /Add other contents below -->
+																
+		<div class="row">
+			<div class="col-lg-12 col-sm-12 mt-3">
+				{% if punched_in == False %}
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">Welcome {{request.user.first_name}}!</h5>
+						<p class="card-text">Click the button below to start your shift. {{time_now}}</p>
+						<form method="POST" action="{% url 'punch_in' %}">
+							{% csrf_token %}
+							<button type="submit" class="btn btn-primary">Punch In</button>
+						</form>
+					</div>
+				</div>
+				{% endif %}
+
+				{% if punched_in == True and punched_out == False %}
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">Hello {{request.user.first_name}}!</h5>
+						<p class="card-text">Fill the details below to punch out. {{time_now}}</p>
+						<form method="POST" action="{% url 'punch_out' %}">
+							{% csrf_token %}
+							<div class="row">
+								<div class="col-xxl-12">
+									<h6>Tasks Performed *</h6>
+									<textarea class="form-control" rows="3" placeholder="Write an internal note" name="tasks" required></textarea>
+								</div>
+							</div>
+							<div class="separator separator-light"></div>
+							<div class="row">
+								<div class="col-xxl-12">
+									<h6>Meetings Attended (If Any)</h6>
+									<textarea class="form-control" rows="3" placeholder="Write an internal note" name="meetings"></textarea>
+								</div>
+							</div>
+							<div class="separator separator-light"></div>
+							<div class="row">
+								<div class="col-xxl-12">
+									<h6>Remarks</h6>
+									<textarea class="form-control" rows="3" placeholder="Write an internal note" name="remarks"></textarea>
+								</div>
+							</div>
+							<div class="separator separator-light"></div>
+							<div class="row">
+								<div class="col-xxl-12">
+									<button type="submit" class="btn btn-primary">Punch Out</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+				{% endif %}
+				{% if punched_in == True and punched_out == True %}
+				<div class="row">
+					<div class="col-lg-12 col-sm-12">
+						<div class="card">
+							<div class="card-header card-header-action">
+								<h6>Shift Ended</h6>
+							</div>
+							<div class="card-body">
+								<h5 class="card-title">See you tomorrow!</h5>
+								<p>You can also view the today's task summary.</p>
+								<a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalCenter">Your Log</a>
+
+
+								<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter" aria-hidden="true">
+									<div class="modal-dialog modal-dialog-centered" role="document">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h4 class="modal-title">Your Log</h4>
+												<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+													<span aria-hidden="true">&times;</span>
+												</button>
+											</div>
+											<div class="modal-body">
+
+												<h6>Punched In : </h6> <span>{{today_log.punch_in_time}}</span>
+												<div class="separator separator-light"></div>
+												<h6>Punched Out : </h6> <span>{{today_log.punch_out_time}}</span>
+												<div class="separator separator-light"></div>
+												<h6>Tasks</h6>
+												<p>{{today_log.tasks}}</p>
+												<div class="separator separator-light"></div>
+												<h6>Meetings</h6>
+												<p>{{today_log.meetings}}</p>
+												<div class="separator separator-light"></div>
+												<h6>Remarks</h6>
+												<p>{{today_log.remarks}}</p>
+											</div>
+											<div class="modal-footer">
+												<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+</div>
+{% include 'footer.html' %}

@@ -5,44 +5,10 @@
 {% include 'nav_links.html' %}
 <body>
 	<div class="page-wrapper">
-		<div class="messages">
-			{% for message in messages %}
-			<div class="popup-msg">
-			<p class="popup-msg-text">{{message}}</p>
-			<!-- <i class="fa fa-times popup-close"></i> -->
-			</div>
-			{% endfor %}
-			<style>
-				.popup-msg {
-					display: flex;
-					justify-content: space-between;
-					position: absolute;
-					transform: translateX(-50%);
-					z-index: 1000;
-					top: 10%;
-					right: -3%;
-					padding: 0.5rem;
-					border-radius: 10px;
-					border: 1.3px solid gray;
-					color: rgb(255, 255, 255);
-					background-color: rgb(228, 228, 228);
-					box-shadow: 3px 4px 12px 0px rgba(0, 0, 0, 0.3);
-				}
-				.popup-msg-text {
-					padding: 7px 5px 0px 5px;
-					color:#FB8500 ;
-			}
-			</style>
-			
-			<script>
-			let popup = document.querySelector(".popup-msg");
-			if (popup) {
-				setTimeout(() => {
-				popup.style.display = "none";
-				}, 10000);
-			}
-			</script>
-		</div>
+		{% for message in messages %}
+		<div data-notify="container" class="col-3 alert alert-primary animated bounceInDown" role="alert" data-notify-position="top-right" style="display: inline-block; margin: 0px auto; position: fixed; transition: all 0.5s ease-in-out 0s; z-index: 1032; top: 20px; right: 20px; animation-iteration-count: 1;"><button type="button" aria-hidden="true" class="close" data-notify="dismiss" style="display: none;"></button><span data-notify="icon"></span> <span data-notify="title"></span> <span data-notify="message">{{message}}</span><a href="#" target="_blank" data-notify="url"></a></div>
+		{% endfor %}
+		
 		<!-- Wrapper -->
 		<div class="hk-wrapper" data-layout="vertical" data-layout-style="default" data-menu="light" data-footer="simple">
 			<!-- Top Navbar -->
@@ -306,7 +272,17 @@
 										<span class="nav-link-text">To Do</span>
 									</a>	
 								</li>
-									
+
+								<li class="nav-item">
+									<a class="nav-link" href="{% url 'log_sheet' %}" >
+										<span class="nav-icon-wrap">
+											<span class="svg-icon">
+												<i class="bi bi-check2-all"></i>
+											</span>
+										</span>
+										<span class="nav-link-text">Log Sheet</span>
+									</a>	
+								</li>	
 							</ul>
 						</div>
 					</div>

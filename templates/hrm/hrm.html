@@ -31,6 +31,7 @@
 							<th>Employee</th>
 							<th>Punch In</th>
 							<th>Punch Out</th>
+							<th></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -39,6 +40,9 @@
 							<td>{{att_data.user}}</td>
 							<td>{{att_data.punch_in_time}}</td>
 							<td>{{att_data.punch_out_time}}</td>
+							<td>
+								<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="modal" data-bs-target="#exampleModalCenter{{att_data.id}}" data-bs-placement="top" title="" data-bs-original-title="View"><span class="btn-icon-wrap"><span class="feather-icon"><i data-feather="eye"></i></span></span></a>
+							</td>
 							
 						</tr>
 						{% endfor %}
@@ -48,4 +52,37 @@
 		</div>
 	</div>
 </div>
+{% for att_data in att_data %}
+<div class="modal fade" id="exampleModalCenter{{att_data.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter{{att_data.id}}" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Log Details</h4>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+
+				<h6>Punched In : </h6> <span>{{att_data.punch_in_time}}</span>
+				<div class="separator separator-light"></div>
+				<h6>Punched Out : </h6> <span>{{att_data.punch_out_time}}</span>
+				<div class="separator separator-light"></div>
+				<h6>Tasks</h6>
+				<p>{{att_data.tasks}}</p>
+				<div class="separator separator-light"></div>
+				<h6>Meetings</h6>
+				<p>{{att_data.meetings}}</p>
+				<div class="separator separator-light"></div>
+				<h6>Remarks</h6>
+				<p>{{att_data.remarks}}</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+				<!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+			</div>
+		</div>
+	</div>
+</div>
+{% endfor %}
 {% include 'footer.html' %}
