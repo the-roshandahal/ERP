@@ -1,125 +1,66 @@
 {% load static %}{% include 'header.html' %}
-
-		
-
-		<!-- Main Content -->
-		<div class="hk-pg-wrapper">
-			<div class="container-xxl">
-
-				<!-- Page Body -->
-				<div class="hk-pg-body">
-					<div class="tab-content">
-						<div class="tab-pane fade show active" id="tab_block_1">
-							<div class="row">
-								<div class="col-xxl-12 col-lg-8 col-md-7 mb-md-4 mb-3">
-									<div class="card card-border mb-0 h-100">
-										<div class="card-header card-header-action">
-											<h6>Salary</h6>
-											<div class="card-action-wrap">
-                                                {% if 'create_hrm' in permissions %}
-                                                <button type="button" class="btn btn-primary mx-2" data-bs-toggle="modal" data-bs-target="#exampleModalCenterAdvance">
-                                                    Issue Advance Payment
-                                                </button>
-                                                {% endif %}
-                                                {% if 'create_hrm' in permissions %}
-                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalCenter">
-                                                    Generate Salary
-                                                </button>
-                                                {% endif %}
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-                           
-                            {% if data_list %}
+<!-- Main Content -->
+    <div class="hk-pg-wrapper">
+        <div class="container-xxl">
+            <div class="hk-pg-header">
+                <div class="d-flex">
+                    <div class="d-flex flex-wrap justify-content-between flex-1">
+                        <div class="mb-md-0 mb-2 me-8">
+                            <div class="d-flex align-items-center">
+                                <h1 class="pg-title">CRM Dashboard</h1>
+                                <span class="badge badge-soft-primary ms-3">Badge</span>
+                            </div>
+                            <p id="greeting"></p>
+    
+                            <script>
+                                const now = new Date();
+                                const hour = now.getHours();
+                        
+                                let greeting;
+                        
+                                if (hour < 12) {
+                                    greeting = "Good Morning";
+                                } else if (hour < 18) {
+                                    greeting = "Good Afternoon";
+                                } else {
+                                    greeting = "Good Evening";
+                                }
+                        
+                                document.getElementById("greeting").innerHTML = greeting + " {{request.user.first_name}}!";
+                            </script>
                             
-
-                            <form action="{% url 'pay_salary' %}" method="POST">
-                                {% csrf_token %}
-                                <div class="row">
-                                    <table id="datable_1" class="table nowrap w-100 mb-5">
-                                        <thead>
-                                            <tr>
-                                                <th><span class="form-check">
-                                                    <input type="checkbox" class="form-check-input check-select-all" id="customCheck1">
-                                                    <label class="form-check-label" for="customCheck1"></label>
-                                                </span></th>
-                                                <th>Name</th>
-                                                <th>Salary</th>
-                                                <th>Absent Days</th>
-                                                <th>Leave Deduction</th>
-                                                <th>Tax Deduction</th>
-                                                <th>Final Salary</th>
-                                                <th>Status</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {% for data_list in data_list %}
-                                            <tr>
-                                                <td> 
-                                                    {% if data_list.type == 'salary' and data_list.status == 'unpaid' %}
-                                                    <span class="form-check mb-0">
-                                                        <input type="checkbox" class="form-check-input check-select" name="selected_salary" id="chk_sel_1" 
-                                                        value="{{data_list.name}},{{monthhhh}}, {{data_list.leave_deduction}},{{data_list.tax_deduction}},{{data_list.final_salary}}">
-                                                        <label class="form-check-label" for="chk_sel_1"></label>
-                                                    </span>
-                                                    {% endif %}
-                                                </td>
-                                                <td>{{data_list.name}}</td>
-                                                <td>{{data_list.total_salary}}</td>
-                                                <td>{{data_list.leave}}</td>
-                                                <td>{{data_list.leave_deduction|floatformat:2}}</td>
-                                                <td>{{data_list.tax_deduction|floatformat:2}}</td>
-                                                <td>{{data_list.final_salary|floatformat:2}}</td>
-                                                <td>
-                                                    {% if data_list.status == 'paid' %}                                                           
-                                                    <span class="badge badge-primary badge-outline">Paid</span>
-                                                    {% else %}
-                                                    <span class="badge badge-danger badge-outline">Unpaid</span>
-                                                    {% endif %} 
-                                                </td>
-                                            </tr>
-                                            {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            
-                                <div class="row">
-                                    <div class="col-xxl-12 col-lg-8 col-md-7 mb-md-4 mb-3  mt-5">
-                                        <div class="card-action-wrap">
-                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalCenterrrr">
-                                                Mark as Paid
-                                            </button>
-                                            <div class="modal fade" id="exampleModalCenterrrr" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterrrr" aria-hidden="true">
-                                                <div class="modal-dialog modal-dialog-centered" role="document">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title">Are you sure you want to mark selected employees salary as paid?</h5>
-                                                        </div>
-                                                        <form action="{% url 'salary' %}" method="POST">
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                                <a href="#" ><button class="btn btn-primary ms-2 d-sm-inline-block d-none">Yes</button></a>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                            {% else %}
-
+                        </div>
+                        <div class="pg-header-action-wrap">
+                            {% if 'create_hrm' in permissions %}
+                            <button class="btn btn-outline-secondary me-3" data-bs-toggle="modal" data-bs-target="#exampleModalCenterAdvance">Advance Payment</button>
+                            {% endif %}
+                            {% if 'create_hrm' in permissions %}
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalCenter">Generate Salary</button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Page Body -->
+            <div class="hk-pg-body">
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="tab_block_1">
+                        {% if data_list %}
+                        <form action="{% url 'pay_salary' %}" method="POST">
+                            {% csrf_token %}
                             <div class="row">
-                                <h2>Recent Payments</h2>
-                                <table class="table nowrap w-100 mb-5">
+                                <table id="datable_1" class="table nowrap w-100 mb-5">
                                     <thead>
                                         <tr>
+                                            <th>
+                                                <span class="form-check">
+                                                    <input type="checkbox" class="form-check-input check-select-all" id="customCheck1">
+                                                    <label class="form-check-label" for="customCheck1"></label>
+                                                </span>
+                                            </th>
                                             <th>Name</th>
-                                            <th>Month</th>
                                             <th>Salary</th>
+                                            <th>Absent Days</th>
                                             <th>Leave Deduction</th>
                                             <th>Tax Deduction</th>
                                             <th>Final Salary</th>
@@ -127,151 +68,223 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {% if recent_salary %}
-                                        {% for recent_salary in recent_salary %}
+                                        {% for data_list in data_list %}
                                         <tr>
-                                            <td>{{recent_salary.employee}}</td>
-                                            <td>{{recent_salary.month}}</td>
-                                            <td>{{recent_salary.employee.emp_salary}}</td>
-                                            <td>{{recent_salary.leave_deduction|floatformat:2}}</td>
-                                            <td>{{recent_salary.tax_deduction|floatformat:2}}</td>
-                                            <td>{{recent_salary.paid_salary|floatformat:2}}</td>
-                                            <td>                                                             
+                                            <td> 
+                                                {% if data_list.type == 'salary' and data_list.status == 'unpaid' %}
+                                                <span class="form-check mb-0">
+                                                    <input type="checkbox" class="form-check-input check-select" name="selected_salary" id="chk_sel_1" 
+                                                    value="{{data_list.name}},{{monthhhh}}, {{data_list.leave_deduction}},{{data_list.tax_deduction}},{{data_list.final_salary}}">
+                                                    <label class="form-check-label" for="chk_sel_1"></label>
+                                                </span>
+                                                {% endif %}
+                                            </td>
+                                            <td>{{data_list.name}}</td>
+                                            <td>{{data_list.total_salary}}</td>
+                                            <td>{{data_list.leave}}</td>
+                                            <td>{{data_list.leave_deduction|floatformat:2}}</td>
+                                            <td>{{data_list.tax_deduction|floatformat:2}}</td>
+                                            <td>{{data_list.final_salary|floatformat:2}}</td>
+                                            <td>
+                                                {% if data_list.status == 'paid' %}                                                           
                                                 <span class="badge badge-primary badge-outline">Paid</span>
+                                                {% else %}
+                                                <span class="badge badge-danger badge-outline">Unpaid</span>
+                                                {% endif %} 
                                             </td>
                                         </tr>
                                         {% endfor %}
-                                        {% else %}
-                                        <tr>
-                                            <td style="text-align: center" colspan="7">No Recent Payments</td>
-                                        </tr>
-                                        {% endif %}
-                                        
                                     </tbody>
                                 </table>
                             </div>
+                        
+                            <div class="row">
+                                <div class="col-xxl-12 col-lg-8 col-md-7 mb-md-4 mb-3  mt-5">
+                                    <div class="card-action-wrap">
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalCenterrrr">
+                                            Mark as Paid
+                                        </button>
+                                        <div class="modal fade" id="exampleModalCenterrrr" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterrrr" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Are you sure you want to mark selected employees salary as paid?</h5>
+                                                    </div>
+                                                    <form action="{% url 'salary' %}" method="POST">
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                            <a href="#" ><button class="btn btn-primary ms-2 d-sm-inline-block d-none">Yes</button></a>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        {% else %}
 
-                            {% endif %}
+                        <div class="row">
+                            <h2>Recent Payments</h2>
+                            <table class="table nowrap w-100 mb-5">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Month</th>
+                                        <th>Salary</th>
+                                        <th>Leave Deduction</th>
+                                        <th>Tax Deduction</th>
+                                        <th>Final Salary</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if recent_salary %}
+                                    {% for recent_salary in recent_salary %}
+                                    <tr>
+                                        <td>{{recent_salary.employee}}</td>
+                                        <td>{{recent_salary.month}}</td>
+                                        <td>{{recent_salary.employee.emp_salary}}</td>
+                                        <td>{{recent_salary.leave_deduction|floatformat:2}}</td>
+                                        <td>{{recent_salary.tax_deduction|floatformat:2}}</td>
+                                        <td>{{recent_salary.paid_salary|floatformat:2}}</td>
+                                        <td>                                                             
+                                            <span class="badge badge-primary badge-outline">Paid</span>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    {% else %}
+                                    <tr>
+                                        <td style="text-align: center" colspan="7">No Recent Payments</td>
+                                    </tr>
+                                    {% endif %}
+                                    
+                                </tbody>
+                            </table>
+                        </div>
 
-                            
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- /Main Content -->
-	</div>
-    <!-- /Wrapper -->
-	
+                        {% endif %}
 
-    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Select Month and Employees</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                        
+                    </div>
                 </div>
-                <form action="{% url 'salary' %}" method="POST">
-                    {% csrf_token %}
-                    <div class="modal-body">                                                                        
-                        <div class="row">
-                            <div class="col-xxl-12 mb-xxl-0 mb-4">
-                                <h6>Select Month</h6>
-                                <div class="form-group">
-                                    <select class="form-select" name="month">
-                                        {% for months in months %}
-                                        <option value = '{{months.id}}'>{{months.month}}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-xxl-12 mb-xxl-0 mb-4">
-                                <h6>Select Employee</h6>
-                                <div class="form-group">
-                                    <select class="form-select" name="employee">
-                                        <option value = ''>All Employees</option>
-                                        {% for employeessss in employeessss %}
-                                        <option value = '{{employeessss.id}}'>{{employeessss.name}}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <a href="#" ><button class="btn btn-primary ms-2 d-sm-inline-block d-none">Save</button></a>
-                    </div>
-                </form>
             </div>
         </div>
     </div>
-    
-    
-    
-    
-    
-    <div class="modal fade" id="exampleModalCenterAdvance" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterAdvance" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Select Employee, Month and Advance Amount</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form action="{% url 'advance_salary' %}" method="POST">
-                    {% csrf_token %}
-                    <div class="modal-body">                                                                        
-                        <div class="row">
-                            <div class="col-xxl-12 mb-xxl-0 mb-4">
-                                <h6>Select Month</h6>
-                                <div class="form-group">
-                                    <select class="form-select" name="month">
-                                        {% for months in months %}
-                                        <option value = '{{months.month}}'>{{months.month}}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
+    <!-- /Main Content -->
+</div>
+<!-- /Wrapper -->
 
-                        <div class="row">
-                            <div class="col-xxl-12 mb-xxl-0 mb-4">
-                                <h6>Select Employee</h6>
-                                <div class="form-group">
-                                    <select class="form-select" name="employee">
-                                        {% for employeessss in employeessss %}
-                                        <option value = '{{employeessss.id}}'>{{employeessss.name}}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
 
-                        <div class="row">
-                            <div class="col-xxl-12 mb-xxl-0 mb-4">
-                                <h6>Advance Amount</h6>
-                                <div class="form-group">
-                                    <input type="number" class="form-control" name="amount" required>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <a href="#" ><button class="btn btn-primary ms-2 d-sm-inline-block d-none">Save</button></a>
-                    </div>
-                </form>
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Select Month and Employees</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
+            <form action="{% url 'salary' %}" method="POST">
+                {% csrf_token %}
+                <div class="modal-body">                                                                        
+                    <div class="row">
+                        <div class="col-xxl-12 mb-xxl-0 mb-4">
+                            <h6>Select Month</h6>
+                            <div class="form-group">
+                                <select class="form-select" name="month">
+                                    {% for months in months %}
+                                    <option value = '{{months.id}}'>{{months.month}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xxl-12 mb-xxl-0 mb-4">
+                            <h6>Select Employee</h6>
+                            <div class="form-group">
+                                <select class="form-select" name="employee">
+                                    <option value = ''>All Employees</option>
+                                    {% for all_employees in all_employees %}
+                                    <option value = '{{all_employees.id}}'>{{all_employees.user.first_name}} {{all_employees.user.last_name}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <a href="#" ><button class="btn btn-primary ms-2 d-sm-inline-block d-none">Save</button></a>
+                </div>
+            </form>
         </div>
-    </div>												
+    </div>
+</div>
+
+
+
+
+
+<div class="modal fade" id="exampleModalCenterAdvance" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterAdvance" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Select Employee, Month and Advance Amount</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{% url 'advance_salary' %}" method="POST">
+                {% csrf_token %}
+                <div class="modal-body">                                                                        
+                    <div class="row">
+                        <div class="col-xxl-12 mb-xxl-0 mb-4">
+                            <h6>Select Month</h6>
+                            <div class="form-group">
+                                <select class="form-select" name="month">
+                                    {% for months in months %}
+                                    <option value = '{{months.month}}'>{{months.month}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xxl-12 mb-xxl-0 mb-4">
+                            <h6>Select Employee</h6>
+                            <div class="form-group">
+                                <select class="form-select" name="employee">
+                                    {% for all_employees in all_employees %}
+                                    <option value = '{{all_employees.id}}'>{{all_employees.user.first_name}} {{all_employees.user.last_name}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xxl-12 mb-xxl-0 mb-4">
+                            <h6>Advance Amount</h6>
+                            <div class="form-group">
+                                <input type="number" class="form-control" name="amount" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <a href="#" ><button class="btn btn-primary ms-2 d-sm-inline-block d-none">Save</button></a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>												
 
 													
 

@@ -25,11 +25,13 @@ def hrm(request):
 def hrm_setup(request):
     if 'read_hrm' in custom_data_views(request):
         month = MonthSetup.objects.all()
+        holidays = Holidays.objects.all()
         year = YearSetup.objects.all()
         department = Department.objects.all()
         designation = Designation.objects.all()
         context = {
             'month':month, 
+            'holidays':holidays, 
             'year':year,
             'department':department, 
             'designation':designation,
@@ -221,7 +223,7 @@ def salary (request):
                 })
                     
 
-            employeessss = Employee.objects.all()
+            all_employees = Employee.objects.all()
             context={
                 'months':months,
                 'monthhhh':monthhhh,
@@ -229,7 +231,7 @@ def salary (request):
                 'from_date_obj':from_date_obj,
                 'to_date_obj':to_date_obj,
                 'today_date':today_date,
-                'employeessss':employeessss,
+                'all_employees':all_employees,
             }
 
             return render(request,'hrm/salary.html',context)
@@ -239,7 +241,7 @@ def salary (request):
             current_datetime = datetime.date.today()
             date_object = current_datetime
             today_date = date_object.strftime('%Y-%m-%d')
-            employeessss = Employee.objects.all()
+            all_employees = Employee.objects.all()
             recent_salary = Salary.objects.all().order_by('created')
             paginator = Paginator(recent_salary, 10)
             page_number = request.GET.get('page')
@@ -247,7 +249,7 @@ def salary (request):
             context = {
                 'months':months,
                 'today_date':today_date,
-                'employeessss':employeessss,
+                'all_employees':all_employees,
                 'recent_salary':recent_salary,
             }
             return render(request,'hrm/salary.html',context)
