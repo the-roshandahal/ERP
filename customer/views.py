@@ -67,6 +67,7 @@ def edit_client(request,id):
         return redirect('home')
     
 def delete_client(request,id):
+    print('hello')
     if 'delete_finance' in custom_data_views(request):
         delete_client = Customer.objects.get(id=id)
         deleted_client = delete_client

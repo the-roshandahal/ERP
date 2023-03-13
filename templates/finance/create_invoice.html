@@ -81,27 +81,6 @@
                                     value = 0>
                                 </div>
                             </div>
-
-                            
-                            {% comment %} <div class="row mb-3">
-                                <div class="col-xxl-6">
-                                    <h6>Deduction</h6>
-                                    <input type="text" class="form-control" name = "deduction_name">
-                                </div>
-                                <div class="col-xxl-6">
-                                    <h6>Deduction Amount</h6>
-                                    <input type="number"
-                                    class="form-control"
-                                    placeholder="Deduction Amount"
-                                    name = "deduction_amount"
-                                    id="deduction_amount"
-                                    value = 0>
-                                </div>
-                            </div> {% endcomment %}
-
-
-                            
-
                             <div class="row mb-3">
                                 <div class="col-xxl-6">
                                     <h6 class="float-right">Sub Total Rs. <span id="sub">0</span></h6>
@@ -130,28 +109,6 @@
                                     <input type="text" class="form-control" placeholder="Disabled" disabled id="totalAmt">
                                 </div>
                             </div>
-                            
-
-                             {% comment %} <div class="row mb-3">
-                                <div class="col-xxl-6">
-                                    <h6><input class="form-check-input checkbox_check me-2" type="checkbox" name="is_vatable" value ="1" id="isVat">Add VAT </h6>
-                                </div>
-                                <div class="col-xxl-6">
-                                    <p> Vat Amount Rs.<span id="vatAmt">0</span></p>
-                                </div>
-                            </div> {% endcomment %}
-                             
-
-                            {% comment %} <div class="row mb-3">
-                                <div class="col-xxl-6">
-                                    <h6>Grand Total</h6>
-                                </div>
-                                <div class="col-xxl-6">
-                                    <p >Rs. <span id="grandTotal">0</span></p>
-                                </div>
-                            </div> {% endcomment %}
-                            
-
                             <div class="row mb-3">
                                 <div class="col-xxl-6">
                                     <h6>Remarks</h6>
@@ -170,7 +127,7 @@
         </div>
     </div>
 </div>
-<script>
+
     
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
 <script type="text/javascript" src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
@@ -245,6 +202,6 @@
             }
           });
     </script>
-</script>
+
 <!-- /Main Content -->
 {% include 'footer.html' %}
