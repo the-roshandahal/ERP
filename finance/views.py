@@ -1,3 +1,4 @@
+from django.db.models.functions import ExtractWeekDay
 from django.shortcuts import render
 
 from django.contrib import messages, auth
@@ -8,6 +9,9 @@ from products.models import *
 from customer.models import *
 from .models import *
 from account.context_processors import custom_data_views
+from django.db.models.functions import TruncMonth
+from django.db.models import Sum, Q
+from datetime import datetime,date,timedelta
 # Create your views here.
 
 
@@ -22,6 +26,44 @@ def invoice(request):
     else:
         messages.info(request, "Unauthorized access.")
         return redirect('home')
+
+
+
+def finance(request):
+    if 'read_finance' in custom_data_views(request):
+        invoice = Invoice.objects.all()
+        receipt = Receipt.objects.all()
+
+        total_invoice_amt=0
+        for invoice in invoice :
+            total_invoice_amt = total_invoice_amt+ invoice.invoice_amount
+
+        total_receipt_amt=0
+        for receipt in receipt :
+            total_receipt_amt = total_receipt_amt+ receipt.paid_amount
+        
+
+        today = date.today()
+        last_7_days = today - timedelta(days=6)
+
+        context = {
+            'totals_by_day': [
+                {
+                    'date': last_7_days + timedelta(days=i),
+                    'invoice_total': Invoice.objects.filter(created=last_7_days + timedelta(days=i)).aggregate(total=Sum('invoice_amount'))['total'] or 0,
+                    'receipt_total': Receipt.objects.filter(created=last_7_days + timedelta(days=i)).aggregate(total=Sum('paid_amount'))['total'] or 0,
+                    'expense_total': Expense.objects.filter(created=last_7_days + timedelta(days=i)).aggregate(total=Sum('expense_amount'))['total'] or 0,
+                }
+                for i in range(7)
+            ],
+            'total_invoice_amt':total_invoice_amt,
+            'total_receipt_amt':total_receipt_amt,
+        }
+        return render (request, 'finance/dashboard.html',context)
+    else:
+        messages.info(request, "Unauthorized access.")
+        return redirect('home')
+
 
 
 
@@ -238,3 +280,54 @@ def view_receipt(request, id):
     else:
         messages.info(request, "Unauthorized access.")
         return redirect('home')
+
+def expenses(request):
+    if 'read_finance' in custom_data_views(request):
+        expense = Expense.objects.all()
+        context = {
+            'expense': expense,
+        }
+        return render(request, 'finance/expenses.html', context)
+    else:
+        messages.info(request, "Unauthorized access.")
+        return redirect('home')
+    
+def create_expense(request):
+    if 'read_finance' in custom_data_views(request):
+        if request.method == "POST":
+            expense_title = request.POST['expense_title']
+            expense_amount  = request.POST['expense_amount']
+            type = request.POST['expense_type']
+            remarks = request.POST['remarks']
+
+            expense_type = ExpenseType.objects.get(id=type)
+            Expense.objects.create(expense_title = expense_title, expense_amount = expense_amount, 
+                                   expense_type = expense_type,remarks = remarks)
+            return redirect('expenses')
+        else:
+            expense_types = ExpenseType.objects.all()
+            context = {
+                'expense_types': expense_types,
+            }
+            return render(request, 'finance/expenses.html', context)
+    else:
+        messages.info(request, "Unauthorized access.")
+        return redirect('home')
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

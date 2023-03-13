@@ -6,3 +6,5 @@ from .models import *
 admin.site.register(Statement)
 admin.site.register(Invoice)
 admin.site.register(Receipt)
+admin.site.register(ExpenseType)
+admin.site.register(Expense)

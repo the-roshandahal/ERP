@@ -113,19 +113,19 @@ window.Apex = {
 /*Stacked Column*/
 var options1 = {
 	series: [{
-		name: 'PRODUCT A',
-		data: [44, 55, 41, 67, 22, 43,44, 55, 41, 67, 22, 43]
+		name: 'Expenses',
+		data: expense_data
 	}, {
-		name: 'PRODUCT B',
-		data: [13, 23, 20, 8, 13, 27,13, 23, 20, 8, 13, 27]
+		name: 'Receipts',
+		data: receipt_data
 	}, {
-		name: 'PRODUCT C',
-		data: [11, 17, 15, 15, 21, 14,11, 17, 15, 15, 21, 14]
+		name: 'Invoices',
+		data: invoice_data
 	}],
 	chart: {
 		type: 'bar',
 		height: 250,
-		stacked: true,
+		stacked: false,
 		toolbar: {
 			show: false
 		},
@@ -144,10 +144,7 @@ var options1 = {
 	},
 	xaxis: {
 		type: 'datetime',
-		categories: ['01/02/2021 GMT', '01/03/2021 GMT', '01/04/2021 GMT',
-			'01/05/2021 GMT', '01/06/2021 GMT','01/07/2021 GMT', '01/08/2021 GMT', '01/09/2021 GMT', '01/10/2021 GMT',
-			'01/11/2021 GMT', '01/12/2021 GMT','01/13/2021 GMT'
-		],
+		categories: categories,
 	},
 	legend: {
 		show:false
@@ -166,7 +163,7 @@ chart1.render();
 
 /*Multiple Chart*/
 var options2 = {
-	series: [80, 75],
+	series: [percent_1, percent_2],
 	stroke: {
 		lineCap: 'round'
 	},
@@ -193,7 +190,7 @@ var options2 = {
 				total: {
 					show: true,
 					formatter: function () {
-						return [('$2249')];
+						return [('Rs '+Math.floor(total_invoice_amt))];
 					}
 				}
 			  }

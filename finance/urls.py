@@ -10,14 +10,15 @@ urlpatterns = [
     path("invoice/", views.invoice, name="invoice"),
     path("create_invoice/", views.create_invoice, name="create_invoice"),   
     path("view_invoice/<int:id>", views.view_invoice, name="view_invoice"),
-    # path("single_invoice/<int:id>", views.single_invoice, name="single_invoice"),
 
     path("receipt/", views.receipt, name="receipt"),
     path("create_receipt/", views.create_receipt, name="create_receipt"),
     path("view_receipt/<int:id>", views.view_receipt, name="view_receipt"),
 
-    # path("clients/", views.clients, name="clients"),
-    # path("add_client/", views.add_client, name="add_client"),
+    path("finance/", views.finance, name="finance"),
+    path("expenses/", views.expenses, name="expenses"),
+    path("create_expense/", views.create_expense, name="create_expense"),
+    # path("create_expense_type/", views.create_expense_type, name="create_expense"),
 
     path("statement/", views.statement, name="statement"),
     path("single_statement/<int:id>", views.single_statement, name="single_statement"),

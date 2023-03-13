@@ -55,3 +55,27 @@ class Statement(models.Model):
 
     class Meta:
         verbose_name_plural = "05. Statements"
+
+
+class ExpenseType(models.Model):
+    expense_type=models.CharField(max_length=199)
+    created = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return self.expense_type
+    class Meta:
+        verbose_name_plural = "04. Expense Type"
+
+
+class Expense(models.Model):
+    expense_title = models.TextField()
+    expense_amount  = models.FloatField()
+    expense_type  = models.ForeignKey(ExpenseType, on_delete=models.CASCADE)
+    remarks = models.CharField(max_length = 255, null = True, blank = True)
+    created = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return self.expense_title
+    
+    class Meta:
+        verbose_name_plural = "04. Expense"
