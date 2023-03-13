@@ -21,7 +21,7 @@ def invoice(request):
         return render (request, 'finance/invoices.html',context)
     else:
         messages.info(request, "Unauthorized access.")
-        return redirect(home)
+        return redirect('home')
 
 
 
@@ -98,7 +98,7 @@ def create_invoice(request):
             return render(request, "finance/create_invoice.html", context)
     else:
         messages.info(request, "Unauthorized access.")
-        return redirect(home)
+        return redirect('home')
     
 
 def view_invoice(request, id):
@@ -110,7 +110,7 @@ def view_invoice(request, id):
         return render(request, 'finance/view_invoice.html', context)
     else:
         messages.info(request, "Unauthorized access.")
-        return redirect(home)
+        return redirect('home')
 
     
 
@@ -123,7 +123,7 @@ def statement(request):
         return render(request, 'finance/statement.html', context)
     else:
         messages.info(request, "Unauthorized access.")
-        return redirect(home)
+        return redirect('home')
 
 
 def single_statement(request, id):
@@ -153,7 +153,7 @@ def single_statement(request, id):
         return render(request, 'finance/single_statement.html', context)
     else:
         messages.info(request, "Unauthorized access.")
-        return redirect(home)
+        return redirect('home')
 
 
 
@@ -182,7 +182,7 @@ def receipt(request):
         return render(request, 'finance/receipts.html', context)
     else:
         messages.info(request, "Unauthorized access.")
-        return redirect(home)
+        return redirect('home')
     
 
 
@@ -223,7 +223,7 @@ def create_receipt(request):
             return render(request, "finance/create_receipt.html", context)
     else:
         messages.info(request, "Unauthorized access.")
-        return redirect(home)
+        return redirect('home')
 
 
 
@@ -237,4 +237,4 @@ def view_receipt(request, id):
         return render(request, 'finance/view_receipt.html', context)
     else:
         messages.info(request, "Unauthorized access.")
-        return redirect(home)
+        return redirect('home')

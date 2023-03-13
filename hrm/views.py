@@ -9,13 +9,20 @@ from datetime import date,datetime
 from django.core.paginator import Paginator
 from account.context_processors import custom_data_views
 # Create your views here.
+from django.db.models import Count
+
+
 
 def hrm(request):
     if 'read_hrm' in custom_data_views(request):
 
         stats = []
         employee = Employee.objects.all().count()
-        present_today = LogSheet.objects.filter(created = date.today()).count()
+        # present_today = LogSheet.objects.filter(created = date.today()).count()
+        present_today = LogSheet.objects.filter(created=date.today()) \
+                    .values('user') \
+                    .annotate(count=Count('id', distinct=True)) \
+                    .count()
         absent_today = employee-present_today
         department = Department.objects.all().count()
         stats.append({

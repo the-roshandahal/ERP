@@ -1,0 +1,75 @@
+$(document).ready(function(){
+    $('#packageS').on('change',function(){
+        var selected=$('#packageS').find(":selected").data('id');
+        $('#id_package_price').text(selected);
+        $('#id_package_price').val(selected);
+
+        var misc_amount=$('#misc_amount_id').val();
+        var deduction_amount=$('#deduction_amount').val();
+        var id_package_price=$('#id_package_price').val();
+        {% comment %} console.log(misc_amount,id_package_price); {% endcomment %}
+        calculateSub(misc_amount,id_package_price,deduction_amount);
+        $( "#isVat" ).trigger( "change" );
+    });
+
+$(document).on('input','#misc_amount_id',function(){
+    var misc_amount=$('#misc_amount_id').val();
+    var selected=$('#packageS').find(":selected").data('id');
+    var deduction_amount=$('#deduction_amount').val();
+    calculateSub(misc_amount,selected,deduction_amount);
+    $( "#isVat" ).trigger( "change" );
+  });
+$(document).on('input','#deduction_amount',function(){
+    var misc_amount=$('#misc_amount_id').val();
+    var selected=$('#packageS').find(":selected").data('id');
+    var deduction_amount=$('#deduction_amount').val();
+    calculateSub(misc_amount,selected,deduction_amount);
+    $( "#isVat" ).trigger( "change" );
+  });
+
+
+  function calculateSub(misc,pack,deduction_amount){
+    var subtotal=parseInt(misc)+parseInt(pack)-parseInt(deduction_amount);
+    $('#sub').html(subtotal);
+    $('#grandTotal').html(subtotal);
+    calculateDis();
+    {% comment %} calculateVat(subtotal) {% endcomment %}
+  }
+  $(document).on('input','#disAmt',function(){
+    calculateDis();
+  })
+  function calculateDis(){
+    {% comment %} console.log('cal dis'); {% endcomment %}
+    var subtotal=$('#sub').text();
+    var disAmt=$('#disAmt').val();
+    {% comment %} console.log('sub=',subtotal,'ds=',disAmt); {% endcomment %}
+    var total=subtotal-disAmt;
+    $('#total').text(total);
+    $( "#isVat" ).trigger( "change" );
+    $('#grandTotal').text(total);
+}
+  function calculateVat(vat){
+
+      var total= $('#total').text();
+      var vatAmt=vat*parseInt(total);
+      
+      var grandToal=vatAmt+parseInt(total);
+      
+    console.log(vatAmt,grandToal);
+    $('#vatAmt').text(vatAmt);
+    $('#grandTotal').text(grandToal); 
+}
+
+$(document).on('change','#isVat',function(){
+    
+    if ($('input.checkbox_check').is(':checked')) {
+        var subtotal=$('#total').text();
+        {% comment %} console.log('if subtotal=',subtotal); {% endcomment %}
+        calculateVat(0.13);
+    }else{
+        var subtotal=$('#total').text();
+        console.log('else subtotal=',subtotal);
+        calculateVat(parseInt(0));
+    }
+})
+});

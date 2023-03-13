@@ -6,51 +6,66 @@
             <div class="invoice-body">
                 <div class="container">
                     <div class="create-invoice-wrap mt-xxl-5 p-md-5 p-3">
-                        <div class="separator separator-light"></div>
+                        
                         <form action="{% url 'create_invoice' %}" method="POST">
                             {% csrf_token %}
-                            <div class="row">
-                                <div class="col-xxl-4 mb-xxl-0 mb-4">
+                            <div class="row mb-3">
+                                <div class="col-xxl-6 mb-xxl-0">
                                     <h6>Billed To</h6>
-                                        <div class="form-group">
-                                            <select class="form-select" name="customer" required>
-                                                <option value="">Select Customer</option>
-                                                {% for customer in customer %}
-                                                <option value = '{{customer.id}}'>{{customer.client_name}}</option>
-                                                {% endfor %}
-                                            </select>
-                                        </div>
-                                        <a class="d-inline-flex align-items-center" data-bs-toggle="modal" data-bs-target="#billed_info" href="{% url 'add_client' %}">
-                                        <i class="ri-add-box-line me-1"></i> Add new client </a>
-                                </div>
-
-                                <div class="col-xxl-4 mb-xxl-0 mb-4">
-                                    <h6>Select Product/Service</h6>
                                     <div class="form-group">
-                                        <select class="form-select" name="selected_product" id="packageS">
-                                            <option value="" data-id="0" selected>Select Product/Service</option>
-                                            {% for product in product %}
-                                            <option value="{{product.id}}" data-id="{{product.product_price}}">{{product.product_title}}</option>
+                                        <select class="form-select" name="customer" required>
+                                            <option value="">Select Customer</option>
+                                            {% for customer in customer %}
+                                            <option value = '{{customer.id}}'>{{customer.client_name}}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
-                                    <a class="d-inline-flex align-items-center" data-bs-toggle="modal" data-bs-target="#billed_info" href="{% url 'products' %}">
-                                    <i class="ri-add-box-line me-1"></i> Add new product </a>
                                 </div>
-
-                                <div class="col-xxl-2 mb-xxl-0 mb-4">
-                                    <h6>Amount</h6>
-                                    <p >Rs. <span id="id_package_price" value="0">0</span></p>
-                                </div>
-
-                                <div class="col-xxl-2 mb-xxl-0 mb-4">
-                                    <h6>Add Item</h6>
-                                    <span class="badge badge-info"><i class="ri-add-box-line me-1"></i> Add Item</span>
-                                </div>
-
                             </div>
-                            <div class="separator separator-light"></div>
+                            
+                            <div class="row mb-3" id="items">
+                                <div class="row testing">
+
+                                    <div class="col-xxl-4 mb-xxl-0">
+                                        <h6>Select Product/Service</h6>
+                                        <div class="form-group">
+                                            <select class="form-select packageS" name="selected_product" id="packageS">
+                                                <option value="" data-id="0" selected>Select Product/Service</option>
+                                                {% for product in product %}
+                                                <option value="{{product.id}}" data-id="{{product.product_price}}">{{product.product_title}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+    
+                                    <div class="col-xxl-3 mb-xxl-0">
+                                        <h6>Amount Rs. <span class="id_package_price" value="0">0</span></h6>
+                                        <input type="number" class="form-control amountNew" id="amountsdfsadf" placeholder="Amoufsdfsdsnt" name = "misc_amount" value=0>
+                                    </div>
+    
+                                    <div class="col-xxl-2 mb-xxl-0">
+                                        <h6>Quantity</h6>
+                                        <input type="text" class="form-control quantityNew" id="quantity" placeholder="Quantity" name = "quantity" value=1>
+                                    </div>
+                                    
+                                    <div class="col-xxl-3 mb-xxl-0">
+                                        <h6>Total</h6>
+                                        <input type="number" class="form-control totalNew" id="total" placeholder="Total" name = "total" disabled>
+                                    </div>
+                                </div>
+                                  
+                                  
+                                
+                            </div>
                             <div class="row">
+                                <div class="col text-start">
+                                    <a class="d-inline-flex align-items-center" id='add'>
+                                        <i class="ri-add-box-line me-1"></i> Add More
+                                    </a>
+                                </div>
+                                
+                            </div>
+                            <div class="row mb-3">
                                 <div class="col-xxl-6">
                                     <h6>Miscellaneous</h6>
                                     <input type="text" class="form-control" name = "misc_name">
@@ -62,12 +77,13 @@
                                     id="misc_amount_id"
                                     placeholder="Miscellaneous Amount"
                                     name = "misc_amount"
+                                    min=0
                                     value = 0>
                                 </div>
                             </div>
 
-                            <div class="separator separator-light"></div>
-                            <div class="row">
+                            
+                            {% comment %} <div class="row mb-3">
                                 <div class="col-xxl-6">
                                     <h6>Deduction</h6>
                                     <input type="text" class="form-control" name = "deduction_name">
@@ -81,22 +97,22 @@
                                     id="deduction_amount"
                                     value = 0>
                                 </div>
-                            </div>
+                            </div> {% endcomment %}
 
 
-                            <div class="separator separator-light"></div>
+                            
 
-                            <div class="row">
+                            <div class="row mb-3">
                                 <div class="col-xxl-6">
-                                    <h6 class="float-right">Sub Total</h6>
+                                    <h6 class="float-right">Sub Total Rs. <span id="sub">0</span></h6>
                                 </div>
                                 <div class="col-xxl-6">
-                                    <p >Rs. <span id="sub">0</span></p>
+                                    <input type="text" class="form-control"  disabled id="subtotal" >
                                 </div>
                             </div>
-                            <div class="separator separator-light"></div>
+                            
 
-                            <div class="row">
+                            <div class="row mb-3">
                                 <div class="col-xxl-6">
                                     <h6>Discount Amount</h6>
                                 </div>
@@ -104,39 +120,39 @@
                                     <input type="number" class="form-control" placeholder="Discount Amount" name="discount" id ="disAmt" value = 0>
                                 </div>
                             </div>
-                            <div class="separator separator-light"></div>
+                            
 
-                            <div class="row">
+                            <div class="row mb-3">
                                 <div class="col-xxl-6">
-                                    <h6>Total</h6>
+                                    <h6>Total Rs. <span id="total">0</span></h6>
                                 </div>
                                 <div class="col-xxl-6">
-                                    <p >Rs. <span id="total">0</span></p>
+                                    <input type="text" class="form-control" placeholder="Disabled" disabled id="totalAmt">
                                 </div>
                             </div>
-                            <div class="separator separator-light"></div>
+                            
 
-                            {% comment %} <div class="row">
+                             {% comment %} <div class="row mb-3">
                                 <div class="col-xxl-6">
                                     <h6><input class="form-check-input checkbox_check me-2" type="checkbox" name="is_vatable" value ="1" id="isVat">Add VAT </h6>
                                 </div>
                                 <div class="col-xxl-6">
                                     <p> Vat Amount Rs.<span id="vatAmt">0</span></p>
                                 </div>
-                            </div>
-                            <div class="separator separator-light"></div> {% endcomment %}
+                            </div> {% endcomment %}
+                             
 
-                            <div class="row">
+                            {% comment %} <div class="row mb-3">
                                 <div class="col-xxl-6">
                                     <h6>Grand Total</h6>
                                 </div>
                                 <div class="col-xxl-6">
                                     <p >Rs. <span id="grandTotal">0</span></p>
                                 </div>
-                            </div>
-                            <div class="separator separator-light"></div>
+                            </div> {% endcomment %}
+                            
 
-                            <div class="row">
+                            <div class="row mb-3">
                                 <div class="col-xxl-6">
                                     <h6>Remarks</h6>
                                 </div>
@@ -173,80 +189,61 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
      <script>
-        $(document).ready(function(){
-            $('#packageS').on('change',function(){
-                var selected=$('#packageS').find(":selected").data('id');
-                $('#id_package_price').text(selected);
-                $('#id_package_price').val(selected);
-
-                var misc_amount=$('#misc_amount_id').val();
-                var deduction_amount=$('#deduction_amount').val();
-                var id_package_price=$('#id_package_price').val();
-                {% comment %} console.log(misc_amount,id_package_price); {% endcomment %}
-                calculateSub(misc_amount,id_package_price,deduction_amount);
-                $( "#isVat" ).trigger( "change" );
+        $(document).ready(function() {
+            $(".delete").hide();
+            //when the Add Field button is clicked
+            $("#add").click(function(e) {
+              $(".delete").fadeIn("1500");
+              //Append a new row of code to the "#items" div
+              $("#items").append(
+                '<div class="row testing"><div class="next-referral mb-3 row"><div class="col-xxl-4 mb-xxl-0"><h6>Select Product/Service</h6><div class="form-group"><select class="form-select packageS" name="selected_product" id="packageS"><option value="" data-id="0" selected>Select Product/Service</option>{% for product in product %}<option value="{{product.id}}" data-id="{{product.product_price}}">{{product.product_title}}</option>{% endfor %}</select></div></div><div class="col-xxl-3 mb-xxl-0"><h6>Amount Rs. <span class="id_package_price" value="0">0</span></h6><input type="number" class="form-control amountNew" id="amount" placeholder="Amount" name="misc_amount"></div><div class="col-xxl-2 mb-xxl-0"><h6>Quantity</h6><input type="text" class="form-control quantityNew" id="quantity" placeholder="Quantity" name="quantity" value=1></div><div class="col-xxl-3 mb-xxl-0"><h6>Total</h6><input type="number" class="form-control totalNew" id="total" placeholder="Total" name="total" ></div><div class="row"><div class="col text-end"><a class="d-inline-flex align-items-center delete"><i class="ri-scissors-cut-line me-1"></i> Remove</a></div></div></div></div>'
+              );
             });
-        });
-        $(document).on('input','#misc_amount_id',function(){
-            var misc_amount=$('#misc_amount_id').val();
-            var selected=$('#packageS').find(":selected").data('id');
-            var deduction_amount=$('#deduction_amount').val();
-            calculateSub(misc_amount,selected,deduction_amount);
-            $( "#isVat" ).trigger( "change" );
-          });
-        $(document).on('input','#deduction_amount',function(){
-            var misc_amount=$('#misc_amount_id').val();
-            var selected=$('#packageS').find(":selected").data('id');
-            var deduction_amount=$('#deduction_amount').val();
-            calculateSub(misc_amount,selected,deduction_amount);
-            $( "#isVat" ).trigger( "change" );
-          });
-        
-      
-          function calculateSub(misc,pack,deduction_amount){
-            var subtotal=parseInt(misc)+parseInt(pack)-parseInt(deduction_amount);
-            $('#sub').html(subtotal);
-            $('#grandTotal').html(subtotal);
-            calculateDis();
-            {% comment %} calculateVat(subtotal) {% endcomment %}
-          }
-          $(document).on('input','#disAmt',function(){
-            calculateDis();
-          })
-          function calculateDis(){
-            {% comment %} console.log('cal dis'); {% endcomment %}
-            var subtotal=$('#sub').text();
-            var disAmt=$('#disAmt').val();
-            {% comment %} console.log('sub=',subtotal,'ds=',disAmt); {% endcomment %}
-            var total=subtotal-disAmt;
-            $('#total').text(total);
-            $( "#isVat" ).trigger( "change" );
-            $('#grandTotal').text(total);
-        }
-          function calculateVat(vat){
+            $("body").on("click", ".delete", function(e) {
+                console.log('click on delete');
+              {% comment %} $(".next-referral").last().remove(); {% endcomment %}
+              $(this).closest('.next-referral').remove();
+              calculateSubTotal();
+            });
 
-              var total= $('#total').text();
-              var vatAmt=vat*parseInt(total);
-              
-              var grandToal=vatAmt+parseInt(total);
-              
-            console.log(vatAmt,grandToal);
-            $('#vatAmt').text(vatAmt);
-            $('#grandTotal').text(grandToal); 
-        }
-        
-        $(document).on('change','#isVat',function(){
-            
-            if ($('input.checkbox_check').is(':checked')) {
-                var subtotal=$('#total').text();
-                {% comment %} console.log('if subtotal=',subtotal); {% endcomment %}
-                calculateVat(0.13);
-            }else{
-                var subtotal=$('#total').text();
-                console.log('else subtotal=',subtotal);
-                calculateVat(parseInt(0));
+            $(document).on('change','.packageS',function(){
+                var selected=$(this).closest('.packageS').find(":selected").data('id');
+                $(this).closest('.testing').find(".amountNew").val(selected);
+                {% comment %} var initialTot=selected {% endcomment %}
+                $(this).closest('.testing').find(".totalNew").val(selected);
+                calculateSubTotal()
+            });
+            $(document).on('keyup','.quantityNew',function(){
+                var amt=$(this).closest('.testing').find(".amountNew").val()
+                var total=amt*$(this).val();
+                $(this).closest('.testing').find(".totalNew").val(total);
+                calculateSubTotal()
+            });
+            $(document).on('keyup','#misc_amount_id',function(){
+                calculateSubTotal()
+            })
+            function calculateSubTotal(){
+                var sum = 0;
+                $('.totalNew').each(function(){
+                    sum += parseFloat($(this).val());  // Or this.innerHTML, this.innerText
+                });
+                
+                var subtotal=parseFloat($('#misc_amount_id').val())+sum;
+                {% comment %} alert(subtotal); {% endcomment %}
+                $('#subtotal').val(subtotal);
+                calculateTotal();
             }
-        })
+            $(document).on('keyup','#disAmt',function(){
+                calculateTotal()
+            })
+
+            function calculateTotal(){
+                $disAmt=parseFloat($('#disAmt').val());
+                $subtotal=parseFloat($('#subtotal').val());
+                var total= $subtotal-$disAmt;
+                $('#totalAmt').val(total);
+            }
+          });
     </script>
 </script>
 <!-- /Main Content -->
