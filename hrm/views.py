@@ -5,17 +5,29 @@ import pandas as pd
 from django.contrib import messages, auth
 from django.contrib.auth.models import User
 from account.views import *
-import datetime
+from datetime import date,datetime
 from django.core.paginator import Paginator
-
 from account.context_processors import custom_data_views
 # Create your views here.
 
 def hrm(request):
     if 'read_hrm' in custom_data_views(request):
-        att_data=LogSheet.objects.all()
+
+        stats = []
+        employee = Employee.objects.all().count()
+        present_today = LogSheet.objects.filter(created = date.today()).count()
+        absent_today = employee-present_today
+        department = Department.objects.all().count()
+        stats.append({
+                'employee': employee,
+                'present_today': present_today,
+                'absent_today': absent_today,
+                'department': department,
+            })
+        stats = stats[0]
+        print(stats)
         context = {
-            'att_data':att_data,
+            'stats':stats,
         }
         return render (request,'hrm/hrm.html',context)
     else:
@@ -238,7 +250,7 @@ def salary (request):
 
         else:
             months = MonthSetup.objects.all()
-            current_datetime = datetime.date.today()
+            current_datetime = date.today()
             date_object = current_datetime
             today_date = date_object.strftime('%Y-%m-%d')
             all_employees = Employee.objects.all()

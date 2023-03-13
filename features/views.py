@@ -13,16 +13,12 @@ def home(request):
         logs=LogSheet.objects.filter(user=logged_in).order_by('-punch_in_time').first()
         punched_in = False
         if logs:
-            print(logs)
-            print(logs.created)
-            print(date.today())
             if logs.created == date.today():
                 punched_in = True 
             else:
                 punched_in = False
         else:
             punched_in = False
-        print(punched_in)
         punched_out_for_today =False
         if logs:
             if logs.punch_out_time and logs.created == date.today():
@@ -173,17 +169,28 @@ def punch_in(request):
 
 def punch_out(request):
     if request.method == 'POST':
-        user = Employee.objects.get(user=request.user)
-        punch = LogSheet.objects.filter(user=user).order_by('-punch_in_time').first()
-        punch.punch_out_time = datetime.now().time()
+        logged_in = Employee.objects.get(user=request.user)
+        logs=LogSheet.objects.filter(user=logged_in).order_by('-punch_in_time').first()
+        punched_in = False
+        if logs:
+            if logs.created == date.today():
+                punched_in = True 
+            else:
+                punched_in = False
+        if punched_in:
+            return redirect('punch_in')
+        else:
+            user = Employee.objects.get(user=request.user)
+            punch = LogSheet.objects.filter(user=user).order_by('-punch_in_time').first()
+            punch.punch_out_time = datetime.now().time()
 
-        punch.tasks = request.POST['tasks']
-        punch.meetings = request.POST['meetings']
-        punch.remarks = request.POST['remarks']
+            punch.tasks = request.POST['tasks']
+            punch.meetings = request.POST['meetings']
+            punch.remarks = request.POST['remarks']
 
-        punch.save()
-        messages.info(request, "Punched out successfully.")
-        return redirect('punch_in')
+            punch.save()
+            messages.info(request, "Punched out successfully.")
+            return redirect('punch_in')
     return redirect('log_sheet')
 
 
