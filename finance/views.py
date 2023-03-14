@@ -250,8 +250,7 @@ def create_receipt(request):
             details = receipt_1.id
             details = "REC_NO_"+str(details)
 
-            bal = Statement.objects.filter(
-                customer=customer).order_by('-id')[:1].get()
+            bal = Statement.objects.filter(customer=customer).order_by('-id')[:1].get()
             initial_balance = bal.balance
             balance = float(initial_balance) - float(paid_amount)
             Statement.objects.create(customer=customer, transaction='receipt',
@@ -305,11 +304,8 @@ def create_expense(request):
                                    expense_type = expense_type,remarks = remarks)
             return redirect('expenses')
         else:
-            expense_types = ExpenseType.objects.all()
-            context = {
-                'expense_types': expense_types,
-            }
-            return render(request, 'finance/expenses.html', context)
+            
+            return render(request, 'finance/expenses.html')
     else:
         messages.info(request, "Unauthorized access.")
         return redirect('home')
