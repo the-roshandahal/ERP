@@ -83,53 +83,43 @@
                                             <thead class="thead-primary">
                                                 <tr>
                                                     <th  colspan="4">Item</th>
+                                                    <th class="text-center">Quantity</th>
                                                     <th class="text-end">Amount</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {% for product in invoice.product.all %}
+                                                {% for product in product %}
                                                 <tr>
                                                     <td class="w-70" colspan="4">
-                                                        <h6>{{product.product_title}}</h6>
+                                                        <h6>{{product.product}}</h6>
                                                     </td>
+                                                    <td class="w-20 text-center text-dark">{{product.product_quantity}}</td>
                                                     <td class="w-20 text-end text-dark">Rs. {{product.product_price}}</td>
                                                 </tr>
                                                 {% endfor %}
+
+
                                                 {% if invoice.misc_name and invoice.misc_amount %}
                                                 <tr>
+                                                   
                                                     <td class="w-70" colspan="4">
                                                         <h6>{{invoice.misc_name}}</h6>
                                                     </td>
+                                                    <td></td>
                                                     <td class="w-20 text-end text-dark">Rs. {{invoice.misc_amount}}</td>
                                                 </tr>
                                                 {% endif %}
-        
-                                                {% if invoice.deduction_name and invoice.deduction_amount %}
+
+                                                {% if vat_amount %}
                                                 <tr>
-                                                    <td class="w-70" colspan="4">
-                                                        <h6>{{invoice.deduction_name}}</h6>
-                                                    </td>
-                                                    <td class="w-20 text-end text-dark">Rs. - {{invoice.deduction_amount}}</td>
-                                                </tr>
-                                                {% endif %}
-                                                <tr>
-                                                    <td colspan="4" class="border-0 text-end ">Subtotal</td>
-                                                    <td class="text-end text-dark">Rs. 0</td>
-                                                </tr>
-                                                <tr>
-                                                    <td colspan="4" class="border-0 text-end ">Discount</td>
-                                                    <td class="text-end text-dark">Rs. {{invoice.discount}}</td>
-                                                </tr>
-                                                
-                                                <tr class="border-0">
-                                                    <td colspan="4" class="text-dark border text-end ">Total</td>
-                                                    <td class="text-end text-dark border">Rs. 0</td>
-                                                </tr>
-                                                <tr>
+                                                    <td></td>
                                                     <td colspan="4" class="border-0 text-end ">13% VAT</td>
                                                     <td class="text-end text-dark">Rs. {{invoice.vat_amount}}</td>
                                                 </tr>
-                                                <tr class="border-0">
+                                                {% endif %}
+                                                
+                                                <tr>
+                                                    <td></td>
                                                     <td colspan="4" class="text-dark border text-end ">Grand Total</td>
                                                     <td class="text-end text-dark border">Rs. {{invoice.invoice_amount}}</td>
                                                 </tr>

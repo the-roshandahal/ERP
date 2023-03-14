@@ -3,6 +3,7 @@ from .models import *
 # Register your models here.
 
 
+
 admin.site.register(Statement)
 admin.site.register(Invoice)
 admin.site.register(Receipt)

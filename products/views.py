@@ -22,7 +22,7 @@ def products(request):
         return render (request,'products/products.html',context)
     else:
         messages.info(request, "Unauthorized access.")
-        return redirect(home)
+        return redirect('home')
 
 
 def add_product(request):
@@ -48,7 +48,7 @@ def add_product(request):
             return render (request,'products/add_product.html')
     else:
         messages.info(request, "Unauthorized access.")
-        return redirect(home)
+        return redirect('home')
 
 
 def edit_product(request,id):
@@ -56,7 +56,7 @@ def edit_product(request,id):
         return render (request,'products/edit_product.html')
     else:
         messages.info(request, "Unauthorized access.")
-        return redirect(home)
+        return redirect('home')
 
 
 def delete_product(request,id):
@@ -67,7 +67,7 @@ def delete_product(request,id):
         return redirect(products)
     else:
         messages.info(request, "Unauthorized access.")
-        return redirect(home)
+        return redirect('home')
 
 
 def product_setup(request):
@@ -81,7 +81,7 @@ def product_setup(request):
         return render (request,'products/product_setup.html',context)
     else:
         messages.info(request, "Unauthorized access.")
-        return redirect(home)
+        return redirect('home')
     
 
 def add_product_category(request):
@@ -97,14 +97,14 @@ def add_product_category(request):
                 return redirect(product_setup)
     else:
         messages.info(request, "Unauthorized access.")
-        return redirect(home)
+        return redirect('home')
         
 def edit_product_category(request,id):
     if 'update_products' in custom_data_views(request):
         return render (request,'products/delete_product.html')
     else:
         messages.info(request, "Unauthorized access.")
-        return redirect(home)
+        return redirect('home')
     
 
 def delete_product_category(request,id):
@@ -115,7 +115,7 @@ def delete_product_category(request,id):
         return redirect(product_setup)
     else:
         messages.info(request, "Unauthorized access.")
-        return redirect(home)
+        return redirect('home')
 
 
 
@@ -132,7 +132,7 @@ def add_product_unit(request):
                 return redirect(product_setup)
     else:
         messages.info(request, "Unauthorized access.")
-        return redirect(home)
+        return redirect('home')
     
 
 
@@ -141,7 +141,7 @@ def edit_product_unit(request,id):
         return render (request,'products/delete_product.html')
     else:
         messages.info(request, "Unauthorized access.")
-        return redirect(home)
+        return redirect('home')
 
 
 def delete_product_unit(request,id):
@@ -152,5 +152,5 @@ def delete_product_unit(request,id):
         return redirect(product_setup)
     else:
         messages.info(request, "Unauthorized access.")
-        return redirect(home)
+        return redirect('home')
     

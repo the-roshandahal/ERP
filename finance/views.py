@@ -35,12 +35,15 @@ def finance(request):
         receipt = Receipt.objects.all()
 
         total_invoice_amt=0
-        for invoice in invoice :
-            total_invoice_amt = total_invoice_amt+ invoice.invoice_amount
+        if invoice:
+            for invoice in invoice :
+                total_invoice_amt = total_invoice_amt+ invoice.invoice_amount
+
 
         total_receipt_amt=0
-        for receipt in receipt :
-            total_receipt_amt = total_receipt_amt+ receipt.paid_amount
+        if receipt:
+            for receipt in receipt :
+                total_receipt_amt = total_receipt_amt+ receipt.paid_amount
         
 
         today = date.today()
@@ -65,54 +68,75 @@ def finance(request):
         return redirect('home')
 
 
-
+from decimal import Decimal
 
 def create_invoice(request):
     if 'create_finance' in custom_data_views(request):
         if request.method == "POST":
             customer = request.POST["customer"]
-            selected_product = request.POST.getlist("selected_product")
+            selected_product_ids = request.POST.getlist("selected_product")
+            selected_product_amounts = request.POST.getlist("selected_product_amount")
+            selected_product_discounts = request.POST.getlist("selected_product_discount")
+            selected_product_quantities = request.POST.getlist("selected_product_quantity")
             misc_name = request.POST["misc_name"]
-            misc_amount = request.POST["misc_amount"]
-            discount = request.POST["discount"]
+            misc_amount = Decimal(request.POST["misc_amount"])
+            due_date = request.POST["due_date"]
             remarks = request.POST["remarks"]
-            product_amount=0
-            for selected_product in selected_product:
-                product = Product.objects.get(id=selected_product)
-                product_amount = product.product_price
-                
-            sub_total = float(product_amount) + float(misc_amount)
-            vatable_amount = sub_total - float(discount)
-
-            if product.is_vatable == True:
-                vat_amount = vatable_amount*0.13
-            else:
-                vat_amount = 0
-
-            total = vatable_amount + float(vat_amount)
-
-            customer = Customer.objects.get(id=customer)
-            created_by_user = User.objects.get(username=request.user)
-            created_by = str(created_by_user)
-
-        
-            invoice_1 = Invoice.objects.create(customer=customer,  misc_name=misc_name, misc_amount=misc_amount, discount=discount,
-                                            vat_amount=vat_amount, remarks=remarks, created_by = created_by, invoice_amount = total)
-            invoice_1.product.set(selected_product)
-            invoice_1.save()
-
-            details = invoice_1.id
+            customer=Customer.objects.get(id=customer)
+            # create the invoice instance
+            invoice = Invoice.objects.create(
+                customer=customer,
+                misc_name=misc_name,
+                misc_amount=misc_amount,
+                due_date=due_date,
+                remarks=remarks,
+                created_by=request.user.username,
+            )
+            
+            # calculate the invoice amount
+            invoice_amount = misc_amount
+            for i in range(len(selected_product_ids)):
+                product_id = selected_product_ids[i]
+                product_amount = Decimal(selected_product_amounts[i])
+                product_discount = Decimal(selected_product_discounts[i])
+                product_quantity = int(selected_product_quantities[i])
+                product_total = (product_amount - product_discount) * product_quantity
+                invoice_amount += product_total
+            invoice.invoice_amount = invoice_amount
+            
+            # calculate the VAT amount
+            if selected_product_ids and Product.objects.filter(id__in=selected_product_ids, is_vatable=True).exists():
+                vat_rate = Decimal("0.12") # assume VAT rate is 12%
+                vat_amount = invoice_amount * vat_rate
+                invoice.vat_amount = vat_amount
+            
+            # save the invoice instance
+            invoice.save()
+            
+            # create the invoice product instances
+            for i in range(len(selected_product_ids)):
+                product_id = selected_product_ids[i]
+                product_amount = Decimal(selected_product_amounts[i])
+                product_discount = Decimal(selected_product_discounts[i])
+                product_quantity = int(selected_product_quantities[i])
+                product = Product.objects.get(id=product_id)
+                InvoiceProduct.objects.create(
+                    invoice=invoice,
+                    product=product,
+                    product_quantity=product_quantity,
+                    product_price=product_amount - product_discount,
+                )
+            details = invoice.id
             details = "INV_NO_"+str(details)
-
             if(Statement.objects.filter(customer=customer).exists()):
 
                 bal = Statement.objects.filter(
                     customer=customer).order_by('-id')[:1].get()
                 initial_balance = bal.balance
-                balance = float(initial_balance) + float(total)
+                balance = float(initial_balance) + float(invoice_amount)
 
                 Statement.objects.create(
-                    customer=customer, transaction='invoice', details=details, amount=total, balance=balance)
+                    customer=customer, transaction='invoice', details=details, amount=invoice_amount, balance=balance)
             else:
                 amount = 0
                 payment = 0
@@ -123,13 +147,12 @@ def create_invoice(request):
                 bal = Statement.objects.filter(
                     customer=customer).order_by('-id')[:1].get()
                 initial_balance = bal.balance
-                balance = float(initial_balance) + float(total)
+                balance = float(initial_balance) + float(invoice_amount)
 
                 Statement.objects.create(
-                    customer=customer, transaction='invoice', details=details, amount=total, balance=balance)
+                    customer=customer, transaction='invoice', details=details, amount=invoice_amount, balance=balance)
             messages.info(request, "Invoice Created Successfully.")
-
-            return redirect(view_invoice, id=invoice_1.id)
+            return redirect(view_invoice, id=invoice.id)
         else:
             product = Product.objects.all()
             customer = Customer.objects.all()
@@ -138,15 +161,104 @@ def create_invoice(request):
                 'customer': customer
             }
             return render(request, "finance/create_invoice.html", context)
-    else:
-        messages.info(request, "Unauthorized access.")
-        return redirect('home')
+
+
+# def create_invoice(request):
+#     if 'create_finance' in custom_data_views(request):
+#         if request.method == "POST":
+#             customer = request.POST["customer"]
+#             selected_product = request.POST.getlist("selected_product")
+#             selected_product_amount = request.POST.getlist("selected_product_amount")
+#             selected_product_discount = request.POST.getlist("selected_product_discount")
+#             selected_product_quantity = request.POST.getlist("selected_product_quantity")
+#             misc_name = request.POST["misc_name"]
+#             misc_amount = request.POST["misc_amount"]
+#             discount = request.POST["discount"]
+#             due_date = request.POST["due_date"]
+#             remarks = request.POST["remarks"]
+            
+
+#             product_vatable_amount = 0
+#             for i in range(len(selected_product)):
+#                 for selected_product in selected_product:
+#                     product = Product.objects.get(id = selected_product)
+#                     if product.is_vatable == True:
+#                         vatable_amount = product.product_price
+
+#             vatable_amount = product_vatable_amount+misc_amount
+
+#             total_vat_amount = vatable_amount*0.13
+
+
+#             total_product_amount = sum(float(amount) for amount in selected_product_amount)
+
+#             sub_total = float(total_product_amount) + float(misc_amount)
+
+#             vatable_amount = sub_total - float(discount)
+
+#             if product.is_vatable == True:
+#                 vat_amount = vatable_amount*0.13
+#             else:
+#                 vat_amount = 0
+
+#             total = vatable_amount + float(vat_amount)
+#             customer = Customer.objects.get(id=customer)
+#             created_by_user = User.objects.get(username=request.user)
+#             created_by = str(created_by_user)
+
+        
+#             invoice_1 = Invoice.objects.create(customer=customer,  misc_name=misc_name, misc_amount=misc_amount, discount=discount,
+#                                             vat_amount=vat_amount, remarks=remarks, created_by = created_by, invoice_amount = total)
+#             # invoice_1.product.set(selected_product)
+#             invoice_1.save()
+
+#             details = invoice_1.id
+#             details = "INV_NO_"+str(details)
+
+#             if(Statement.objects.filter(customer=customer).exists()):
+
+#                 bal = Statement.objects.filter(
+#                     customer=customer).order_by('-id')[:1].get()
+#                 initial_balance = bal.balance
+#                 balance = float(initial_balance) + float(total)
+
+#                 Statement.objects.create(
+#                     customer=customer, transaction='invoice', details=details, amount=total, balance=balance)
+#             else:
+#                 amount = 0
+#                 payment = 0
+#                 balance = 0
+#                 Statement.objects.create(customer=customer, transaction='Opening Balance',
+#                                         details='--', amount=amount, payment=payment, balance=balance)
+
+#                 bal = Statement.objects.filter(
+#                     customer=customer).order_by('-id')[:1].get()
+#                 initial_balance = bal.balance
+#                 balance = float(initial_balance) + float(total)
+
+#                 Statement.objects.create(
+#                     customer=customer, transaction='invoice', details=details, amount=total, balance=balance)
+#             messages.info(request, "Invoice Created Successfully.")
+#             return redirect(view_invoice, id=invoice_1.id)
+#         else:
+#             product = Product.objects.all()
+#             customer = Customer.objects.all()
+#             context = {
+#                 'product': product,
+#                 'customer': customer
+#             }
+#             return render(request, "finance/create_invoice.html", context)
+#     else:
+#         messages.info(request, "Unauthorized access.")
+#         return redirect('home')
     
 
 def view_invoice(request, id):
     if 'read_finance' in custom_data_views(request):
         invoice = Invoice.objects.get(id=id)
+        product = InvoiceProduct.objects.filter(invoice_id=id)
         context = {
+            'product':product,
             'invoice': invoice,
         }
         return render(request, 'finance/view_invoice.html', context)
@@ -283,8 +395,11 @@ def view_receipt(request, id):
 def expenses(request):
     if 'read_finance' in custom_data_views(request):
         expense = Expense.objects.all()
+        expense_type= ExpenseType.objects.all()
+        
         context = {
             'expense': expense,
+            'expense_type': expense_type,
         }
         return render(request, 'finance/expenses.html', context)
     else:

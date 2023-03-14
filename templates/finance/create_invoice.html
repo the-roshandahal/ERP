@@ -26,7 +26,7 @@
                             <div class="row mb-3" id="items">
                                 <div class="row testing">
 
-                                    <div class="col-xxl-4 mb-xxl-0">
+                                    <div class="col-xxl-3 mb-xxl-0">
                                         <h6>Select Product/Service</h6>
                                         <div class="form-group">
                                             <select class="form-select packageS" name="selected_product" id="packageS">
@@ -39,18 +39,22 @@
                                     </div>
     
                                     <div class="col-xxl-3 mb-xxl-0">
-                                        <h6>Amount Rs. <span class="id_package_price" value="0">0</span></h6>
-                                        <input type="number" class="form-control amountNew" id="amountsdfsadf" placeholder="Amoufsdfsdsnt" name = "misc_amount" value=0>
+                                        <h6>Amount Rs.</h6>
+                                        <input type="number" class="form-control amountNew" id="amountsdfsadf" placeholder="Amoufsdfsdsnt" name = "selected_product_amount" value=0>
                                     </div>
     
                                     <div class="col-xxl-2 mb-xxl-0">
                                         <h6>Quantity</h6>
-                                        <input type="text" class="form-control quantityNew" id="quantity" placeholder="Quantity" name = "quantity" value=1>
+                                        <input type="text" class="form-control quantityNew" id="quantity" placeholder="Quantity" name = "selected_product_quantity" value=1>
+                                    </div>
+                                    <div class="col-xxl-2 mb-xxl-0">
+                                        <h6>Discount</h6>
+                                        <input type="text" class="form-control discountNew" id="discount" placeholder="Quantity" name = "selected_product_discount" value=0>
                                     </div>
                                     
-                                    <div class="col-xxl-3 mb-xxl-0">
+                                    <div class="col-xxl-2 mb-xxl-0">
                                         <h6>Total</h6>
-                                        <input type="number" class="form-control totalNew" id="total" placeholder="Total" name = "total" disabled>
+                                        <input type="number" class="form-control totalNew" id="total" placeholder="Total" disabled>
                                     </div>
                                 </div>
                                   
@@ -83,7 +87,7 @@
                             </div>
                             <div class="row mb-3">
                                 <div class="col-xxl-6">
-                                    <h6 class="float-right">Sub Total Rs. <span id="sub">0</span></h6>
+                                    <h6 class="float-right">Sub Total</h6>
                                 </div>
                                 <div class="col-xxl-6">
                                     <input type="text" class="form-control"  disabled id="subtotal" >
@@ -103,10 +107,18 @@
 
                             <div class="row mb-3">
                                 <div class="col-xxl-6">
-                                    <h6>Total Rs. <span id="total">0</span></h6>
+                                    <h6>Total</h6>
                                 </div>
                                 <div class="col-xxl-6">
                                     <input type="text" class="form-control" placeholder="Disabled" disabled id="totalAmt">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-xxl-6">
+                                    <h6>Due Date</h6>
+                                </div>
+                                <div class="col-xxl-6">
+                                    <input type="date" class="form-control" placeholder="Due Date" name="due_date">
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -131,20 +143,7 @@
     
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
 <script type="text/javascript" src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
      <script>
         $(document).ready(function() {
             $(".delete").hide();
@@ -153,7 +152,7 @@
               $(".delete").fadeIn("1500");
               //Append a new row of code to the "#items" div
               $("#items").append(
-                '<div class="row testing"><div class="next-referral mb-3 row"><div class="col-xxl-4 mb-xxl-0"><h6>Select Product/Service</h6><div class="form-group"><select class="form-select packageS" name="selected_product" id="packageS"><option value="" data-id="0" selected>Select Product/Service</option>{% for product in product %}<option value="{{product.id}}" data-id="{{product.product_price}}">{{product.product_title}}</option>{% endfor %}</select></div></div><div class="col-xxl-3 mb-xxl-0"><h6>Amount Rs. <span class="id_package_price" value="0">0</span></h6><input type="number" class="form-control amountNew" id="amount" placeholder="Amount" name="misc_amount"></div><div class="col-xxl-2 mb-xxl-0"><h6>Quantity</h6><input type="text" class="form-control quantityNew" id="quantity" placeholder="Quantity" name="quantity" value=1></div><div class="col-xxl-3 mb-xxl-0"><h6>Total</h6><input type="number" class="form-control totalNew" id="total" placeholder="Total" name="total" ></div><div class="row"><div class="col text-end"><a class="d-inline-flex align-items-center delete"><i class="ri-scissors-cut-line me-1"></i> Remove</a></div></div></div></div>'
+                '<div class="row testing"><div class="next-referral mb-3 row"><div class="col-xxl-3 mb-xxl-0"><h6>Select Product/Service</h6><div class="form-group"><select class="form-select packageS" name="selected_product" id="packageS"><option value="" data-id="0" selected>Select Product/Service</option>{% for product in product %}<option value="{{product.id}}" data-id="{{product.product_price}}">{{product.product_title}}</option>{% endfor %}</select></div></div><div class="col-xxl-3 mb-xxl-0"><h6>Amount</h6><input type="number" class="form-control amountNew" id="amount" placeholder="Amount" name = "selected_product_amount"></div><div class="col-xxl-2 mb-xxl-0"><h6>Quantity</h6><input type="text" class="form-control quantityNew" id="quantity" placeholder="Quantity" name = "selected_product_quantity" value=1></div><div class="col-xxl-2 mb-xxl-0"><h6>Discount</h6><input type="text" class="form-control discountNew" id="discount" placeholder="Quantity" name = "selected_product_discount" value=0></div><div class="col-xxl-2 mb-xxl-0"><h6>Total</h6><input type="number" class="form-control totalNew" id="total" placeholder="Total" name="total" disabled></div><div class="row"><div class="col text-end"><a class="d-inline-flex align-items-center delete"><i class="ri-scissors-cut-line me-1"></i> Remove</a></div></div></div></div>'
               );
             });
             $("body").on("click", ".delete", function(e) {
@@ -205,3 +204,6 @@
 
 <!-- /Main Content -->
 {% include 'footer.html' %}
+
+
+

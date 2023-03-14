@@ -95,8 +95,8 @@
                             <h6>Expense Type</h6>
                                 <div class="form-group">
                                     <select class="form-select" name="expense_type" required="">
-                                        {% for expense in expense %}
-                                        <option value="{{expense.id}}">{{expense.expense_type}}</option>
+                                        {% for expense_type in expense_type %}
+                                        <option value="{{expense_type.id}}">{{expense_type.expense_type}}</option>
                                         {% endfor %}
                                     </select>
                                 </div>  
