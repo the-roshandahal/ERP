@@ -8,7 +8,7 @@
 				<div class="d-flex flex-wrap justify-content-between flex-1">
 					<div class="mb-md-0 mb-2 me-8">
 						<div class="d-flex align-items-center">
-							<h1 class="pg-title">CRM Dashboard</h1>
+							<h1 class="pg-title">Accounting Dashboard</h1>
 							<span class="badge badge-soft-primary ms-3">Badge</span>
 						</div>
 						<p id="greeting"></p>
@@ -40,7 +40,7 @@
 			<div class="col-xxl-9 col-lg-8 col-md-7 mb-md-4 mb-3">
 				<div class="card card-border mb-0 h-100">
 					<div class="card-header card-header-action">
-						<h6>Audience Overview</h6>
+						<h6>Finance Overview</h6>
 					</div>
 					<div class="card-body">
 						<div class="text-center">
@@ -68,30 +68,21 @@
 						<div class="flex-grow-1 ms-lg-3">
 							<div class="row">
 								<div class="col-xxl-4 col-sm-6 mb-xxl-0 mb-3">
-									<span class="d-block fw-medium fs-7">Users</span>
+									<span class="d-block fw-medium fs-7">Invoice Summary</span>
 									<div class="d-flex align-items-center">
-										<span class="d-block fs-4 fw-medium text-dark mb-0">8.8k</span>
-										<span class="badge badge-sm badge-soft-success ms-1">
-											<i class="bi bi-arrow-up"></i> 7.5%
-										</span>
+										<span class="d-block fs-4 fw-medium text-dark mb-0">Rs. {{today_invoice_total}}</span>
 									</div>
 								</div>
 								<div class="col-xxl-4 col-sm-6 mb-xxl-0 mb-3">
-									<span class="d-block fw-medium fs-7">Sessions</span>
+									<span class="d-block fw-medium fs-7">Expenses Summary</span>
 									<div class="d-flex align-items-center">
-										<span class="d-block fs-4 fw-medium text-dark mb-0">18.2k</span>
-										<span class="badge badge-sm badge-soft-success ms-1">
-											<i class="bi bi-arrow-up"></i> 7.2%
-										</span>
+										<span class="d-block fs-4 fw-medium text-dark mb-0">Rs. {{today_expense_total}}</span>
 									</div>
 								</div>
 								<div class="col-xxl-4 col-sm-6 mb-xxl-0 mb-3">
-									<span class="d-block fw-medium fs-7">Bounce rate</span>
+									<span class="d-block fw-medium fs-7">Receipt summary</span>
 									<div class="d-flex align-items-center">
-										<span class="d-block fs-4 fw-medium text-dark mb-0">46.2%</span>
-										<span class="badge badge-sm badge-soft-danger ms-1">
-											<i class="bi bi-arrow-down"></i> 0.2%
-										</span>
+										<span class="d-block fs-4 fw-medium text-dark mb-0">Rs. {{today_receipt_total}}</span>
 									</div>
 								</div>
 								
@@ -126,29 +117,6 @@
 					</div>
 				</div>
 			</div>
-		</div>
-		<div class="container">
-			<h6>Last 7 days Summary</h6>
-			<table class="table">
-			<thead>
-			  <tr>
-				<th>Date</th>
-				<th>Invoice Total</th>
-				<th>Receipt Total</th>
-				<th>Expense Total</th>
-			  </tr>
-			</thead>
-			<tbody>
-				{% for totals in totals_by_day %}
-				<tr>
-					<td class="mx-5">{{ totals.date }}</td>
-					<td class="mx-5">{{ totals.invoice_total }}</td>
-					<td class="mx-5">{{ totals.receipt_total }}</td>
-					<td>{{ totals.expense_total }}</td>
-				</tr>
-				{% endfor %}
-			</tbody>
-		  </table>
 		</div>
 	</div>
 </div>

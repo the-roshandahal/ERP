@@ -33,7 +33,10 @@ def finance(request):
     if 'read_finance' in custom_data_views(request):
         invoice = Invoice.objects.all()
         receipt = Receipt.objects.all()
-
+        today_invoice_total = Invoice.objects.filter(created=date.today()).aggregate(total=Sum('invoice_amount'))['total'] or 0
+        today_receipt_total = Receipt.objects.filter(created=date.today()).aggregate(total=Sum('paid_amount'))['total'] or 0
+        today_expense_total = Expense.objects.filter(created=date.today()).aggregate(total=Sum('expense_amount'))['total'] or 0
+        
         total_invoice_amt=0
         if invoice:
             for invoice in invoice :
@@ -44,7 +47,6 @@ def finance(request):
         if receipt:
             for receipt in receipt :
                 total_receipt_amt = total_receipt_amt+ receipt.paid_amount
-        
 
         today = date.today()
         last_7_days = today - timedelta(days=6)
@@ -61,6 +63,9 @@ def finance(request):
             ],
             'total_invoice_amt':total_invoice_amt,
             'total_receipt_amt':total_receipt_amt,
+            'today_invoice_total':today_invoice_total,
+            'today_receipt_total':today_receipt_total,
+            'today_expense_total':today_expense_total,
         }
         return render (request, 'finance/dashboard.html',context)
     else:
