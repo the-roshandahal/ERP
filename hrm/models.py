@@ -70,17 +70,6 @@ class Employee(models.Model):
     class Meta:
         verbose_name_plural = "01. Employees"
 
-class Leave(models.Model):
-    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
-    reason = models.CharField(max_length=255,null=True, blank=True)
-    is_absent = models.BooleanField(default=1)
-    created = models.DateField(auto_now_add=True)
-    def __str__(self):
-        return self.employee.name
-
-    class Meta:
-        verbose_name_plural = "02. Leave"
-
 class Salary(models.Model):
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
     month = models.CharField(max_length=100)
@@ -95,5 +84,18 @@ class Salary(models.Model):
 
     class Meta:
         verbose_name_plural = "03. Salary"
+
+        
+class Leave(models.Model):
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    reason = models.CharField(max_length=255,null=True, blank=True)
+    is_absent = models.BooleanField(default=1)
+    created = models.DateField(auto_now_add=True)
+    def __str__(self):
+        return self.employee.user.username
+
+    class Meta:
+        verbose_name_plural = "02. Leave"
+
 
 

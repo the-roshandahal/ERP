@@ -33,12 +33,6 @@
 				<table id="datable_1" class="table nowrap w-100 mb-5">
 					<thead>
 						<tr>
-							<th>
-								<span class="form-check">
-									<input type="checkbox" class="form-check-input check-select-all" id="customCheck1">
-									<label class="form-check-label" for="customCheck1"></label>
-								</span>
-							</th>
 							<th>ID</th>
 							<th>Name</th>
 							<th>Role</th>
@@ -51,13 +45,6 @@
 					<tbody>
 						{% for employees in employees %}
 						<tr>
-							<td>
-								<span class="form-check mb-0" style="display:none;" >
-									<input type="checkbox" class="form-check-input check-select" name="selected_invoice" id="chk_sel_1" 
-									value="1">
-									<label class="form-check-label" for="chk_sel_1"></label>
-								</span>
-							</td>
 							<td><a href="#" class="table-link-text link-high-em">{{employees.id}}</a></td>
 							<td>{{employees.user.first_name}} {{employees.user.last_name}}</td>
 							<td>{{employees.permission}}</td>

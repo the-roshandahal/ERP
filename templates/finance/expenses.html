@@ -43,7 +43,6 @@
             <table id="datable_1" class="table nowrap w-100 mb-5">
                 <thead>
                     <tr>
-                        <th></th>
                         <th>Date</th>
                         <th>Title</th>
                         <th>Amount</th>
@@ -54,7 +53,6 @@
                 <tbody>
                     {% for expense in expense %}
                     <tr>
-                        <td></td>
                         <td>{{expense.created}}</td>
                         <td>{{expense.expense_title}}</td>
                         <td>Rs. {{expense.expense_amount}}</td>

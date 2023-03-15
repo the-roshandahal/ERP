@@ -118,7 +118,7 @@
                                     <h6>Due Date</h6>
                                 </div>
                                 <div class="col-xxl-6">
-                                    <input type="date" class="form-control" placeholder="Due Date" name="due_date">
+                                    <input type="date" class="form-control" placeholder="Due Date" name="due_date" required>
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -157,7 +157,6 @@
             });
             $("body").on("click", ".delete", function(e) {
                 console.log('click on delete');
-              {% comment %} $(".next-referral").last().remove(); {% endcomment %}
               $(this).closest('.next-referral').remove();
               calculateSubTotal();
             });
@@ -165,7 +164,6 @@
             $(document).on('change','.packageS',function(){
                 var selected=$(this).closest('.packageS').find(":selected").data('id');
                 $(this).closest('.testing').find(".amountNew").val(selected);
-                {% comment %} var initialTot=selected {% endcomment %}
                 $(this).closest('.testing').find(".totalNew").val(selected);
                 calculateSubTotal()
             });
@@ -185,7 +183,6 @@
                 });
                 
                 var subtotal=parseFloat($('#misc_amount_id').val())+sum;
-                {% comment %} alert(subtotal); {% endcomment %}
                 $('#subtotal').val(subtotal);
                 calculateTotal();
             }

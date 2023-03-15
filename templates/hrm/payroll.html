@@ -130,7 +130,6 @@
                                         <th>Leave Deduction</th>
                                         <th>Tax Deduction</th>
                                         <th>Final Salary</th>
-                                        <th>Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -143,9 +142,6 @@
                                         <td>{{recent_salary.leave_deduction|floatformat:2}}</td>
                                         <td>{{recent_salary.tax_deduction|floatformat:2}}</td>
                                         <td>{{recent_salary.paid_salary|floatformat:2}}</td>
-                                        <td>                                                             
-                                            <span class="badge badge-primary badge-outline">Paid</span>
-                                        </td>
                                     </tr>
                                     {% endfor %}
                                     {% else %}
@@ -164,52 +160,7 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <table class="table">
-            <thead>
-              <tr>
-                <th scope="col"><input type="checkbox" id="check-all"></th>
-                <th scope="col">Name</th>
-                <th scope="col">Address</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><input type="checkbox" class="check"></td>
-                <td>John</td>
-                <td>123 Main St.</td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" class="check"></td>
-                <td>Jane</td>
-                <td>456 Oak St.</td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" class="check"></td>
-                <td>Bob</td>
-                <td>789 Elm St.</td>
-              </tr>
-            </tbody>
-          </table>
-          <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-        <script>
-            $(document).ready(function() {
-                $("#check-all").change(function() {
-                  $(".check").prop('checked', $(this).prop("checked"));
-                });
-              
-                $(".check").change(function() {
-                  if(false == $(this).prop("checked")) {
-                    $("#check-all").prop('checked', false);
-                  }
-                  if ($('.check:checked').length == $('.check').length ){
-                      $("#check-all").prop('checked', true);
-                  }
-                });
-              });
-              
-        </script>          
+        </div>       
     </div>
     <!-- /Main Content -->
 </div>
@@ -226,7 +177,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="{% url 'salary' %}" method="POST">
+            <form action="" method="POST">
                 {% csrf_token %}
                 <div class="modal-body">                                                                        
                     <div class="row">
@@ -325,8 +276,4 @@
         </div>
     </div>
 </div>												
-
-													
-
-
-	{% include 'footer.html' %}
+{% include 'footer.html' %}

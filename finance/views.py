@@ -1,6 +1,6 @@
 from django.db.models.functions import ExtractWeekDay
 from django.shortcuts import render
-
+from decimal import Decimal
 from django.contrib import messages, auth
 from django.contrib.auth.models import User
 from account.views import *
@@ -73,7 +73,6 @@ def finance(request):
         return redirect('home')
 
 
-from decimal import Decimal
 
 def create_invoice(request):
     if 'create_finance' in custom_data_views(request):
@@ -131,6 +130,8 @@ def create_invoice(request):
                     product_quantity=product_quantity,
                     product_price=product_amount - product_discount,
                 )
+                product.product_quantity = -product_quantity
+                product.save()
             details = invoice.id
             details = "INV_NO_"+str(details)
             if(Statement.objects.filter(customer=customer).exists()):

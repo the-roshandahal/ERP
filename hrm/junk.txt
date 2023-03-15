@@ -1,0 +1,173 @@
+
+def salary (request):
+    if 'create_hrm' in custom_data_views(request):
+        if request.method == 'POST':
+            month = request.POST['month']
+
+            monthhhh = MonthSetup.objects.get(id=month)
+            from_date_obj = monthhhh.start_date
+            to_date_obj = monthhhh.end_date
+
+            employees = Employee.objects.all()
+            current_datetime = datetime.date.today()               
+            date_object = current_datetime
+            today_date = date_object.strftime('%Y-%m-%d')
+            
+
+            months = MonthSetup.objects.all()
+            if 'employee' in request.POST:
+                selected_employee = request.POST['employee']
+            else:
+                selected_employee=None
+
+            data_list=[]
+
+
+            if selected_employee:
+                selected_employee = Employee.objects.get(id=selected_employee)
+                total_salary = selected_employee.emp_salary
+
+
+                diff = to_date_obj - from_date_obj
+                difference = diff.days+1
+
+                leave = Leave.objects.filter(employee=selected_employee).filter(created__range=(from_date_obj, to_date_obj)).count()
+                total_present_days = difference-leave
+
+
+                daily_salary = int(total_salary)/difference
+                leave_deduction = leave*daily_salary
+
+                salary = daily_salary*total_present_days
+
+
+                if (salary<=33000):
+                    tax_deduction = salary*0.01
+                elif(salary<=100000):
+                    tax_deduction=(33000*0.01)+(salary-33000)*0.1
+                else:
+                    tax_deduction=0
+                final_salary = salary-tax_deduction
+
+
+                data_list.append({
+                    'name': selected_employee,
+                    'total_salary': total_salary,
+                    'final_salary': final_salary,
+                    'difference': difference,
+                    'leave': leave,
+                    'leave_deduction': leave_deduction,
+                    'tax_deduction': tax_deduction,
+                    'final_salary': final_salary,
+            })
+            else:
+                for employees in employees:
+                    total_salary = employees.emp_salary
+
+                    diff = to_date_obj - from_date_obj
+                    difference = diff.days+1
+
+                    leave = Leave.objects.filter(employee=employees).filter(created__range=(from_date_obj, to_date_obj)).count()
+                    total_present_days = difference-leave
+
+
+                    daily_salary = int(total_salary)/difference
+                    leave_deduction = leave*daily_salary
+
+                    salary = daily_salary*total_present_days
+
+
+                    if (salary<=33000):
+                        tax_deduction = salary*0.01
+                    elif(salary<=100000):
+                        tax_deduction=(33000*0.01)+(salary-33000)*0.1
+                    else:
+                        tax_deduction=0
+                    final_salary = salary-tax_deduction
+                    salary_status = Salary.objects.filter(employee = employees,month=monthhhh.month,type='salary')
+                    if salary_status:
+                        status='paid'
+                    else:
+                        status='unpaid'
+                    data_list.append({
+                        'name': employees,
+                        'total_salary': total_salary,
+                        'final_salary': final_salary,
+                        'difference': difference,
+                        'leave': leave,
+                        'leave_deduction': leave_deduction,
+                        'tax_deduction': tax_deduction,
+                        'final_salary': final_salary,
+                        'status':status,
+                        'type':'salary'
+                })
+                    
+
+            all_employees = Employee.objects.all()
+            context={
+                'months':months,
+                'monthhhh':monthhhh,
+                'data_list':data_list,
+                'from_date_obj':from_date_obj,
+                'to_date_obj':to_date_obj,
+                'today_date':today_date,
+                'all_employees':all_employees,
+            }
+
+            return render(request,'hrm/salary.html',context)
+
+        else:
+            months = MonthSetup.objects.all()
+            current_datetime = date.today()
+            date_object = current_datetime
+            today_date = date_object.strftime('%Y-%m-%d')
+            all_employees = Employee.objects.all()
+            recent_salary = Salary.objects.all().order_by('created')
+            paginator = Paginator(recent_salary, 10)
+            page_number = request.GET.get('page')
+            recent_salary = paginator.get_page(page_number)
+            context = {
+                'months':months,
+                'today_date':today_date,
+                'all_employees':all_employees,
+                'recent_salary':recent_salary,
+            }
+            return render(request,'hrm/salary.html',context)
+    else:
+        messages.info(request, "Unauthorized access.")
+        return redirect('home')
+
+
+
+
+
+
+
+def pay_salary(request):
+    if request.method =="POST":
+        selected_salary = request.POST.getlist("selected_salary")
+        sel=selected_salary
+       
+        for sel in sel:
+            x_list = sel.split(",")
+            name, month, leave_deduction, tax_deduction, paid_salary = x_list
+            employee = Employee.objects.get(name=name)
+            prev_salary = Salary.objects.filter(month=month,employee=employee,type='salary')
+            advance_salary = Salary.objects.filter(month=month,employee=employee).filter(type='advance')
+            if prev_salary:
+                pass
+            else:
+                if advance_salary:
+                    advance_amount = 0
+                    for advance_salary in advance_salary:
+                        amount = advance_salary.paid_salary
+                        advance_amount = advance_amount+amount
+
+                    final_salary = float(paid_salary)-advance_amount
+                    Salary.objects.create(employee=employee,month=month,leave_deduction=leave_deduction,tax_deduction=tax_deduction,paid_salary=final_salary)
+                else:
+                    Salary.objects.create(employee=employee,month=month,leave_deduction=leave_deduction,tax_deduction=tax_deduction,paid_salary=paid_salary)
+                
+        return redirect('salary')
+    else:
+        return redirect('salary')
