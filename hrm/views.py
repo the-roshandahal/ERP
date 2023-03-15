@@ -127,11 +127,34 @@ def add_designation(request):
 
 def attendance (request):
     if 'read_hrm' in custom_data_views(request):
-        att_data=LogSheet.objects.all()
-        context = {
+        if request.method == 'POST':
+            start_date = request.POST.get('start_date')
+            end_date = request.POST.get('end_date')
+            employee_id = request.POST.get('employee')
+            start_date=start_date
+            end_date=end_date
+            if employee_id == 'all':
+                att_data = LogSheet.objects.filter(created__range=[start_date, end_date])
+            else:
+                att_data = LogSheet.objects.filter(user_id=employee_id, created__range=[start_date, end_date])
+            employees = Employee.objects.all()
+            searched = True
+            context = {
+            'start_date':start_date,
+            'end_date':end_date,
             'att_data':att_data,
+            'employees':employees,
+            'searched':searched
         }
-        return render (request, 'hrm/attendance.html',context)
+            return render(request, 'hrm/attendance.html',context)
+        else:
+            att_data=LogSheet.objects.all()
+            employees = Employee.objects.all()
+            context = {
+                'att_data':att_data,
+                'employees':employees
+            }
+            return render (request, 'hrm/attendance.html',context)
     else:
         messages.info(request, "Unauthorized access.")
         return redirect('home')

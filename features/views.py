@@ -9,33 +9,7 @@ from account.context_processors import *
 
 def home(request):
     if request.user.is_authenticated:
-        logged_in = Employee.objects.get(user=request.user)
-        logs=LogSheet.objects.filter(user=logged_in).order_by('-punch_in_time').first()
-        punched_in = False
-        if logs:
-            if logs.created == date.today():
-                punched_in = True 
-            else:
-                punched_in = False
-        else:
-            punched_in = False
-        punched_out_for_today =False
-        if logs:
-            if logs.punch_out_time and logs.created == date.today():
-                punched_out_for_today =True
-        else:
-            punched_out_for_today =False
-    
-        time_now = datetime.now().time()
-        today_log=LogSheet.objects.filter(user=logged_in).order_by('-punch_in_time').first()
-        
-        context = {
-            'time_now':time_now,
-            'today_log':today_log,
-            'punched_in':punched_in,
-            'punched_out':punched_out_for_today,
-        }
-        return render (request,'index.html',context) 
+        return render (request,'index.html') 
     else:
         return redirect('login')
 
@@ -107,88 +81,77 @@ def reassign(request,id):
     return redirect(todo)
 
 
+
 def log_sheet(request):
     if request.user.is_authenticated:
-        logged_in = Employee.objects.get(user=request.user)
-        logs=LogSheet.objects.filter(user=logged_in).filter(punch_out_time=None).order_by('-created').first()
+        logged_in_employee = Employee.objects.get(user=request.user)
+        current_log = LogSheet.objects.filter(user=logged_in_employee, created=date.today()).first()
         punched_in = False
-        if logs:
-            if logs.created == date.today():
-                punched_in = True 
+        punched_out = False
+        today_logs = None
+        
+        if current_log:
+            if current_log.punch_out_time is None:
+                punched_in = True
             else:
-                punched_in = False
-        else:
-            punched_in = False
-
-        punched_out_for_today =False
-        if logs:
-            if logs.punch_out_time and logs.created == date.today():
-                punched_out_for_today =True
-        else:
-            punched_out_for_today =False
-    
+                punched_out = True
+                today_logs = LogSheet.objects.filter(user=logged_in_employee, created=date.today()).order_by('-punch_in_time').first()
+        
         time_now = datetime.now().time()
-        today_log=LogSheet.objects.filter(user=logged_in).order_by('-punch_in_time').first()
         
         context = {
-            'time_now':time_now,
-            'today_log':today_log,
-            'punched_in':punched_in,
-            'punched_out':punched_out_for_today,
+            'time_now': time_now,
+            'today_logs': today_logs,
+            'punched_in': punched_in,
+            'punched_out': punched_out,
         }
-        return render (request,'features/log_sheet.html',context) 
+        return render(request, 'features/log_sheet.html', context)
     else:
         return redirect('login')
-    
+
 
 def punch_in(request):
     if request.method == 'POST':
         logged_in = Employee.objects.get(user=request.user)
-        logs=LogSheet.objects.filter(user=logged_in).filter(punch_out_time=None).order_by('-created').first()
-        if logs:
-            if logs.created == date.today():
-                messages.info(request, "Already punched in for today.")
-                return redirect('log_sheet') 
-            else:
-                user = Employee.objects.get(user=request.user)
-                punch = LogSheet(user=user, punch_in_time=datetime.now().time())
-                punch.save()
-                messages.info(request, "Punched in successfully.")
-                return redirect('log_sheet')
+        today_logs = LogSheet.objects.filter(user=logged_in, created=date.today())
+
+        if today_logs.exists():
+            messages.info(request, "You have already punched in for today.")
+            return redirect('log_sheet')
         else:
-            user = Employee.objects.get(user=request.user)
-            punch = LogSheet(user=user, punch_in_time=datetime.now().time())
+            punch = LogSheet(user=logged_in, punch_in_time=datetime.now().time())
             punch.save()
-            messages.info(request, "Punched in successfully.")
-            return redirect('log_sheet') 
+            messages.success(request, "Punched in successfully.")
+            return redirect('log_sheet')
     return redirect('log_sheet')
 
 
 def punch_out(request):
     if request.method == 'POST':
         logged_in = Employee.objects.get(user=request.user)
-        logs=LogSheet.objects.filter(user=logged_in).order_by('-created').first()
-        punched_in = False
-        if logs:
-            if logs.created == date.today():
-                punched_in = True
-            else:
-                punched_in = False
-        if punched_in:
-            user = Employee.objects.get(user=request.user)
-            punch = LogSheet.objects.filter(user=user).order_by('-punch_in_time').first()
-            punch.punch_out_time = datetime.now().time()
+        today_logs = LogSheet.objects.filter(user=logged_in, created=date.today())
 
+        if today_logs.exists() and today_logs.latest('punch_in_time').punch_out_time:
+            # User has already punched out for the day, redirect to punch in page
+            messages.info(request, "You have already punched out for today.")
+            return redirect('punch_in')
+        elif today_logs.exists():
+            # Update the latest LogSheet instance with user's tasks, meetings, and remarks and punch out time
+            punch = today_logs.latest('punch_in_time')
+            punch.punch_out_time = datetime.now().time()
             punch.tasks = request.POST['tasks']
             punch.meetings = request.POST['meetings']
             punch.remarks = request.POST['remarks']
-
             punch.save()
-            messages.info(request, "Punched out successfully.")
+            messages.success(request, "Punched out successfully.")
             return redirect('punch_in')
         else:
+            # User has not punched in for the day, redirect to punch in page
+            messages.info(request, "You need to punch in before punching out.")
             return redirect('punch_in')
     return redirect('log_sheet')
+
+
 
 
 

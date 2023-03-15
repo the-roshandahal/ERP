@@ -15,7 +15,6 @@ class LogSheet(models.Model):
     tasks = models.TextField(null = True, blank = True)
     meetings = models.TextField(null = True, blank = True)
     remarks = models.TextField(null = True, blank = True)
-    # created = models.DateTimeField(default=timezone.now().astimezone(pytz.timezone('Asia/Kathmandu')))
     created = models.DateField(auto_now_add=True)
 
     def __str__(self):
