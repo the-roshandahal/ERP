@@ -130,7 +130,8 @@ def create_invoice(request):
                     product_quantity=product_quantity,
                     product_price=product_amount - product_discount,
                 )
-                product.product_quantity = -product_quantity
+                product_quantity_new = product.product_quantity
+                product.product_quantity = product_quantity_new - product_quantity
                 product.save()
             details = invoice.id
             details = "INV_NO_"+str(details)
