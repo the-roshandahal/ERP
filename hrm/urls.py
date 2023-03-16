@@ -29,6 +29,7 @@ urlpatterns = [
     path("advance_salary/", views.advance_salary, name="advance_salary"),
     path("leave/", views.leave, name="leave"),
     path("apply_leave/", views.apply_leave, name="apply_leave"),
+    path("add_emp_leave/", views.add_emp_leave, name="add_emp_leave"),
     path("emp_leaves/", views.emp_leaves, name="emp_leaves"),
     
     

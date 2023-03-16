@@ -423,6 +423,7 @@ def apply_leave(request):
 
 def emp_leaves(request):
     if 'read_hrm' in custom_data_views(request):
+        employees =Employee.objects.all()
         pending_leaves = Leave.objects.filter(status='pending')
         pending_leaves_dates = LeaveDate.objects.filter(leave__in=pending_leaves)
 
@@ -433,20 +434,43 @@ def emp_leaves(request):
         denied_leaves_dates = LeaveDate.objects.filter(leave__in=denied_leaves)
 
         context = {
-        'pending_leaves':pending_leaves,
-        'pending_leaves_dates':pending_leaves_dates,
+            'employees':employees,
+            'pending_leaves':pending_leaves,
+            'pending_leaves_dates':pending_leaves_dates,
 
-        'approved_leaves':approved_leaves,
-        'approved_leaves_dates':approved_leaves_dates,
-        
-        'denied_leaves':denied_leaves,
-        'denied_leaves_dates':denied_leaves_dates,
+            'approved_leaves':approved_leaves,
+            'approved_leaves_dates':approved_leaves_dates,
+            
+            'denied_leaves':denied_leaves,
+            'denied_leaves_dates':denied_leaves_dates,
         }
         return render (request,'hrm/emp_leaves.html',context)
     else:
         messages.info(request, "Unauthorized access.")
         return redirect('home')
     
+
+def add_emp_leave(request):
+    if 'create_hrm' in custom_data_views(request):
+        if request.method=="POST":
+            emp = request.POST['employee']
+            reason = request.POST['reason']
+            days = request.POST['dates']
+            employee = Employee.objects.get(id=emp)
+            date_list = [date.strip() for date in days.split(",")]
+            leave = Leave.objects.create(reason=reason,status='accepted',employee=employee)
+            leave.save()
+            for date in date_list:
+                LeaveDate.objects.create(leave=leave,date=date)
+            return redirect('emp_leaves')
+        else:
+            return redirect('emp_leaves')
+    else:
+        messages.info(request, "Unauthorized access.")
+        return redirect('home')
+    
+
+
 def accept_leave(request,id):
     leave = Leave.objects.get(id=id)
     leave.status = 'accepted'
@@ -460,6 +484,8 @@ def deny_leave(request,id):
     return redirect('emp_leaves')
     
 
+def salary_payment(request):
+    pass
 
 
 
@@ -471,38 +497,6 @@ def deny_leave(request,id):
 
 
 
-# def add_leave(request):
-#     if 'create_hrm' in custom_data_views(request):
-#         if request.method=="POST":
-#             reason = request.POST['reason']
-#             emp = request.POST['employee']
-#             employe = Employee.objects.get(id=emp)
-#             current_datetime = datetime.date.today()
-#             print(current_datetime)
-
-#             if Leave.objects.filter(employee = employe):
-#                 leaves = Leave.objects.filter(employee = employe).order_by('-created')[0]
-#                 print(leaves.created)
-#             else:
-#                 leaves=None
-
-#             if leaves:
-#                 if leaves.created ==current_datetime:
-#                     messages.info(request,f"Already added for today ({current_datetime})")
-#                     return redirect('attendance')
-#                 else:
-#                     Leave.objects.create(employee=employe,reason =reason)
-#                     messages.info(request, "Leave Added Successfully")
-#                     return redirect('attendance')
-#             else:
-#                 Leave.objects.create(employee=employe,reason =reason)
-#                 messages.info(request, "Leave Added Successfully")
-#                 return redirect('attendance')
-#         else:
-#             return redirect('attendance')
-#     else:
-#         messages.info(request, "Unauthorized access.")
-#         return redirect('home')
     
 
 
