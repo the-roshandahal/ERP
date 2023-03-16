@@ -158,14 +158,24 @@ def punch_in(request):
         logged_in = Employee.objects.get(user=request.user)
         today_logs = LogSheet.objects.filter(user=logged_in, created=date.today())
 
-        if today_logs.exists():
-            messages.info(request, "You have already punched in for today.")
+        current_date = date.today()
+        leave_dates = LeaveDate.objects.filter(date=current_date)
+        employees_on_leave = [leave_date.leave.employee for leave_date in leave_dates]
+
+        # employee = Employee.objects.get(id=1)  # Replace with the appropriate employee ID
+        is_on_leave = logged_in in employees_on_leave
+        if is_on_leave:
+            messages.info(request, "You are on leave for today.")
             return redirect('log_sheet')
         else:
-            punch = LogSheet(user=logged_in, punch_in_time=datetime.now().time())
-            punch.save()
-            messages.success(request, "Punched in successfully.")
-            return redirect('log_sheet')
+            if today_logs.exists():
+                messages.info(request, "You have already punched in for today.")
+                return redirect('log_sheet')
+            else:
+                punch = LogSheet(user=logged_in, punch_in_time=datetime.now().time())
+                punch.save()
+                messages.success(request, "Punched in successfully.")
+                return redirect('log_sheet')
     return redirect('log_sheet')
 
 
@@ -372,6 +382,7 @@ def delete_employee(request,id):
     else:
         messages.info(request, "Unauthorized access.")
         return redirect('home')
+    
 def emp_payslip(request):
     employee = Employee.objects.get(user=request.user)
     payments_made = Salary.objects.filter(employee=employee )
