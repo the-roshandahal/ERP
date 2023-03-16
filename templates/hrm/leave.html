@@ -111,11 +111,15 @@
                             <input type="text" class="form-control" name="reason" required>
                         </div>
                     </div>
-                    <div class="col-xxl-12 mb-xxl-0 mb-4">
+                    {% comment %} <div class="col-xxl-12 mb-xxl-0 mb-4">
                         <h6>Select Leave Days</h6>
                         <div class="form-group">
                             <input type="text" name="dates" class="form-control datepicker" placeholder="Select dates...">
                         </div>
+                    </div> {% endcomment %}
+                    <div class="form-group">
+                        <label class="form-label">Date Range Picker</label>
+                        <input class="form-control" type="text" name="daterange"  />
                     </div>
                     
                 </div>
@@ -127,11 +131,4 @@
 		</div>
 	</div>
 </div>
-
-<script>
-    $('.datepicker').datepicker({
-        multidate: true,
-        format: 'yyyy-mm-dd'
-    });
-</script>
 {% include 'footer.html' %}

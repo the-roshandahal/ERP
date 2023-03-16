@@ -5,7 +5,7 @@ import pandas as pd
 from django.contrib import messages, auth
 from django.contrib.auth.models import User
 from account.views import *
-from datetime import date,datetime
+from datetime import date,datetime,timedelta
 from django.core.paginator import Paginator
 from account.context_processors import custom_data_views
 # Create your views here.
@@ -408,11 +408,21 @@ def leave(request):
 def apply_leave(request):
     if request.method == "POST":
         reason = request.POST['reason']
-        dates = request.POST['dates']
+        dates = request.POST['daterange']
         employee = Employee.objects.get(user=request.user)
-        date_list = [date.strip() for date in dates.split(",")]
         leave = Leave.objects.create(reason=reason,status='pending',employee=employee)
         leave.save()
+
+
+        start_date_str, end_date_str = dates.split(" - ")
+        start_date = datetime.strptime(start_date_str, "%m/%d/%Y").date()
+        end_date = datetime.strptime(end_date_str, "%m/%d/%Y").date()
+        date_list = []
+        current_date = start_date
+        while current_date <= end_date:
+            date_list.append(current_date)
+            current_date += timedelta(days=1)
+
         for date in date_list:
             LeaveDate.objects.create(leave=leave,date=date)
 
@@ -485,19 +495,49 @@ def deny_leave(request,id):
     
 
 def salary_payment(request):
-    pass
+    if request.method =="POST":
+        month = request.POST['month']
+        employee = request.POST['employee']
+        selected_month = MonthSetup.objects.get(id=month)
+        start_date = selected_month.start_date
+        end_date = selected_month.end_date
 
+        if employee == 'all':
+            pass
+        else:
+            data_list=[]
+            emp_to_pay = Employee.objects.get(id = employee)
+            
+            logs = LogSheet.objects.filter(user=emp_to_pay.id, created__range=(start_date, end_date))
+            present_days = logs.count()
 
+            leaves = Leave.objects.filter(employee = emp_to_pay,status='accepted')
+            absent_days = 0
+            leave_days =[]
+            for leave in leaves:
+                leave_dates = LeaveDate.objects.filter(leave=leave)
+                for leave_date in leave_dates:
+                    if start_date <= leave_date.date <= end_date:
+                        absent_days += 1
+                        leave_days.append(leave_date.date)
+            
+            holiday_dates = []
+            holidays = Holidays.objects.filter(month=month)
+            for holidays in holidays:
+                holiday_dates.append(holidays.holiday)
 
+            payable = [x for x in holiday_dates if x not in leave_days]
+            unpayable_holidays = [x for x in leave_days if x in holiday_dates]
 
-
-
-
-
-
-
-
-    
-
-
-
+            # date1 = datetime(start_date)
+            # date2 = datetime(end_date)
+            total_month_dates = end_date-start_date
+            diff = total_month_dates.days
+            print(diff)
+            payable_days = diff-len(unpayable_holidays)
+            print(payable_days)
+        context = {
+            'holiday_dates':holiday_dates,
+            'unpayable':unpayable_holidays,
+         }
+    return render(request,'hrm/salary_payment.html',context)
