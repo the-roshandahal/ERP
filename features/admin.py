@@ -6,4 +6,3 @@ from .models import *
 
 admin.site.register(ToDo)
 admin.site.register(Company)
-admin.site.register(LogSheet)

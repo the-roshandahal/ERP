@@ -20,10 +20,20 @@ urlpatterns = [
 
     path("attendance/", views.attendance, name="attendance"),
     path("payroll/", views.payroll, name="payroll"),
+    path("emp_payslip/", views.emp_payslip, name="emp_payslip"),
     # path("salary/", views.salary, name="salary"),
     # path("pay_salary/", views.pay_salary, name="pay_salary"),
+    path("log_sheet/", views.log_sheet, name="log_sheet"),
+    path('punch_in/', views.punch_in, name='punch_in'),
+    path('punch_out/', views.punch_out, name='punch_out'),
     path("advance_salary/", views.advance_salary, name="advance_salary"),
-    # path("add_leave/", views.add_leave, name="add_leave"),
+    path("leave/", views.leave, name="leave"),
+    path("apply_leave/", views.apply_leave, name="apply_leave"),
+    path("emp_leaves/", views.emp_leaves, name="emp_leaves"),
+    
+    
+    path("accept_leave/<int:id>", views.accept_leave, name="accept_leave"),
+    path("deny_leave/<int:id>", views.deny_leave, name="deny_leave"),
 
 
 

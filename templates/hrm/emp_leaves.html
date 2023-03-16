@@ -1,0 +1,217 @@
+{% load static %}{% include 'header.html' %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+<!-- Main Content -->
+<div class="hk-pg-wrapper">
+	<div class="container-xxl">
+		<!-- Page Header -->												
+		<div class="hk-pg-header">
+			<div class="d-flex">
+				<div class="d-flex flex-wrap justify-content-between flex-1">
+					<div class="mb-md-0 mb-2 me-8">
+						<div class="d-flex align-items-center">
+							<h1 class="pg-title">CRM Dashboard</h1>
+							<span class="badge badge-soft-primary ms-3">Badge</span>
+						</div>
+						<p id="greeting"></p>
+
+						<script>
+							const now = new Date();
+							const hour = now.getHours();
+					
+							let greeting;
+					
+							if (hour < 12) {
+								greeting = "Good Morning";
+							} else if (hour < 18) {
+								greeting = "Good Afternoon";
+							} else {
+								greeting = "Good Evening";
+							}
+					
+							document.getElementById("greeting").innerHTML = greeting + " {{request.user.first_name}}!";
+						</script>
+						
+					</div>
+					<div class="pg-header-action-wrap">
+                        {% comment %} <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalCenterAddMonth">Apply Leave</button> {% endcomment %}
+					</div>
+				</div>
+			</div>
+		</div>	
+		<div class="hk-pg-body">
+            <h3>Leave History</h3>                                                   
+                <ul class="nav nav-icon nav-icon-top nav-tabs nav-light">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-bs-toggle="tab" href="#tab_block_112">
+                            <span class="nav-icon-wrap"><span class="feather-icon"><i data-feather="file-text"></i></span></span>
+                            <span class="nav-link-text">Pending</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#tab_block_212">
+                            <span class="nav-icon-wrap"><span class="feather-icon"><i data-feather="check-circle"></i></span></span>
+                            <span class="nav-link-text">Approved</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#tab_block_215">
+                            <span class="nav-icon-wrap"><span class="feather-icon"><i class="bi bi-x-circle"></i></span></span>
+                            <span class="nav-link-text">Denied</span>
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="tab_block_112">
+                        <div class="row">
+                            <h5>Pending Leave Requests</h5>
+                            <table class="table nowrap w-100 mb-5">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                        <th>Reason</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if pending_leaves %}
+                                    {% for pending_leaves in pending_leaves %}
+                                    <tr>
+                                        <td>{{pending_leaves.employee.user.first_name}} {{pending_leaves.employee.user.last_name}}</td>
+    
+                                        <td>
+                                            {% for pending_leaves_dates in pending_leaves_dates %}
+                                            {% if pending_leaves_dates.leave.id == pending_leaves.id %}
+                                                {{pending_leaves_dates.date}}<br>
+                                            {% endif %}
+                                            {% endfor %}
+                                        </td>
+                                        
+                                        <td>{{pending_leaves.status}}</td>
+                                        <td>{{pending_leaves.reason}}</td>
+                                        <td>
+                                            <div  class="d-flex">
+                                                <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Approve" href="{% url 'accept_leave' id=pending_leaves.id %}"><span class="icon"><span class="feather-icon"><i class="bi bi-check2-circle"></i></span></span></a>
+                                                <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Deny" href="{% url 'deny_leave' id=pending_leaves.id %}"><span class="icon"><span class="feather-icon"><i class="bi bi-x-circle"></i></span></span></a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    
+                                    
+                                    {% endfor %}
+                                    {% else %}
+                                    <tr>
+                                        <td style="text-align: center" colspan="7">No Recent Leaves</td>
+                                    </tr>
+                                    {% endif %}
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tab_block_212">
+                        <div class="row">
+                            <h5>Approved Leaves</h5>
+                            <table class="table nowrap w-100 mb-5">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                        <th>Reason</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if approved_leaves %}
+                                    {% for approved_leaves in approved_leaves %}
+                                    <tr>
+                                        <td>{{approved_leaves.employee.user.first_name}} {{approved_leaves.employee.user.last_name}}</td>
+    
+                                        <td>
+                                            {% for approved_leaves_dates in approved_leaves_dates %}
+                                            {% if approved_leaves_dates.leave.id == approved_leaves.id %}
+                                                {{approved_leaves_dates.date}}<br>
+                                            {% endif %}
+                                            {% endfor %}
+                                        </td>
+                                        
+                                        <td>{{approved_leaves.status}}</td>
+                                        <td>{{approved_leaves.reason}}</td>
+                                    </tr>
+                                    
+                                    
+                                    {% endfor %}
+                                    {% else %}
+                                    <tr>
+                                        <td style="text-align: center" colspan="7">No Recent Leaves</td>
+                                    </tr>
+                                    {% endif %}
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tab_block_215">
+                        <div class="row">
+                            <h5>Denied Leaves</h5>
+                            <table class="table nowrap w-100 mb-5">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                        <th>Reason</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if denied_leaves %}
+                                    {% for denied_leaves in denied_leaves %}
+                                    <tr>
+                                        <td>{{denied_leaves.employee.user.first_name}} {{denied_leaves.employee.user.last_name}}</td>
+    
+                                        <td>
+                                            {% for denied_leaves_dates in denied_leaves_dates %}
+                                            {% if denied_leaves_dates.leave.id == denied_leaves.id %}
+                                                {{denied_leaves_dates.date}}<br>
+                                            {% endif %}
+                                            {% endfor %}
+                                        </td>
+                                        
+                                        <td>{{denied_leaves.status}}</td>
+                                        <td>{{denied_leaves.reason}}</td>
+                                    </tr>
+                                    
+                                    
+                                    {% endfor %}
+                                    {% else %}
+                                    <tr>
+                                        <td style="text-align: center" colspan="7">No Recent Leaves</td>
+                                    </tr>
+                                    {% endif %}
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+													
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="tab_block_1">
+                    
+                </div>
+            </div>
+
+
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="tab_block_1">
+                    
+                </div>
+            </div>
+        </div>
+	</div>
+</div>
+{% include 'footer.html' %}

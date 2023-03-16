@@ -125,6 +125,76 @@ def add_designation(request):
 
 
 
+def log_sheet(request):
+    if request.user.is_authenticated:
+        logged_in_employee = Employee.objects.get(user=request.user)
+        current_log = LogSheet.objects.filter(user=logged_in_employee, created=date.today()).first()
+        punched_in = False
+        punched_out = False
+        today_logs = None
+        
+        if current_log:
+            if current_log.punch_out_time is None:
+                punched_in = True
+            else:
+                punched_out = True
+                today_logs = LogSheet.objects.filter(user=logged_in_employee, created=date.today()).order_by('-punch_in_time').first()
+        
+        time_now = datetime.now().time()
+        
+        context = {
+            'time_now': time_now,
+            'today_logs': today_logs,
+            'punched_in': punched_in,
+            'punched_out': punched_out,
+        }
+        return render(request, 'hrm/log_sheet.html', context)
+    else:
+        return redirect('login')
+
+
+def punch_in(request):
+    if request.method == 'POST':
+        logged_in = Employee.objects.get(user=request.user)
+        today_logs = LogSheet.objects.filter(user=logged_in, created=date.today())
+
+        if today_logs.exists():
+            messages.info(request, "You have already punched in for today.")
+            return redirect('log_sheet')
+        else:
+            punch = LogSheet(user=logged_in, punch_in_time=datetime.now().time())
+            punch.save()
+            messages.success(request, "Punched in successfully.")
+            return redirect('log_sheet')
+    return redirect('log_sheet')
+
+
+def punch_out(request):
+    if request.method == 'POST':
+        logged_in = Employee.objects.get(user=request.user)
+        today_logs = LogSheet.objects.filter(user=logged_in, created=date.today())
+
+        if today_logs.exists() and today_logs.latest('punch_in_time').punch_out_time:
+            # User has already punched out for the day, redirect to punch in page
+            messages.info(request, "You have already punched out for today.")
+            return redirect('punch_in')
+        elif today_logs.exists():
+            # Update the latest LogSheet instance with user's tasks, meetings, and remarks and punch out time
+            punch = today_logs.latest('punch_in_time')
+            punch.punch_out_time = datetime.now().time()
+            punch.tasks = request.POST['tasks']
+            punch.meetings = request.POST['meetings']
+            punch.remarks = request.POST['remarks']
+            punch.save()
+            messages.success(request, "Punched out successfully.")
+            return redirect('punch_in')
+        else:
+            # User has not punched in for the day, redirect to punch in page
+            messages.info(request, "You need to punch in before punching out.")
+            return redirect('punch_in')
+    return redirect('log_sheet')
+
+
 def attendance (request):
     if 'read_hrm' in custom_data_views(request):
         if request.method == 'POST':
@@ -302,7 +372,89 @@ def delete_employee(request,id):
     else:
         messages.info(request, "Unauthorized access.")
         return redirect('home')
+def emp_payslip(request):
+    employee = Employee.objects.get(user=request.user)
+    payments_made = Salary.objects.filter(employee=employee )
+    context = {
+        'payments_made':payments_made,
+        }
+    return render(request,'hrm/emp_payslip.html',context)
+
+
+
+
+def leave(request):
+    employee = Employee.objects.get(user=request.user)
+    approved_leaves = Leave.objects.filter(employee=employee)
+    approved_leave_dates = LeaveDate.objects.filter(leave__in=approved_leaves)
+    context = {
+        'approved_leaves':approved_leaves,
+        'approved_leave_dates':approved_leave_dates
+        }
+    return render (request,'hrm/leave.html',context)
     
+
+def apply_leave(request):
+    if request.method == "POST":
+        reason = request.POST['reason']
+        dates = request.POST['dates']
+        employee = Employee.objects.get(user=request.user)
+        date_list = [date.strip() for date in dates.split(",")]
+        leave = Leave.objects.create(reason=reason,status='pending',employee=employee)
+        leave.save()
+        for date in date_list:
+            LeaveDate.objects.create(leave=leave,date=date)
+
+        return redirect('leave')
+    else:
+        return redirect('leave')
+
+
+def emp_leaves(request):
+    if 'read_hrm' in custom_data_views(request):
+        pending_leaves = Leave.objects.filter(status='pending')
+        pending_leaves_dates = LeaveDate.objects.filter(leave__in=pending_leaves)
+
+        approved_leaves = Leave.objects.filter(status='accepted')
+        approved_leaves_dates = LeaveDate.objects.filter(leave__in=approved_leaves)
+        
+        denied_leaves = Leave.objects.filter(status='denied')
+        denied_leaves_dates = LeaveDate.objects.filter(leave__in=denied_leaves)
+
+        context = {
+        'pending_leaves':pending_leaves,
+        'pending_leaves_dates':pending_leaves_dates,
+
+        'approved_leaves':approved_leaves,
+        'approved_leaves_dates':approved_leaves_dates,
+        
+        'denied_leaves':denied_leaves,
+        'denied_leaves_dates':denied_leaves_dates,
+        }
+        return render (request,'hrm/emp_leaves.html',context)
+    else:
+        messages.info(request, "Unauthorized access.")
+        return redirect('home')
+    
+def accept_leave(request,id):
+    leave = Leave.objects.get(id=id)
+    leave.status = 'accepted'
+    leave.save()
+    return redirect('emp_leaves')
+
+def deny_leave(request,id):
+    leave = Leave.objects.get(id=id)
+    leave.status = 'denied'
+    leave.save()
+    return redirect('emp_leaves')
+    
+
+
+
+
+
+
+
 
 
 

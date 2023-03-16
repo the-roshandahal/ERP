@@ -5,9 +5,11 @@ from .models import *
 
 admin.site.register(Salary)
 admin.site.register(Leave)
+admin.site.register(LeaveDate)
 admin.site.register(Department)
 admin.site.register(Designation)
 admin.site.register(MonthSetup)
 admin.site.register(YearSetup)
 admin.site.register(Holidays)
 admin.site.register(Employee)
+admin.site.register(LogSheet)

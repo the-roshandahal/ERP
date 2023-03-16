@@ -1,0 +1,137 @@
+{% load static %}{% include 'header.html' %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+<!-- Main Content -->
+<div class="hk-pg-wrapper">
+	<div class="container-xxl">
+		<!-- Page Header -->												
+		<div class="hk-pg-header">
+			<div class="d-flex">
+				<div class="d-flex flex-wrap justify-content-between flex-1">
+					<div class="mb-md-0 mb-2 me-8">
+						<div class="d-flex align-items-center">
+							<h1 class="pg-title">CRM Dashboard</h1>
+							<span class="badge badge-soft-primary ms-3">Badge</span>
+						</div>
+						<p id="greeting"></p>
+
+						<script>
+							const now = new Date();
+							const hour = now.getHours();
+					
+							let greeting;
+					
+							if (hour < 12) {
+								greeting = "Good Morning";
+							} else if (hour < 18) {
+								greeting = "Good Afternoon";
+							} else {
+								greeting = "Good Evening";
+							}
+					
+							document.getElementById("greeting").innerHTML = greeting + " {{request.user.first_name}}!";
+						</script>
+						
+					</div>
+					<div class="pg-header-action-wrap"><button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalCenterAddMonth">Apply Leave</button>
+					</div>
+				</div>
+			</div>
+		</div>	
+		<div class="hk-pg-body">
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="tab_block_1">
+                    <div class="row">
+                        <h2>Recent Leaves</h2>
+                        <table class="table nowrap w-100 mb-5">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Reason</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if approved_leaves %}
+                                {% for approved_leaves in approved_leaves %}
+                                <tr>
+                                    <td>{{approved_leaves.employee.user.first_name}} {{approved_leaves.employee.user.last_name}}</td>
+
+                                    <td>
+                                        {% for approved_leave_dates in approved_leave_dates %}
+                                        {% if approved_leave_dates.leave.id == approved_leaves.id %}
+                                            {{approved_leave_dates.date}}<br>
+                                        {% endif %}
+                                        {% endfor %}
+                                    </td>
+                                    
+                                    <td>{{approved_leaves.status}}</td>
+                                    <td>{{approved_leaves.reason}}</td>
+                                </tr>
+                                
+                                
+                                {% endfor %}
+                                {% else %}
+                                <tr>
+                                    <td style="text-align: center" colspan="7">No Recent Leaves</td>
+                                </tr>
+                                {% endif %}
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+	</div>
+</div>
+
+
+
+
+
+<div class="modal fade" id="exampleModalCenterAddMonth" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterAddMonth" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Add Month</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+            <form action="{% url 'apply_leave' %} " method="POST">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="col-xxl-12 mb-xxl-0 mb-4">
+                        <h6>Reason</h6>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="reason" required>
+                        </div>
+                    </div>
+                    <div class="col-xxl-12 mb-xxl-0 mb-4">
+                        <h6>Select Leave Days</h6>
+                        <div class="form-group">
+                            <input type="text" name="dates" class="form-control datepicker" placeholder="Select dates...">
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save </button>
+                </div>
+            </form>
+		</div>
+	</div>
+</div>
+
+<script>
+    $('.datepicker').datepicker({
+        multidate: true,
+        format: 'yyyy-mm-dd'
+    });
+</script>
+{% include 'footer.html' %}

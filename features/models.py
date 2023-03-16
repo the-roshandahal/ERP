@@ -8,20 +8,7 @@ from django.utils import timezone
 
 # Create your models here.
 
-class LogSheet(models.Model):
-    user = models.ForeignKey(Employee, on_delete=models.CASCADE)
-    punch_in_time = models.TimeField()
-    punch_out_time = models.TimeField(null = True, blank = True)
-    tasks = models.TextField(null = True, blank = True)
-    meetings = models.TextField(null = True, blank = True)
-    remarks = models.TextField(null = True, blank = True)
-    created = models.DateField(auto_now_add=True)
 
-    def __str__(self):
-        return self.user.user.username
-
-    class Meta:
-        verbose_name_plural = "01. Log Sheet"
 
 
 

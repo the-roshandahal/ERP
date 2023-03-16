@@ -70,6 +70,20 @@ class Employee(models.Model):
     class Meta:
         verbose_name_plural = "01. Employees"
 
+class LogSheet(models.Model):
+    user = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    punch_in_time = models.TimeField()
+    punch_out_time = models.TimeField(null = True, blank = True)
+    tasks = models.TextField(null = True, blank = True)
+    meetings = models.TextField(null = True, blank = True)
+    remarks = models.TextField(null = True, blank = True)
+    created = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return self.user.user.username
+
+    class Meta:
+        verbose_name_plural = "01. Log Sheet"
 class Salary(models.Model):
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
     month = models.CharField(max_length=100)
@@ -89,7 +103,7 @@ class Salary(models.Model):
 class Leave(models.Model):
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
     reason = models.CharField(max_length=255,null=True, blank=True)
-    is_absent = models.BooleanField(default=1)
+    status = models.CharField(max_length=100)
     created = models.DateField(auto_now_add=True)
     def __str__(self):
         return self.employee.user.username
@@ -97,5 +111,12 @@ class Leave(models.Model):
     class Meta:
         verbose_name_plural = "02. Leave"
 
+class LeaveDate(models.Model):
+    leave = models.ForeignKey(Leave,on_delete=models.CASCADE)
+    date = models.DateField(max_length=220)
+    def __str__(self):
+        return self.leave.employee.user.username
 
+    class Meta:
+        verbose_name_plural = "02. Leave Dates"
 
