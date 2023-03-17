@@ -20,7 +20,7 @@ class MonthSetup(models.Model):
     end_date = models.DateField()
 
     def __str__(self):
-        return f"{self.year.year} - {self.month} ({self.start_date.strftime('%b %d, %Y')})"
+        return self.month
 
 
     class Meta:
@@ -86,7 +86,7 @@ class LogSheet(models.Model):
         verbose_name_plural = "01. Log Sheet"
 class Salary(models.Model):
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
-    month = models.CharField(max_length=100)
+    month = models.ForeignKey(MonthSetup, on_delete=models.CASCADE)
     leave_deduction = models.FloatField(max_length=255,null=True, blank=True)
     tax_deduction = models.FloatField(max_length=255,null=True, blank=True)
     company_deduction = models.FloatField(max_length=255,null=True, blank=True)
@@ -106,7 +106,8 @@ class Leave(models.Model):
     status = models.CharField(max_length=100)
     created = models.DateField(auto_now_add=True)
     def __str__(self):
-        return self.employee.user.username
+        return f"{self.employee.user.username} {self.created} {self.id}"
+    
 
     class Meta:
         verbose_name_plural = "02. Leave"
@@ -115,7 +116,7 @@ class LeaveDate(models.Model):
     leave = models.ForeignKey(Leave,on_delete=models.CASCADE)
     date = models.DateField(max_length=220)
     def __str__(self):
-        return self.leave.employee.user.username
+        return f"{self.leave.employee.user.username} {self.date} {self.leave.id}"
 
     class Meta:
         verbose_name_plural = "02. Leave Dates"

@@ -45,6 +45,7 @@
             <div class="hk-pg-body">
                 <div class="tab-content">
                     <div class="tab-pane fade show active" id="tab_block_1">
+                        <p>Month = {{month}}</p>
                         <form action="{% url 'pay_salary' %}" method="POST">
                             {% csrf_token %}
                             <div class="row">
@@ -52,13 +53,13 @@
                                     <thead>
                                         <tr>
                                             <th scope="col"><input type="checkbox" id="check-all"></th>
-                                            <th>Emp Name/Month</th>
+                                            <th>Emp Name</th>
                                             <th>Salary</th>
                                             <th>Absent Days</th>
-                                            <th>Payable Days</th>
                                             <th>Advance</th>
                                             <th>Leave Deduction</th>
                                             <th>Tax Deduction</th>
+                                            <th>Company Deduction</th>
                                             <th>Final Salary</th>
                                             <th>Status</th>
                                         </tr>
@@ -67,14 +68,18 @@
                                         {% for data_list in data_list %}
                                         <input type="text" name='month' value="{{data_list.month}}" style="display:none;">
                                         <tr>
-                                            <td><input type="checkbox" class="check" name="selected_employees" value="{{data_list.emp_id}}"></td>
-                                            <td>{{data_list.employee}} | {{data_list.month}}</td>
+                                            {% if data_list.status == 'paid' %} 
+                                            <td><input type="checkbox" class="check" name="selected_employees" value="{{data_list.emp_id.id}}" disabled></td>
+                                            {% else %}
+                                            <td><input type="checkbox" class="check" name="selected_employees" value="{{data_list.emp_id.id}}"></td>
+                                            {% endif %}
+                                            <td>{{data_list.employee}}</td>
                                             <td>{{data_list.salary}}</td>
                                             <td>{{data_list.absent_days}}</td>
-                                            <td>{{data_list.payable_days}}</td>
                                             <td>{{data_list.advance_this_month}}</td>
                                             <td><input type="text" class="form-control form-control-sm"  id="row-57-age" value="{{data_list.leave_deduction|floatformat:2}}" name="leave_deduction"></td>
                                             <td><input type="text" class="form-control form-control-sm"  id="row-57-age" value="{{data_list.tax_deduction|floatformat:2}}" name="tax_deduction"></td>
+                                            <td><input type="text" class="form-control form-control-sm"  id="row-57-age" value="0.00" name="company_deduction"></td>
                                             <td><input type="text" class="form-control form-control-sm"  id="row-57-age" value="{{data_list.final_salary|floatformat:2}}" name="final_salary"></td>
                                             <td>
                                                 {% if data_list.status == 'paid' %}                                                           
