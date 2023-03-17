@@ -39,6 +39,7 @@
 							<th>Email Address</th>
 							<th>Department</th>
 							<th>Designation</th>
+							<th>Date Joined</th>
 							<th>Action</th>
 						</tr>
 					</thead>
@@ -51,6 +52,7 @@
 							<td>{{employees.email}}</td>
 							<td>{{employees.department}}</td>
 							<td>{{employees.designation}}</td>
+							<td>{{employees.date_joined.date}}</td>
                             <td>
                                 <div class="d-flex align-items-center">
                                     <div class="d-flex">
@@ -58,7 +60,7 @@
 										<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" href="{% url 'edit_employee' id=employees.id %}"><span class="icon"><span class="feather-icon"><i data-feather="edit-2"></i></span></span></a>
                                         {% endif %}
                                         {% if 'update_hrm' in permissions %}
-                                        <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover del-button" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" href="#"><span class="btn-icon-wrap"><span class="feather-icon"><i data-feather="eye"></i></span></span></a>
+                                        <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover del-button" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="View" href="#"><span class="btn-icon-wrap"><span class="feather-icon"><i data-feather="eye"></i></span></span></a>
                                         {% endif %}
                                         {% if 'delete_hrm' in permissions %}
 										<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="modal" data-bs-target="#exampleModalCenter{{employees.id}}" href=""><span class="icon"><span class="feather-icon"><i data-feather="archive"></i></span></span></a>

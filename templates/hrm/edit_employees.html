@@ -69,7 +69,7 @@
                                     <select class="form-select"  name="role" required>
                                         <option value="">Select Role</option>
                                         {% for roles in roles %}
-                                        <option value="{{roles.id}}" {% if user_data.permission.role == roles.role %}selected{% endif %} >{{roles.role}}</option>
+                                        <option value="{{roles.id}}" {% if user_data.permission.role.id == roles.id %}selected{% endif %} >{{roles.role}}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
@@ -80,9 +80,9 @@
                         <div class="row">
                             <div class="col-md-6">
                             <h6>Department</h6>
-                            <select class="form-select" value="{{user_data.department}}" name="department" required id="department-select">
+                            <select class="form-select" name="department" required id="department-select">
                                 {% for department in department %}
-                                <option value="{{ department.department }}" {% if user_data.department == department.department %}selected{% endif %}>{{ department.department }}</option>
+                                <option value="{{department.id}}" {% if user_data.department.id == department.id %}selected{% endif %}>{{ department.department }}</option>
                                 {% endfor %}
                             </select>
                             </div>
@@ -91,7 +91,7 @@
                             <h6>Designation</h6>
                             <select class="form-select" value="{{user_data.designation}}" name="designation" required id="designation-select">
                                 {% for designation in designation %}
-                                <option value="{{ designation.designation }}" data-department-id="{{ designation.department.id }}">{{ designation.designation }}</option>
+                                <option value="{{ designation.id }}" data-department-id="{{ designation.department.id }}">{{designation.designation }}</option>
                                 {% endfor %}
                             </select>
                             </div>

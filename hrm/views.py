@@ -356,8 +356,8 @@ def edit_employee(request,id):
             salary = request.POST['salary']
             date_joined = request.POST.get('date_joined', '')
             
-            password = request.POST['password']
-            username = request.POST['username']
+            # password = request.POST['password']
+            # username = request.POST['username']
             email = request.POST['email']
             first_name = request.POST['first_name']
             last_name = request.POST['last_name']
@@ -365,10 +365,10 @@ def edit_employee(request,id):
             role = request.POST['role']
             user_data = Employee.objects.get(id=id)
             permission=Permission.objects.get(role=role)
-            department=Department.objects.get(department=department)
-            designation=Designation.objects.get(designation=designation)
+            department=Department.objects.get(id=department)
+            designation=Designation.objects.get(id=designation)
 
-            user = User.objects.get(username=username)
+            user = user_data.user
             user.first_name=first_name
             user.last_name=last_name
             user.email=email
@@ -380,7 +380,7 @@ def edit_employee(request,id):
             user_data.contact = contact
             user_data.address = address
             user_data.emp_salary = salary
-            user_data.password=password
+            # user_data.password=password
             if date_joined:
                 user_data.date_joined = date_joined
             user_data.save()
