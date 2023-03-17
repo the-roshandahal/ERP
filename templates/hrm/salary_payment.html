@@ -30,33 +30,115 @@
                             </script>
                             
                         </div>
-                        <div class="pg-header-action-wrap">
+                        {% comment %} <div class="pg-header-action-wrap">
                             {% if 'create_hrm' in permissions %}
                             <button class="btn btn-outline-secondary me-3" data-bs-toggle="modal" data-bs-target="#exampleModalCenterAdvance">Advance Payment</button>
                             {% endif %}
                             {% if 'create_hrm' in permissions %}
                             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalCenter">Generate Salary</button>
                             {% endif %}
-                        </div>
+                        </div> {% endcomment %}
                     </div>
                 </div>
             </div>
             <!-- Page Body -->
+            <div class="hk-pg-body">
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="tab_block_1">
+                        <form action="{% url 'pay_salary' %}" method="POST">
+                            {% csrf_token %}
+                            <div class="row">
+                                <table id="datable_1" class="table nowrap w-100 mb-5">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col"><input type="checkbox" id="check-all"></th>
+                                            <th>Emp Name/Month</th>
+                                            <th>Salary</th>
+                                            <th>Absent Days</th>
+                                            <th>Payable Days</th>
+                                            <th>Advance</th>
+                                            <th>Leave Deduction</th>
+                                            <th>Tax Deduction</th>
+                                            <th>Final Salary</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for data_list in data_list %}
+                                        <input type="text" name='month' value="{{data_list.month}}" style="display:none;">
+                                        <tr>
+                                            <td><input type="checkbox" class="check" name="selected_employees" value="{{data_list.emp_id}}"></td>
+                                            <td>{{data_list.employee}} | {{data_list.month}}</td>
+                                            <td>{{data_list.salary}}</td>
+                                            <td>{{data_list.absent_days}}</td>
+                                            <td>{{data_list.payable_days}}</td>
+                                            <td>{{data_list.advance_this_month}}</td>
+                                            <td><input type="text" class="form-control form-control-sm"  id="row-57-age" value="{{data_list.leave_deduction|floatformat:2}}" name="leave_deduction"></td>
+                                            <td><input type="text" class="form-control form-control-sm"  id="row-57-age" value="{{data_list.tax_deduction|floatformat:2}}" name="tax_deduction"></td>
+                                            <td><input type="text" class="form-control form-control-sm"  id="row-57-age" value="{{data_list.final_salary|floatformat:2}}" name="final_salary"></td>
+                                            <td>
+                                                {% if data_list.status == 'paid' %}                                                           
+                                                <span class="badge badge-primary badge-outline">Paid</span>
+                                                {% else %}
+                                                <span class="badge badge-danger badge-outline">Unpaid</span>
+                                                {% endif %} 
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        
+                            <div class="row">
+                                <div class="col-xxl-12 col-lg-8 col-md-7 mb-md-4 mb-3  mt-5">
+                                    <div class="card-action-wrap">
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalCenterrrr">
+                                            Pay Salary
+                                        </button>
+                                        <div class="modal fade" id="exampleModalCenterrrr" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterrrr" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Are you sure you want to mark selected employees salary as paid?</h5>
+                                                    </div>
+                                                    <form action="{% url 'payroll' %}" method="POST">
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                            <a href="#" ><button class="btn btn-primary ms-2 d-sm-inline-block d-none">Yes</button></a>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-            <h3>Unpayable Holidays</h3>
-            {% for unpayable in unpayable %}
-            {{unpayable}}<br>
-            {% endfor %}
-            
-            
-            <h3>Holidays</h3>
-            {% for holiday_dates in holiday_dates %}
-            {{holiday_dates}}<br>
-            {% endfor %}
-                
+        <script>
+            $(document).ready(function() {
+                $("#check-all").change(function() {
+                  $(".check").prop('checked', $(this).prop("checked"));
+                });
+              
+                $(".check").change(function() {
+                  if(false == $(this).prop("checked")) {
+                    $("#check-all").prop('checked', false);
+                  }
+                  if ($('.check:checked').length == $('.check').length ){
+                      $("#check-all").prop('checked', true);
+                  }
+                });
+              });
+              
+        </script>          
     </div>
     <!-- /Main Content -->
 </div>
 <!-- /Wrapper -->
-
 {% include 'footer.html' %}
