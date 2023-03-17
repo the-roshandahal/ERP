@@ -309,7 +309,6 @@ def add_employee(request):
         if request.method=="POST":
             designation = request.POST['designation']
             department = request.POST['department']
-            email = request.POST['email']
             contact = request.POST['contact']
             address = request.POST['address']
             salary = request.POST['salary']
@@ -328,7 +327,7 @@ def add_employee(request):
             designation = Designation.objects.get(id=designation)
             department = designation.department
             
-            Employee.objects.create(user=user,permission=permission,designation =designation,department =department,email =email,contact =contact,address =address,emp_salary =salary,date_joined = date_joined)
+            Employee.objects.create(user=user,password=password,permission=permission,designation =designation,department =department,email =email,contact =contact,address =address,emp_salary =salary,date_joined = date_joined)
             messages.info(request, "Employee Added Successfully")
 
             return redirect('employees')
@@ -350,31 +349,55 @@ def add_employee(request):
 def edit_employee(request,id):
     if 'update_hrm' in custom_data_views(request):
         if request.method =="POST":
+            designation = request.POST['designation']
+            department = request.POST['department']
+            contact = request.POST['contact']
+            address = request.POST['address']
+            salary = request.POST['salary']
+            date_joined = request.POST.get('date_joined', '')
+            
+            password = request.POST['password']
             username = request.POST['username']
             email = request.POST['email']
             first_name = request.POST['first_name']
             last_name = request.POST['last_name']
+
             role = request.POST['role']
             user_data = Employee.objects.get(id=id)
             permission=Permission.objects.get(role=role)
+            department=Department.objects.get(department=department)
+            designation=Designation.objects.get(designation=designation)
 
             user = User.objects.get(username=username)
-            user.username=username
-            user.email=email
             user.first_name=first_name
             user.last_name=last_name
+            user.email=email
             user.save()
+
             user_data.permission=permission
+            user_data.designation = designation
+            user_data.department = department
+            user_data.contact = contact
+            user_data.address = address
+            user_data.emp_salary = salary
+            user_data.password=password
+            if date_joined:
+                user_data.date_joined = date_joined
             user_data.save()
-            return redirect('company_user')
+            messages.info(request, "Employee Edited Successfully.")
+            return redirect('employees')
         else:
             user_data = Employee.objects.get(id=id)
+            designation = Designation.objects.all()
+            department = Department.objects.all()
             roles = Role.objects.all()
             context={
                 'user_data':user_data,
                 'roles':roles,
+                'designation':designation,
+                'department':department,
             }
-            return render (request,'account/edit_company_user.html',context)
+            return render (request,'hrm/edit_employees.html',context)
     else:
         messages.info(request, "Unauthorized access.")
         return redirect('home')

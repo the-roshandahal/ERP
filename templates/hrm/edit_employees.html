@@ -20,50 +20,100 @@
 														
         <div class="container mt-5">										
             <div class="modal-content">
-                <form action="{% url 'edit_company_user' id=user_data.id %}" method="POST">
+                <h5 class="modal-title" >Edit Employee</h5>
+                <form action="{% url 'edit_employee' id=user_data.id %}" method="POST">
                     {% csrf_token %}
-                    <div class="modal-header">
-                        <h5 class="modal-title" >Edit User</h5>
-                    </div>
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-6">
                                 <label for="">First Name</label>
-                                <input type="text" class="form-control"  placeholder="alex" name='first_name' required value="{{user_data.user.first_name}}">
+                                <input type="text" class="form-control"  placeholder="alex" value="{{user_data.user.first_name}}" name='first_name' required>
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="">Last_name</label>
-                                <input type="text" class="form-control"  placeholder="alex" name='last_name' required value="{{user_data.user.last_name}}">
+                            <div class="col-md-6">
+                                <label for="">Last Name</label>
+                                <input type="text" class="form-control"  placeholder="alex" value="{{user_data.user.last_name}}" name='last_name' required>
                             </div>
                         </div>
-                        <div class="col-md-12 mb-3">
-                            <label for="">Email Address</label>
-                            <input type="text" class="form-control"  placeholder="alex" name='email' required value="{{user_data.user.email}}">
-                        </div>
-                        
-                        <div class="col-md-12 mb-3">
-                            <label for="">Username</label>
-                            <input type="text" class="form-control"  placeholder="alex" name='username' required value="{{user_data.user.username}}">
-                        </div>
-                        <div class="col-md-12 mb-3">
-                            <h6>Select Role</h6>
-                            <div class="form-group">
-                                <select class="form-select" name="role" required>
-                                    <option value="" data-id="0" selected>Select Role</option>
-                                    {% for roles in roles %}
-                                    
-                                    <option value="{{roles.id}}" {% if roles == user_data.permission.role  %}selected{% endif %}>{{roles.role}}</option>
-                                    
-                                    {% endfor %}
-                                </select>
+    
+                        <div class="separator separator-light"></div>
+    
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6>Email</h6>
+                                <div class="form-group">
+                                    <input type="email" class="form-control" value="{{user_data.email}}" name="email" required>
+                                </div>
                             </div>
-                            <a class="d-inline-flex align-items-center" data-bs-toggle="modal" data-bs-target="#billed_info" href="#">
-                            <i class="ri-add-box-line me-1"></i> Add new role </a>
+    
+                            <div class="col-md-6">
+                                <h6>Contact</h6>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" value="{{user_data.contact}}" name="contact" required>
+                                </div>
+                            </div>
                         </div>
+    
+                        <div class="separator separator-light"></div>
+    
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6>Address</h6>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" value="{{user_data.address}}" name="address" required>
+                                </div>
+                            </div>
+    
+                            <div class="col-md-6">
+                                <h6>Select Role</h6>
+                                <div class="form-group">
+                                    <select class="form-select"  name="role" required>
+                                        <option value="">Select Role</option>
+                                        {% for roles in roles %}
+                                        <option value="{{roles.id}}" {% if user_data.permission.role == roles.role %}selected{% endif %} >{{roles.role}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="separator separator-light"></div>
+    
+                        <div class="row">
+                            <div class="col-md-6">
+                            <h6>Department</h6>
+                            <select class="form-select" value="{{user_data.department}}" name="department" required id="department-select">
+                                {% for department in department %}
+                                <option value="{{ department.department }}" {% if user_data.department == department.department %}selected{% endif %}>{{ department.department }}</option>
+                                {% endfor %}
+                            </select>
+                            </div>
+                            
+                            <div class="col-md-6">
+                            <h6>Designation</h6>
+                            <select class="form-select" value="{{user_data.designation}}" name="designation" required id="designation-select">
+                                {% for designation in designation %}
+                                <option value="{{ designation.designation }}" data-department-id="{{ designation.department.id }}">{{ designation.designation }}</option>
+                                {% endfor %}
+                            </select>
+                            </div>
+                        </div>
+                        <div class="separator separator-light"></div>
                         
-
-
                         
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6>Salary</h6>
+                                <div class="form-group">
+                                    <input type="number" class="form-control" value="{{user_data.emp_salary}}" name="salary" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h6>Date Joined</h6>
+                                <div class="form-group">
+                                    <input type="date" class="form-control" value="{{user_data.date_joined}}" name="date_joined">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="separator separator-light"></div>
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary">Save</button>
@@ -75,4 +125,22 @@
 		
 	</div>
 </div>
+<script>
+	const departmentSelect = document.querySelector('#department-select');
+	const designationSelect = document.querySelector('#designation-select');
+	
+	departmentSelect.addEventListener('change', () => {
+	  const selectedDepartmentId = departmentSelect.value;
+	  const options = designationSelect.querySelectorAll('option');
+	  
+	  options.forEach((option) => {
+		if (option.value && option.dataset.departmentId !== selectedDepartmentId) {
+		  option.disabled = true;
+		  option.selected = false;
+		} else {
+		  option.disabled = false;
+		}
+	  });
+	});
+	</script>
 {% include 'footer.html' %}
