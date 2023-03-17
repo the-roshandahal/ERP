@@ -270,9 +270,15 @@ def advance_salary(request):
             type='advance'
             leave_deduction=0
             tax_deduction=0
-
             employee=Employee.objects.get(id=employee)
-            Salary.objects.create(employee=employee,month=month,paid_salary=amount,type=type,leave_deduction=leave_deduction,tax_deduction=tax_deduction)
+            sel_month=MonthSetup.objects.get(month=month)
+            salary_obj = Salary.objects.filter(employee=employee,month=sel_month,type='salary')
+            if salary_obj:
+                messages.info(request, "You have already paid the salary of this employee for this month. Please select another month for advance payment.")
+            else:
+                Salary.objects.create(employee=employee,month=sel_month,paid_salary=amount,type=type,leave_deduction=leave_deduction,tax_deduction=tax_deduction)
+                messages.info(request, "Advance issued successfully.")
+
             return redirect('payroll')
         else:
             return redirect('payroll')
