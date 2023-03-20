@@ -9,14 +9,22 @@ urlpatterns = [
     path("hrm/", views.hrm, name="hrm"),
     path("hrm_setup/", views.hrm_setup, name="hrm_setup"),
     path("add_designation/", views.add_designation, name="add_designation"),
+    path("delete_designation/<int:id>", views.delete_designation, name="delete_designation"),
+
     path("add_department/", views.add_department, name="add_department"),
+    path("delete_department/<int:id>", views.delete_department, name="delete_department"),
+
     path("add_year/", views.add_year, name="add_year"),
+    path("delete_year/<int:id>", views.delete_year, name="delete_year"),
+    
     path("add_month/", views.add_month, name="add_month"),
+    path("delete_month/<int:id>", views.delete_month, name="delete_month"),
 
     path("employees/", views.employees, name="employees"),
     path("add_employee/", views.add_employee, name="add_employee"),
     path("edit_employee/<int:id>", views.edit_employee, name="edit_employee"),
     path("delete_employee/<int:id>", views.delete_employee, name="delete_employee"),
+    path("view_employee/<int:id>", views.view_employee, name="view_employee"),
 
     path("attendance/", views.attendance, name="attendance"),
     path("payroll/", views.payroll, name="payroll"),

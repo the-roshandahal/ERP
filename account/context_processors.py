@@ -7,7 +7,9 @@ def custom_data(request):
     company=None
     if request.user.is_authenticated:
         logged_in_user = User.objects.get(username=request.user)
+        print(logged_in_user)
         user = Employee.objects.get(user=logged_in_user)
+        print(user)
         role=Role.objects.get(role=user.permission)
         permission=Permission.objects.get(role=role)
         company = Company.objects.all().order_by('-created').first()
@@ -84,6 +86,7 @@ def custom_data(request):
         return {'permissions': permissions,'company':company}
     else:
         return {'permissions': permissions,'company':company}
+    return {'permissions': permissions,'company':company}
 
 # def company_details(request):
 #     if request.user.is_authenticated:

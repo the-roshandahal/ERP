@@ -53,10 +53,10 @@ class Designation(models.Model):
         verbose_name_plural = "05. Designation"
 
 class Employee(models.Model):
-    department = models.ForeignKey(Department, on_delete=models.CASCADE)
-    designation = models.ForeignKey(Designation, on_delete=models.CASCADE)
+    department = models.ForeignKey(Department, on_delete=models.SET_NULL,null=True)
+    designation = models.ForeignKey(Designation, on_delete=models.SET_NULL,null=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    permission = models.ForeignKey(Permission,on_delete=models.CASCADE,null=True, blank=True)
+    permission = models.ForeignKey(Permission,on_delete=models.SET_NULL,null=True, blank=True)
     email = models.CharField(max_length=200,null=True, blank=True)
     contact = models.CharField(max_length=200,null=True, blank=True)
     address = models.CharField(max_length=200,null=True, blank=True)
@@ -87,7 +87,7 @@ class LogSheet(models.Model):
         verbose_name_plural = "01. Log Sheet"
 class Salary(models.Model):
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
-    month = models.ForeignKey(MonthSetup, on_delete=models.CASCADE)
+    month = models.ForeignKey(MonthSetup, on_delete=models.SET_NULL,null=True)
     leave_deduction = models.FloatField(max_length=255,null=True, blank=True)
     tax_deduction = models.FloatField(max_length=255,null=True, blank=True)
     company_deduction = models.FloatField(max_length=255,null=True, blank=True)

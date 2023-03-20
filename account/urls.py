@@ -12,6 +12,7 @@ urlpatterns = [
     path("role/", views.role, name="role"),
     path("create_role/", views.create_role, name="create_role"),
     path("edit_role/<int:id>", views.edit_role, name="edit_role"),
+    path("view_role/<int:id>", views.view_role, name="view_role"),
     path("delete_role/<int:id>", views.delete_role, name="delete_role"),
 
     path("company_user/", views.company_user, name="company_user"),

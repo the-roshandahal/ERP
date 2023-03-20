@@ -248,6 +248,9 @@
 									{% if 'update_account' in permissions  %}
 									<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" href="{% url 'edit_role' id=roles.id %}"><span class="icon"><span class="feather-icon"><i data-feather="edit-2"></i></span></span></a>
 									{% endif %}
+									{% if 'read_account' in permissions  %}
+									<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" href="{% url 'view_role' id=roles.role_id %}"><span class="icon"><span class="feather-icon"><i data-feather="eye"></i></span></span></a>
+									{% endif %}
 									{% if 'delete_account' in permissions  %}
 									<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="modal" data-bs-target="#exampleModalCenter{{roles.id}}" href=""><span class="icon"><span class="feather-icon"><i data-feather="archive"></i></span></span></a>
 									{% endif %}

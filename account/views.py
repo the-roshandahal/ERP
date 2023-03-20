@@ -163,11 +163,28 @@ def edit_role(request, id):
 def delete_role(request,id):
     if 'delete_account' in custom_data_views(request):
         role_data = Role.objects.get(id=id)
+        permission = Permission.objects.filter(role=role_data)
+        if permission:
+            messages.info(request, f"Please assign the employees with {role_data} to another role before deleting")
+            return redirect('role')
+        else:
+            deleted_role = role_data.role
+            role_data.delete()
+            messages.info(request, f"{deleted_role} Deleted Successfully")
+            return redirect('role')
+    else:
+        messages.info(request, "Unauthorized access.")
+        return redirect('home')
+
+
+def view_role(request,id):
+    if 'read_account' in custom_data_views(request):
+        role_data = Permission.objects.get(role=id)
         print(role_data)
-        deleted_role = role_data.role
-        role_data.delete()
-        messages.info(request, f"{deleted_role} Deleted Successfully")
-        return redirect('role')
+        context={
+                'role_data':role_data,
+            }
+        return render(request,'account/view_role.html',context)
     else:
         messages.info(request, "Unauthorized access.")
         return redirect('home')

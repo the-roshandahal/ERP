@@ -1,0 +1,230 @@
+{% load static %}
+{% include 'header.html' %}
+<!-- Main Content -->
+<div class="hk-pg-wrapper">
+    <div class="container-xxl">
+        <!-- Page Header -->
+		<div class="hk-pg-header pg-header-wth-tab pt-7">
+			<div class="d-flex">
+				<div class="d-flex flex-wrap justify-content-between flex-1">
+					<div class="mb-lg-0 mb-2 me-8">
+						<h1 class="pg-title">Welcome back</h1>
+						<p>Welcome to SPELL CRM Dashboard.</p>
+					</div>
+					<div class="mb-lg-0 mb-2 me-8">
+						{% if 'delete_hrm' in permissions %}
+                        <button type="button" class="btn btn-success  btn-animated" data-bs-toggle="modal" data-bs-target="#DeleteModal">Delete Employee</button>
+                        {% endif %}
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- /Page Header -->
+        <div class="card-body ">
+            <div class="row mt-2">
+                <div class="col-4">
+                    <div class="d-flex align-items-start">
+                        <div class="media align-items-center">
+                            <div class="media-head me-2">
+                                <div class="avatar avatar-xs avatar-rounded">
+                                    <i class="bi bi-person-circle"></i>
+                                </div>
+                            </div>
+                            <div class="media-body">
+                                <div class="text-high-em">Name</div> 
+                                <div class="fs-7"><a href="#" class="table-link-text link-medium-em">{{employee.user.first_name}} {{employee.user.last_name}}</a></div> 
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                
+                
+                <div class="col-4">
+                    <div class="d-flex align-items-start">
+                        <div class="media align-items-center">
+                            <div class="media-head me-2">
+                                <div class="avatar avatar-xs avatar-rounded">
+                                    <i class="bi bi-telephone"></i>
+                                </div>
+                            </div>
+                            <div class="media-body">
+                                <div class="text-high-em">Phone Number</div> 
+                                <div class="fs-7"><a href="#" class="table-link-text link-medium-em">{{employee.contact}}</a></div> 
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                
+                
+                
+                
+                <div class="col-4">
+                    <div class="d-flex align-items-start">
+                        <div class="media align-items-center">
+                            <div class="media-head me-2">
+                                <div class="avatar avatar-xs avatar-rounded">
+                                    <i class="bi bi-envelope"></i>
+                                </div>
+                            </div>
+                            <div class="media-body">
+                                <div class="text-high-em">Email</div> 
+                                <div class="fs-7"><a href="#" class="table-link-text link-medium-em">{{employee.email}}</a></div> 
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-5">
+                <div class="col-4">
+                    <div class="d-flex align-items-start">
+                        <div class="media align-items-center">
+                            <div class="media-head me-2">
+                                <div class="avatar avatar-xs avatar-rounded">
+                                    <i class="bi bi-geo"></i>
+                                </div>
+                            </div>
+                            <div class="media-body">
+                                <div class="text-high-em">Address</div> 
+                                <div class="fs-7"><a href="#" class="table-link-text link-medium-em">{{employee.address}}</a></div> 
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                
+                
+                <div class="col-4">
+                    <div class="d-flex align-items-start">
+                        <div class="media align-items-center">
+                            <div class="media-head me-2">
+                                <div class="avatar avatar-xs avatar-rounded">
+                                    <i class="bi bi-calendar-month"></i>
+                                </div>
+                            </div>
+                            <div class="media-body">
+                                <div class="text-high-em">Department</div> 
+                                <div class="fs-7"><a href="#" class="table-link-text link-medium-em">{{employee.department}}</a></div> 
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="d-flex align-items-start">
+                        <div class="media align-items-center">
+                            <div class="media-head me-2">
+                                <div class="avatar avatar-xs avatar-rounded">
+                                    <i class="bi bi-calendar-month"></i>
+                                </div>
+                            </div>
+                            <div class="media-body">
+                                <div class="text-high-em">Designation</div> 
+                                <div class="fs-7"><a href="#" class="table-link-text link-medium-em">{{employee.designation}}</a></div> 
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-5">
+                <div class="col-4">
+                    <div class="d-flex align-items-start">
+                        <div class="media align-items-center">
+                            <div class="media-head me-2">
+                                <div class="avatar avatar-xs avatar-rounded">
+                                    <i class="bi bi-calendar-month"></i>
+                                </div>
+                            </div>
+                            <div class="media-body">
+                                <div class="text-high-em">Salary</div> 
+                                <div class="fs-7"><a href="#" class="table-link-text link-medium-em">{{employee.emp_salary}}</a></div> 
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="d-flex align-items-start">
+                        <div class="media align-items-center">
+                            <div class="media-head me-2">
+                                <div class="avatar avatar-xs avatar-rounded">
+                                    <i class="bi bi-calendar-month"></i>
+                                </div>
+                            </div>
+                            <div class="media-body">
+                                <div class="text-high-em">Date Joined</div> 
+                                <div class="fs-7"><a href="#" class="table-link-text link-medium-em">{{employee.date_joined.date}}</a></div> 
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="invoice-body mt-3">
+			<div class="container">
+                <h5 class="h5g-title">Payments</h5>
+				<div class="invoice-list-view">
+					<table class="table nowrap w-100 mb-5">
+						<thead>
+							<tr>
+								<th>Month</th>
+								<th>Leave Deduction</th>
+								<th>Tax Deduction</th>
+								<th>Type</th>
+								<th>Paid AMount</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for payments_made in payments_made %}
+							<tr>
+								<td>{{payments_made.month}}</td>
+								<td>{{payments_made.leave_deduction}}</td>
+								<td>{{payments_made.tax_deduction}}</td>
+								<td>{{payments_made.type}}</td>
+								<td>{{payments_made.paid_salary}}</td>
+								
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				
+				</div>
+			
+			</div>
+		</div>
+
+
+
+    </div>
+</div>
+
+
+{% comment %} delete  {% endcomment %}
+
+
+<div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Delete Lead</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<p>Are you sure you want to delete the employee.</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+				<a href="{% url 'delete_employee' id=employee.id %}"><button type="button" class="btn btn-primary">Delete</button></a>
+			</div>
+		</div>
+	</div>
+</div>
+{% include 'footer.html' %}

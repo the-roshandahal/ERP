@@ -15,7 +15,7 @@
 						
 					</div>
 					<div class="pg-header-action-wrap">
-						<button class="btn btn-outline-secondary me-3">Secondary</button>
+						{% comment %} <button class="btn btn-outline-secondary me-3">Secondary</button> {% endcomment %}
 						{% if 'create_hrm' in permissions %}
 						<a href="{% url 'add_employee' %}"><button class="btn btn-primary">Add Employee</button></a>
 						{% endif %}
@@ -60,7 +60,7 @@
 										<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" href="{% url 'edit_employee' id=employees.id %}"><span class="icon"><span class="feather-icon"><i data-feather="edit-2"></i></span></span></a>
                                         {% endif %}
                                         {% if 'update_hrm' in permissions %}
-                                        <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover del-button" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="View" href="#"><span class="btn-icon-wrap"><span class="feather-icon"><i data-feather="eye"></i></span></span></a>
+                                        <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="View" href="{% url 'view_employee' id=employees.id %}"><span class="btn-icon-wrap"><span class="feather-icon"><i data-feather="eye"></i></span></span></a>
                                         {% endif %}
                                         {% if 'delete_hrm' in permissions %}
 										<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="modal" data-bs-target="#exampleModalCenter{{employees.id}}" href=""><span class="icon"><span class="feather-icon"><i data-feather="archive"></i></span></span></a>

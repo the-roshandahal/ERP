@@ -1,0 +1,247 @@
+{% load static %}{% include 'header.html' %}
+<!-- Main Content -->
+<div class="hk-pg-wrapper">
+	<div class="container-xxl">
+
+		<div class="hk-pg-header">
+			<div class="d-flex">
+				<div class="d-flex flex-wrap justify-content-between flex-1">
+					<div class="mb-md-0 mb-2 me-8">
+						<div class="d-flex align-items-center">
+							<h1 class="pg-title">CRM Dashboard</h1>
+							<span class="badge badge-soft-primary ms-3">Badge</span>
+						</div>
+						<p>Good afternoon {{request.user.first_name}}!</p>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- /Add other contents below -->
+															
+        <table class="table table-striped mt-4">
+            <h5>Permissions</h5>
+            <tbody>
+                <tr>
+                    <th scope="row">Create Finance</th>
+                    <td>
+                        {% if role_data.create_finance == True %}
+                        <span class="badge badge-primary  badge-outline"><i class="bi bi-check2-circle"></i></span>
+                        {% else %}
+                        <span class="badge badge-danger badge-outline"><i class="bi bi-x-circle"></i></span>
+                        {% endif %}
+                    <th scope="row">Read Finance</th>
+                    <td>
+                        {% if role_data.read_finance == True %}
+                        <span class="badge badge-primary  badge-outline"><i class="bi bi-check2-circle"></i></span>
+                        {% else %}
+                        <span class="badge badge-danger badge-outline"><i class="bi bi-x-circle"></i></span>
+                        {% endif %}
+                    </td>
+                    <th scope="row">Update Finance</th>
+                    <td>
+                        {% if role_data.update_finance == True %}
+                        <span class="badge badge-primary  badge-outline"><i class="bi bi-check2-circle"></i></span>
+                        {% else %}
+                        <span class="badge badge-danger badge-outline"><i class="bi bi-x-circle"></i></span>
+                        {% endif %}
+                    </td>
+                    <th scope="row">Delete Finance</th>
+                    <td>
+                        {% if role_data.delete_finance == True %}
+                        <span class="badge badge-primary  badge-outline"><i class="bi bi-check2-circle"></i></span>
+                        {% else %}
+                        <span class="badge badge-danger badge-outline"><i class="bi bi-x-circle"></i></span>
+                        {% endif %}
+                    </td>
+                </tr>
+                
+                <tr>
+                    <th scope="row">Create account</th>
+                    <td>
+                        {% if role_data.create_account == True %}
+                        <span class="badge badge-primary  badge-outline"><i class="bi bi-check2-circle"></i></span>
+                        {% else %}
+                        <span class="badge badge-danger badge-outline"><i class="bi bi-x-circle"></i></span>
+                        {% endif %}
+                    <th scope="row">Read account</th>
+                    <td>
+                        {% if role_data.read_account == True %}
+                        <span class="badge badge-primary  badge-outline"><i class="bi bi-check2-circle"></i></span>
+                        {% else %}
+                        <span class="badge badge-danger badge-outline"><i class="bi bi-x-circle"></i></span>
+                        {% endif %}
+                    </td>
+                    <th scope="row">Update account</th>
+                    <td>
+                        {% if role_data.update_account == True %}
+                        <span class="badge badge-primary  badge-outline"><i class="bi bi-check2-circle"></i></span>
+                        {% else %}
+                        <span class="badge badge-danger badge-outline"><i class="bi bi-x-circle"></i></span>
+                        {% endif %}
+                    </td>
+                    <th scope="row">Delete account</th>
+                    <td>
+                        {% if role_data.delete_account == True %}
+                        <span class="badge badge-primary  badge-outline"><i class="bi bi-check2-circle"></i></span>
+                        {% else %}
+                        <span class="badge badge-danger badge-outline"><i class="bi bi-x-circle"></i></span>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Create account</th>
+                    <td>
+                        {% if role_data.create_account == True %}
+                        <span class="badge badge-primary  badge-outline"><i class="bi bi-check2-circle"></i></span>
+                        {% else %}
+                        <span class="badge badge-danger badge-outline"><i class="bi bi-x-circle"></i></span>
+                        {% endif %}
+                    <th scope="row">Read account</th>
+                    <td>
+                        {% if role_data.read_account == True %}
+                        <span class="badge badge-primary  badge-outline"><i class="bi bi-check2-circle"></i></span>
+                        {% else %}
+                        <span class="badge badge-danger badge-outline"><i class="bi bi-x-circle"></i></span>
+                        {% endif %}
+                    </td>
+                    <th scope="row">Update account</th>
+                    <td>
+                        {% if role_data.update_account == True %}
+                        <span class="badge badge-primary  badge-outline"><i class="bi bi-check2-circle"></i></span>
+                        {% else %}
+                        <span class="badge badge-danger badge-outline"><i class="bi bi-x-circle"></i></span>
+                        {% endif %}
+                    </td>
+                    <th scope="row">Delete account</th>
+                    <td>
+                        {% if role_data.delete_account == True %}
+                        <span class="badge badge-primary  badge-outline"><i class="bi bi-check2-circle"></i></span>
+                        {% else %}
+                        <span class="badge badge-danger badge-outline"><i class="bi bi-x-circle"></i></span>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Create hrm</th>
+                    <td>
+                        {% if role_data.create_hrm == True %}
+                        <span class="badge badge-primary  badge-outline"><i class="bi bi-check2-circle"></i></span>
+                        {% else %}
+                        <span class="badge badge-danger badge-outline"><i class="bi bi-x-circle"></i></span>
+                        {% endif %}
+                    <th scope="row">Read hrm</th>
+                    <td>
+                        {% if role_data.read_hrm == True %}
+                        <span class="badge badge-primary  badge-outline"><i class="bi bi-check2-circle"></i></span>
+                        {% else %}
+                        <span class="badge badge-danger badge-outline"><i class="bi bi-x-circle"></i></span>
+                        {% endif %}
+                    </td>
+                    <th scope="row">Update hrm</th>
+                    <td>
+                        {% if role_data.update_hrm == True %}
+                        <span class="badge badge-primary  badge-outline"><i class="bi bi-check2-circle"></i></span>
+                        {% else %}
+                        <span class="badge badge-danger badge-outline"><i class="bi bi-x-circle"></i></span>
+                        {% endif %}
+                    </td>
+                    <th scope="row">Delete hrm</th>
+                    <td>
+                        {% if role_data.delete_hrm == True %}
+                        <span class="badge badge-primary  badge-outline"><i class="bi bi-check2-circle"></i></span>
+                        {% else %}
+                        <span class="badge badge-danger badge-outline"><i class="bi bi-x-circle"></i></span>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Create products</th>
+                    <td>
+                        {% if role_data.create_products == True %}
+                        <span class="badge badge-primary  badge-outline"><i class="bi bi-check2-circle"></i></span>
+                        {% else %}
+                        <span class="badge badge-danger badge-outline"><i class="bi bi-x-circle"></i></span>
+                        {% endif %}
+                    <th scope="row">Read products</th>
+                    <td>
+                        {% if role_data.read_products == True %}
+                        <span class="badge badge-primary  badge-outline"><i class="bi bi-check2-circle"></i></span>
+                        {% else %}
+                        <span class="badge badge-danger badge-outline"><i class="bi bi-x-circle"></i></span>
+                        {% endif %}
+                    </td>
+                    <th scope="row">Update products</th>
+                    <td>
+                        {% if role_data.update_products == True %}
+                        <span class="badge badge-primary  badge-outline"><i class="bi bi-check2-circle"></i></span>
+                        {% else %}
+                        <span class="badge badge-danger badge-outline"><i class="bi bi-x-circle"></i></span>
+                        {% endif %}
+                    </td>
+                    <th scope="row">Delete products</th>
+                    <td>
+                        {% if role_data.delete_products == True %}
+                        <span class="badge badge-primary  badge-outline"><i class="bi bi-check2-circle"></i></span>
+                        {% else %}
+                        <span class="badge badge-danger badge-outline"><i class="bi bi-x-circle"></i></span>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Create leads</th>
+                    <td>
+                        {% if role_data.create_leads == True %}
+                        <span class="badge badge-primary  badge-outline"><i class="bi bi-check2-circle"></i></span>
+                        {% else %}
+                        <span class="badge badge-danger badge-outline"><i class="bi bi-x-circle"></i></span>
+                        {% endif %}
+                    <th scope="row">Read leads</th>
+                    <td>
+                        {% if role_data.read_leads == True %}
+                        <span class="badge badge-primary  badge-outline"><i class="bi bi-check2-circle"></i></span>
+                        {% else %}
+                        <span class="badge badge-danger badge-outline"><i class="bi bi-x-circle"></i></span>
+                        {% endif %}
+                    </td>
+                    <th scope="row">Update leads</th>
+                    <td>
+                        {% if role_data.update_leads == True %}
+                        <span class="badge badge-primary  badge-outline"><i class="bi bi-check2-circle"></i></span>
+                        {% else %}
+                        <span class="badge badge-danger badge-outline"><i class="bi bi-x-circle"></i></span>
+                        {% endif %}
+                    </td>
+                    <th scope="row">Delete leads</th>
+                    <td>
+                        {% if role_data.delete_leads == True %}
+                        <span class="badge badge-primary  badge-outline"><i class="bi bi-check2-circle"></i></span>
+                        {% else %}
+                        <span class="badge badge-danger badge-outline"><i class="bi bi-x-circle"></i></span>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Manage leads</th>
+                    <td>
+                        {% if role_data.manage_leads == True %}
+                        <span class="badge badge-primary  badge-outline"><i class="bi bi-check2-circle"></i></span>
+                        {% else %}
+                        <span class="badge badge-danger badge-outline"><i class="bi bi-x-circle"></i></span>
+                        {% endif %}
+                    <th scope="row">Manage Company</th>
+                    <td>
+                        {% if role_data.manage_company == True %}
+                        <span class="badge badge-primary  badge-outline"><i class="bi bi-check2-circle"></i></span>
+                        {% else %}
+                        <span class="badge badge-danger badge-outline"><i class="bi bi-x-circle"></i></span>
+                        {% endif %}
+                    </td>
+                </tr>
+            </tbody>
+        </table>							
+	</div>
+</div>
+
+{% include 'footer.html' %}

@@ -33,9 +33,35 @@
                     </div>
                 </div>
                 <div class="flex">
-                    {% for year in year %}
-                        <span class="badge badge-warning badge-outline">{{year.year}}</span>
-                    {% endfor %}
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Year</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for year in year %}
+                                <tr>
+                                    <td>{{year.year}}</td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="d-flex">
+                                                {% if 'read_hrm' in permissions %}
+                                                <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" href="#"><span class="btn-icon-wrap"><span class="feather-icon"><i data-feather="edit"></i></span></span></a>
+                                                {% endif %}
+                                                {% if 'delete_hrm' in permissions %}
+                                                <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="modal" data-bs-target="#exampleModalCenterYearDelete{{year.id}}" href="#"><span class="icon"><span class="feather-icon"><i data-feather="archive"></i></span></span></a>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
             <div class="separator"></div>
@@ -51,7 +77,7 @@
                     </div>
                 </div>
 
-                                                                                        
+                    <div class="table-responsive">                                                             
                 <table class="table table-hover mb-0">
                     <thead>
                         <tr>
@@ -76,7 +102,7 @@
                                         <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" href="#"><span class="btn-icon-wrap"><span class="feather-icon"><i data-feather="edit"></i></span></span></a>
                                         {% endif %}
                                         {% if 'delete_hrm' in permissions %}
-                                        <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover del-button" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Delete" href="#"><span class="btn-icon-wrap"><span class="feather-icon"><i data-feather="trash-2"></i></span></span></a>
+                                        <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="modal" data-bs-target="#exampleModalCentermonthDelete{{month.id}}" href="#"><span class="icon"><span class="feather-icon"><i data-feather="archive"></i></span></span></a>
                                         {% endif %}
                                         {% if 'read_hrm' in permissions %}
                                         <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover del-button"  data-bs-toggle="modal" data-bs-target="#exampleModalCenterViewMonth{{month.id}}"><span class="btn-icon-wrap"><span class="feather-icon"><i data-feather="eye"></i></span></span></a>
@@ -88,6 +114,7 @@
                         {% endfor %}
                     </tbody>
                 </table>
+                </div>    
             </div>
             <div class="separator"></div>
             <div class="row mt-3">
@@ -121,7 +148,7 @@
                                         <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" href="#"><span class="btn-icon-wrap"><span class="feather-icon"><i data-feather="edit"></i></span></span></a>
                                         {% endif %}
                                         {% if 'delete_hrm' in permissions %}
-                                        <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover del-button" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Delete" href="#"><span class="btn-icon-wrap"><span class="feather-icon"><i data-feather="trash-2"></i></span></span></a>
+										<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="modal" data-bs-target="#exampleModalCenter{{department.id}}" href=""><span class="icon"><span class="feather-icon"><i data-feather="archive"></i></span></span></a>
                                         {% endif %}
                                     </div>
                                 </div>
@@ -165,7 +192,7 @@
                                         <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" href="#"><span class="btn-icon-wrap"><span class="feather-icon"><i data-feather="edit"></i></span></span></a>
                                         {% endif %}
                                         {% if 'delete_hrm' in permissions %}
-                                        <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover del-button" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Delete" href="#"><span class="btn-icon-wrap"><span class="feather-icon"><i data-feather="trash-2"></i></span></span></a>
+										<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="modal" data-bs-target="#exampleModalCenterDesignation{{designation.id}}" href=""><span class="icon"><span class="feather-icon"><i data-feather="archive"></i></span></span></a>
                                         {% endif %}
                                     </div>
                                 </div>
@@ -385,6 +412,114 @@
 		</div>
 	</div>
 </div>
+
+
+
+
+
+
+
+{% for department in department %}
+<div class="modal fade" id="exampleModalCenter{{department.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter{{department.id}}" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete Department</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete {{department.department}}?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <a href="{% url 'delete_department' id=department.id %}"><button type="button" class="btn btn-primary">Delete</button></a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+
+
+
+{% for designation in designation %}
+<div class="modal fade" id="exampleModalCenterDesignation{{designation.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterDesignation{{designation.id}}" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete designation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete {{designation.designation}}?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <a href="{% url 'delete_designation' id=designation.id %}"><button type="button" class="btn btn-primary">Delete</button></a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+{% for year in year %}
+<div class="modal fade" id="exampleModalCenterYearDelete{{year.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterYearDelete{{year.id}}" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete Year</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete {{year.year}}?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <a href="{% url 'delete_year' id=year.id %}"><button type="button" class="btn btn-primary">Delete</button></a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+
+
+{% for month in month %}
+<div class="modal fade" id="exampleModalCentermonthDelete{{month.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCentermonthDelete{{month.id}}" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete month</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete {{month.month}}?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <a href="{% url 'delete_month' id=month.id %}"><button type="button" class="btn btn-primary">Delete</button></a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+
+
+
+
+
+
+
+
 
 <script>
     $('.datepicker').datepicker({

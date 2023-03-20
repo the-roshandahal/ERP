@@ -75,6 +75,18 @@ def add_year(request):
         return redirect('home')
     
 
+def delete_year(request,id):
+    if 'delete_hrm' in custom_data_views(request):
+        year = YearSetup.objects.get(id=id)
+        year.delete()
+        messages.info(request, "Year Deleted")
+        return redirect('hrm_setup')
+    else:
+        messages.info(request, "Unauthorized access.")
+        return redirect('home')
+
+    
+
 def add_month(request):
     if 'create_hrm' in custom_data_views(request):
         if request.method =="POST":
@@ -98,6 +110,20 @@ def add_month(request):
         messages.info(request, "Unauthorized access.")
         return redirect('home')
     
+
+def delete_month(request,id):
+    if 'delete_hrm' in custom_data_views(request):
+        month = MonthSetup.objects.get(id=id)
+        month.delete()
+        messages.info(request, "Month Deleted")
+        return redirect('hrm_setup')
+    else:
+        messages.info(request, "Unauthorized access.")
+        return redirect('home')
+    
+
+
+
 def add_department(request):
     if 'create_hrm' in custom_data_views(request):
         if request.method =="POST":
@@ -105,6 +131,21 @@ def add_department(request):
             Department.objects.create(department=department)
             messages.info(request, "Department Added Successfully")
             return redirect(hrm_setup)
+    else:
+        messages.info(request, "Unauthorized access.")
+        return redirect('home')
+    
+def delete_department(request,id):
+    if 'delete_hrm' in custom_data_views(request):
+        department = Department.objects.get(id=id)
+        employee = Employee.objects.filter(department=department)
+        if employee:
+            messages.info(request, "Assign employees to another department to delete this department.")
+            return redirect('hrm_setup')
+        else:
+            department.delete()
+            messages.info(request, "Department Deleted")
+            return redirect('hrm_setup')
     else:
         messages.info(request, "Unauthorized access.")
         return redirect('home')
@@ -122,6 +163,20 @@ def add_designation(request):
         messages.info(request, "Unauthorized access.")
         return redirect('home')
 
+def delete_designation(request,id):
+    if 'delete_hrm' in custom_data_views(request):
+        designation = Designation.objects.get(id=id)
+        employee = Employee.objects.filter(designation=designation)
+        if employee:
+            messages.info(request, "Assign employees to another designation to delete this designation.")
+            return redirect('hrm_setup')
+        else:
+            designation.delete()
+            messages.info(request, "Designation Deleted")
+            return redirect('hrm_setup')
+    else:
+        messages.info(request, "Unauthorized access.")
+        return redirect('home')
 
 
 def log_sheet(request):
@@ -380,6 +435,7 @@ def edit_employee(request,id):
             user_data.contact = contact
             user_data.address = address
             user_data.emp_salary = salary
+            user_data.email = email
             # user_data.password=password
             if date_joined:
                 user_data.date_joined = date_joined
@@ -403,6 +459,20 @@ def edit_employee(request,id):
         return redirect('home')
     
 
+def view_employee(request,id):
+    if 'delete_hrm' in custom_data_views(request):
+        employee = Employee.objects.get(id=id)
+        payments_made = Salary.objects.filter(employee=employee )
+        context = {
+            'employee':employee,
+            'payments_made':payments_made,
+            }
+        return render(request,'hrm/view_employee.html',context)
+    else:
+        messages.info(request, "Unauthorized access.")
+        return redirect('home')
+    
+    
 def delete_employee(request,id):
     if 'delete_hrm' in custom_data_views(request):
         user_data = Employee.objects.get(id=id)
@@ -727,3 +797,5 @@ def pay_salary(request):
     else:
         messages.info(request, "Unauthorized access.")
         return redirect('home')
+    
+
