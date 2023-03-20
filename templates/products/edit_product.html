@@ -22,69 +22,22 @@
             </div>
         </div>
         <!-- /Page Header -->
-
-        <div class="invoice-body mt-3">
-			<div class="row">
-				<table id="datable_1" class="table nowrap w-100 mb-5">
-					<thead>
-						<tr>
-							<th>Title</th>
-                            <th>Type</th>
-                            <th>Category</th>
-                            <th>Price</th>
-                            <th>Available Quantity</th>
-                            <th>Is Vatable</th>
-                            <th>Action</th>
-						</tr>
-					</thead>
-					<tbody>
-						{% for products in products %}
-						<tr>
-							<td>{{products.product_title}}</td>
-                            <td>{{products.product_type}}</td>
-                            <td>{{products.product_category}}</td>
-                            <td>{{products.product_price}}</td>
-                            <td>{{products.product_quantity}}</td>
-                            <td>{% if products.is_vatable == True %}Yes {% else %}No{% endif %}</td>
-                            
-                            <td>
-                                {% if 'update_products' in permissions %}
-                                <a href="{% url 'edit_product' id=products.id %}" class="btn btn-icon btn-rounded btn-flush-primary flush-soft-hover" data-bs-toggle="tooltip" data-bs-original-title="Edit" ><span class="icon"><span class="feather-icon"><i data-feather="edit-3"></i></span></span></a>
-                                {% endif %}
-                                {% if 'delete_products' in permissions %}
-                                <a href="{% url 'delete_product' id=products.id %}" class="btn btn-icon btn-rounded btn-flush-danger flush-soft-hover" data-bs-toggle="tooltip" data-bs-original-title="Delete" ><span class="icon"><span class="feather-icon"><i data-feather="trash-2"></i></span></span></a>
-                                {% endif %}
-                            </td>
-						</tr>
-						{% endfor %}
-					</tbody>
-				</table>
-			</div>
-		</div>
-    </div>
-</div>
-
-	
-
-<div class="modal fade" id="createUserModal" tabindex="-1" role="dialog" aria-labelledby="createUserModal" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <form action="{% url 'add_product' %}" method="POST">
+        <div class="container">
+            <form action="{% url 'edit_product' product.id %}" method="POST">
                 {% csrf_token %}
-                <div class="modal-header">
-                    <h5 class="modal-title" id="createUserModal">Create Service</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
                 <div class="modal-body">                                                                        
                     <div class="row">
                         <div class="col-xxl-12 mb-xxl-0 mb-4">
                             <h6>Type</h6>
                             <div class="form-group">
                                 <select class="form-select" name="product_type" required="">
-                                    <option value="product">product</option>
-                                    <option value="service">service</option>
+                                    {% if product.product_type == 'product' %}
+                                    <option value="product" selected>product</option>
+                                    <option value="service" >service</option>
+                                    {% else %}
+                                    <option value="service" selected>service</option>
+                                    <option value="product" >product</option>
+                                    {% endif %}
                                 </select>
                             </div>  
                         </div>
@@ -92,9 +45,9 @@
                             <h6>Category</h6>
                             <div class="form-group">
                                 <select class="form-select" name="product_category" required="">
-                                    <option value="product">Select category</option>
+                                    <option>Select Category</option>
                                     {% for category in category %}
-                                    <option value="{{category.id}}">{{category.product_category}}</option>
+                                    <option value="{{category.id}}" {% if category.product_category == product.product_category.product_category %}selected{% endif %} >{{category.product_category}}</option>
                                     {% endfor %}
                                 </select>
                             </div>  
@@ -103,9 +56,9 @@
                             <h6>Unit</h6>
                             <div class="form-group">
                                 <select class="form-select" name="product_unit" required="">
-                                    <option value="product">Select unit</option>
+                                    <option>Select unit</option>
                                     {% for unit in unit %}
-                                    <option value="{{unit.id}}">{{unit.product_unit}}</option>
+                                    <option value="{{unit.id}}" {% if unit.product_unit == product.product_unit.product_unit %}selected{% endif %}>{{unit.product_unit}}</option>
                                     {% endfor %}
                                 </select>
                             </div>  
@@ -113,20 +66,20 @@
                         <div class="col-xxl-12 mb-xxl-0 mb-4">
                             <h6>Title</h6>
                             <div class="form-group">
-                                <input type="text" class="form-control" name = "product_title" required>
+                                <input type="text" class="form-control" value="{{product.product_title}}" name = "product_title" required>
                             </div>
                         </div>
 
                         <div class="col-xxl-12 mb-xxl-0 mb-4">
                             <h6>Price</h6>
                             <div class="form-group">
-                                <input type="number" class="form-control" name = "product_price" required>
+                                <input type="number" class="form-control" value="{{product.product_price}}" name = "product_price" required>
                             </div>
                         </div>
                         <div class="col-xxl-12 mb-xxl-0 mb-4">
                             <h6>Available Quantity</h6>
                             <div class="form-group">
-                                <input type="number" class="form-control" name = "product_quantity" required>
+                                <input type="number" class="form-control" value="{{product.product_quantity}}" name = "product_quantity" required>
                             </div>
                         </div>
 
@@ -135,25 +88,27 @@
                         <div class="col-xxl-12 mb-xxl-0 mb-4">
                             <h6>Description</h6>
                             <div class="form-group">
-                                <textarea id="classic" name="product_description" placeholder="Description"></textarea>
+                                <label class="form-label">Description</label>
+                                <textarea id="classic" name="product_description" placeholder="Description">{{product.product_description}}</textarea>
                             </div>
                         </div>
                         <div class="col-xxl-12 mb-xxl-0 mb-4">
                             <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="is_vatable" checked value="True" name="is_vatable">
+                                <input type="checkbox" class="form-check-input" id="is_vatable" {% if product.is_vatable == True %}checked{% endif %} value="True" name="is_vatable">
                                 <label class="form-check-label" for="customCheck2">Is Vatable?</label>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Save</button>
                 </div>
             </form>
         </div>
+
     </div>
 </div>
+
 
 
 	{% include 'footer.html' %}

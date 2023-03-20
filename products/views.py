@@ -53,7 +53,40 @@ def add_product(request):
 
 def edit_product(request,id):
     if 'update_products' in custom_data_views(request):
-        return render (request,'products/edit_product.html')
+        if request.method == "POST":
+            product_type = request.POST["product_type"]
+            product_title = request.POST["product_title"]
+            product_description = request.POST["product_description"]
+            product_price = request.POST["product_price"]
+            product_quantity = request.POST["product_quantity"]
+            is_vatable = request.POST.get('is_vatable', 0)
+
+            category = request.POST["product_category"]
+            unit = request.POST["product_unit"]
+            product_category = ProductCategory.objects.get(id=category)
+            product_unit = ProductUnit.objects.get(id=unit)
+            product_obj = Product.objects.get(id=id)
+            print(product_description)
+            product_obj.product_type=product_type
+            product_obj.product_title=product_title
+            product_obj.product_description=product_description
+            product_obj.product_price=product_price
+            product_obj.product_quantity=product_quantity
+            product_obj.is_vatable=is_vatable
+            product_obj.product_category=product_category
+            product_obj.product_unit=product_unit
+            product_obj.save()
+            return redirect(products)
+        else:
+            product = Product.objects.get(id=id)
+            category = ProductCategory.objects.all()
+            unit = ProductUnit.objects.all()
+            context={
+                'product':product,
+                'category':category,
+                'unit':unit,
+            }
+            return render (request,'products/edit_product.html',context)
     else:
         messages.info(request, "Unauthorized access.")
         return redirect('home')
