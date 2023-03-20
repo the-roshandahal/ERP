@@ -18,7 +18,6 @@ from datetime import datetime,date,timedelta
 def invoice(request):
     if 'read_finance' in custom_data_views(request):
         invoices = Invoice.objects.all()
-        print(invoices)
         context={
             'invoices':invoices
             }
