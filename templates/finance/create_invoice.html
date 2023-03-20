@@ -40,7 +40,7 @@
     
                                     <div class="col-xxl-3 mb-xxl-0">
                                         <h6>Amount Rs.</h6>
-                                        <input type="number" class="form-control amountNew" id="amountsdfsadf" placeholder="Amoufsdfsdsnt" name = "selected_product_amount" value=0>
+                                        <input type="number" class="form-control amountNew" id="productAmount" placeholder="Amoufsdfsdsnt" name = "selected_product_amount" value=0>
                                     </div>
     
                                     <div class="col-xxl-2 mb-xxl-0">
@@ -71,6 +71,14 @@
                             </div>
                             <div class="row mb-3">
                                 <div class="col-xxl-6">
+                                    <h6 class="float-right">Sub Total</h6>
+                                </div>
+                                <div class="col-xxl-6">
+                                    <input type="text" class="form-control"  disabled id="subtotal" >
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-xxl-6">
                                     <h6>Miscellaneous</h6>
                                     <input type="text" class="form-control" name = "misc_name">
                                 </div>
@@ -85,24 +93,17 @@
                                     value = 0>
                                 </div>
                             </div>
-                            <div class="row mb-3">
-                                <div class="col-xxl-6">
-                                    <h6 class="float-right">Sub Total</h6>
-                                </div>
-                                <div class="col-xxl-6">
-                                    <input type="text" class="form-control"  disabled id="subtotal" >
-                                </div>
-                            </div>
+                            
                             
 
-                            <div class="row mb-3">
+                            {% comment %} <div class="row mb-3">
                                 <div class="col-xxl-6">
                                     <h6>Discount Amount</h6>
                                 </div>
                                 <div class="col-xxl-6">
                                     <input type="number" class="form-control" placeholder="Discount Amount" name="discount" id ="disAmt" value = 0>
                                 </div>
-                            </div>
+                            </div> {% endcomment %}
                             
 
                             <div class="row mb-3">
@@ -162,38 +163,57 @@
             });
 
             $(document).on('change','.packageS',function(){
+                console.log('cjamge');
                 var selected=$(this).closest('.packageS').find(":selected").data('id');
                 $(this).closest('.testing').find(".amountNew").val(selected);
-                $(this).closest('.testing').find(".totalNew").val(selected);
+                var quantity=$(this).closest('.testing').find(".quantityNew").val();
+                var discount=$(this).closest('.testing').find(".discountNew").val();
+                var total=(parseFloat(selected)*parseFloat(quantity)) -parseFloat(discount);  
+                $(this).closest('.testing').find(".totalNew").val(total);
+                calculateSubTotal()
+            });
+            $(document).on('keyup','.amountNew',function(){
+                var quantity=$(this).closest('.testing').find(".quantityNew").val();
+                var discount=$(this).closest('.testing').find(".discountNew").val();
+                var total=(parseFloat(quantity)*parseFloat($(this).val()))-parseFloat(discount);
+                $(this).closest('.testing').find(".totalNew").val(total);
+                calculateSubTotal()
+            });
+            $(document).on('keyup','.discountNew',function(){
+                var quantity=$(this).closest('.testing').find(".quantityNew").val();
+                var amount=$(this).closest('.testing').find(".amountNew").val();
+                var total=(parseFloat(quantity)*parseFloat(amount))-parseFloat($(this).val());
+                $(this).closest('.testing').find(".totalNew").val(total);
                 calculateSubTotal()
             });
             $(document).on('keyup','.quantityNew',function(){
-                var amt=$(this).closest('.testing').find(".amountNew").val()
-                var total=amt*$(this).val();
+               
+                var amt=$(this).closest('.testing').find(".amountNew").val();
+                var discount=$(this).closest('.testing').find(".discountNew").val();
+                var total=(parseFloat(amt)*parseFloat($(this).val()))-parseFloat(discount);
                 $(this).closest('.testing').find(".totalNew").val(total);
                 calculateSubTotal()
             });
             $(document).on('keyup','#misc_amount_id',function(){
-                calculateSubTotal()
-            })
-            function calculateSubTotal(){
-                var sum = 0;
-                $('.totalNew').each(function(){
-                    sum += parseFloat($(this).val());  // Or this.innerHTML, this.innerText
-                });
-                
-                var subtotal=parseFloat($('#misc_amount_id').val())+sum;
-                $('#subtotal').val(subtotal);
-                calculateTotal();
-            }
-            $(document).on('keyup','#disAmt',function(){
                 calculateTotal()
             })
+             function calculateSubTotal(){
+                var sum = 0;
+                $('.totalNew').each(function(){
+                    sum += parseFloat($(this).val());
+                });
+                
+                $('#subtotal').val(sum);
+                calculateTotal();
+            } 
+            {% comment %} $(document).on('keyup','#disAmt',function(){
+                calculateTotal()
+            }) {% endcomment %}
 
             function calculateTotal(){
-                $disAmt=parseFloat($('#disAmt').val());
+                $disAmt=parseFloat($('#misc_amount_id').val());
                 $subtotal=parseFloat($('#subtotal').val());
-                var total= $subtotal-$disAmt;
+                var total= $subtotal+$disAmt;
                 $('#totalAmt').val(total);
             }
           });
