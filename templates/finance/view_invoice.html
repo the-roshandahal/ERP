@@ -15,7 +15,7 @@
 						
 					</div>
 					<div class="pg-header-action-wrap">
-						<button class="btn btn-outline-secondary me-3">Mail to Client</button>
+						<button class="btn btn-outline-secondary me-3" id="print-button">Print</button>
 						<button class="btn btn-primary" onclick="CreatePDFfromHTML()">Print</button>
 					</div>
 				</div>
@@ -26,8 +26,8 @@
 
 
         <div class="invoiceapp-content">
-            <div class="invoiceapp-detail-wrap html-content">
-                <div class="invoice-body">
+            <div class="invoiceapp-detail-wrap html-content" id="printable">
+                <div class="invoice-body" >
                     <div class="nicescroll-bar">
                         <div class="container">
                             <div class="template-invoice-wrap mt-xxl-5 p-md-5 p-3">
@@ -146,6 +146,39 @@
                 </div>
             </div>
         </div>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script>
+		$(document).ready(function() {
+			$("#print-button").click(function() {
+				window.print();
+			});
+		});
+	</script>
+
+
+	<style>
+		@media print {
+			/* Hide all elements except for the desired div */
+			#print-button{
+				display: none;
+
+			}
+			.hk-pg-header, .hk-navbar{
+				display: none;
+			}
+			#printable {
+				display: block;
+                padding:-10px;
+			}
+		}
+	</style>
+
+
+
+
+
+
+
         
                               <script>
                             function CreatePDFfromHTML() {
