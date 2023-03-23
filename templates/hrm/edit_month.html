@@ -1,0 +1,113 @@
+{% load static %}{% include 'header.html' %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+<!-- Main Content -->
+<div class="hk-pg-wrapper">
+	<div class="container-xxl">
+		<!-- Page Header -->												
+		<div class="hk-pg-header">
+			<div class="d-flex">
+				<div class="d-flex flex-wrap justify-content-between flex-1">
+					<div class="mb-md-0 mb-2 me-8">
+						<div class="d-flex align-items-center">
+							<h1 class="pg-title">CRM Dashboard</h1>
+							<span class="badge badge-soft-primary ms-3">Badge</span>
+						</div>
+						<p id="greeting"></p>
+
+						<script>
+							const now = new Date();
+							const hour = now.getHours();
+					
+							let greeting;
+					
+							if (hour < 12) {
+								greeting = "Good Morning";
+							} else if (hour < 18) {
+								greeting = "Good Afternoon";
+							} else {
+								greeting = "Good Evening";
+							}
+					
+							document.getElementById("greeting").innerHTML = greeting + " {{request.user.first_name}}!";
+						</script>
+						
+					</div>
+					
+				</div>
+			</div>
+		</div>	
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Edit Month</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+            <form action="{% url 'edit_month' id=month_data.id %} " method="POST">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="col-xxl-12 mb-xxl-0 mb-4">
+                        <h6>Select Year</h6>
+                        <div class="form-group">
+                            <select class="form-select" name="year" required>
+								<option value="">Choose</option>
+                                {% for year in year %}
+                                <option value="{{year.id}}" {% if month_data.year.id == year.id %} selected {% endif %} >{{year.year}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>  
+                    </div>
+                    <div class="col-xxl-12 mb-xxl-0 mb-4">
+                        <h6>Month Name</h6>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="month" value="{{month_data.month}}" required>
+                        </div>
+                    </div>
+                    <div class="col-xxl-12 mb-xxl-0 mb-4">
+                        <h6>Start Date</h6>
+                        <div class="form-group">
+                            <input type="date" class="form-control" name="start_date" value="{{ month_data.start_date|date:'Y-m-d'}}" required>
+                        </div>
+                    </div>
+                    <div class="col-xxl-12 mb-xxl-0 mb-4">
+                        <h6>End Date</h6>
+                        <div class="form-group">
+                            <input type="date" class="form-control" name="end_date" value="{{ month_data.end_date|date:'Y-m-d'}}" required>
+                        </div>
+                    </div>
+                    <div class="col-xxl-12 mb-xxl-0 mb-4">
+                        <h6>Select Holidays </h6>
+                        <p>Including Saturdays and Paid holidays</p>
+                        <div class="form-group">
+                            <input type="text" name="holidays" value="{{month_data.holidays}}" class="form-control datepicker" placeholder="Select dates..." required>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Edit</button>
+                </div>
+            </form>
+		</div>
+	
+	</div>
+</div>
+
+<script>
+	// Retrieve the list of holidays for the selected month
+	var holidays = [{% for holiday in month_holidays %}
+	  "{{ holiday.holiday|date:'Y-m-d' }}",
+	{% endfor %}];
+  
+	// Pre-select the holidays in the datepicker
+	$('.datepicker').datepicker({
+	  multidate: true,
+	  format: 'yyyy-mm-dd'
+	}).datepicker('setDates', holidays);
+  </script>
+  
+  
+{% include 'footer.html' %}

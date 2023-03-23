@@ -74,6 +74,25 @@ def add_year(request):
         messages.info(request, "Unauthorized access.")
         return redirect('home')
     
+def edit_year(request,id):
+    if 'update_hrm' in custom_data_views(request):
+        if request.method == 'POST':
+            year = request.POST['year']
+            year_obj = YearSetup.objects.get(id=id)
+            year_obj.year=year
+            year_obj.save()
+            messages.info(request, "Year Edited Successfully")
+            return redirect(hrm_setup)
+        else:
+            year_data = YearSetup.objects.get(id=id)
+            context= {
+                'year_data':year_data,
+            }
+            return render(request,'hrm/edit_year.html',context)
+    else:
+        messages.info(request, "Unauthorized access.")
+        return redirect('home')
+    
 
 def delete_year(request,id):
     if 'delete_hrm' in custom_data_views(request):
@@ -100,12 +119,51 @@ def add_month(request):
             month = MonthSetup.objects.create(year=year,month=month,start_date=start_date,end_date=end_date)
             month.save()
             date_list = [date.strip() for date in holidays.split(",")]
-            print(date_list)
             for holiday in date_list:
                 Holidays.objects.create(month = month, holiday = holiday)
 
             messages.info(request, "Year Added Successfully")
             return redirect(hrm_setup)
+    else:
+        messages.info(request, "Unauthorized access.")
+        return redirect('home')
+    
+
+def edit_month(request,id):
+    if 'update_hrm' in custom_data_views(request):
+        if request.method == 'POST':
+            year = request.POST['year']
+            month = request.POST['month']
+            start_date = request.POST['start_date']
+            end_date = request.POST['end_date']
+            holidays = request.POST['holidays']
+            year = YearSetup.objects.get(id=year)
+
+            month_obj = MonthSetup.objects.get(id=id)
+            month_obj.year=year
+            month_obj.month=month
+            month_obj.start_date=start_date
+            month_obj.end_date=end_date
+            month_obj.save()
+
+            prev_holidays = Holidays.objects.filter(month=id)
+            prev_holidays.delete()
+            date_list = [date.strip() for date in holidays.split(",")]
+            for holiday in date_list:
+                Holidays.objects.create(month = month_obj, holiday = holiday)
+
+            messages.info(request, "Year Edited Successfully")
+            return redirect(hrm_setup)
+        else:
+            year = YearSetup.objects.all()
+            month_data = MonthSetup.objects.get(id=id)
+            month_holidays = Holidays.objects.filter(month = month_data.id)
+            context= {
+                'year':year,
+                'month_data':month_data,
+                'month_holidays':month_holidays,
+            }
+            return render(request,'hrm/edit_month.html',context)
     else:
         messages.info(request, "Unauthorized access.")
         return redirect('home')
@@ -134,7 +192,30 @@ def add_department(request):
     else:
         messages.info(request, "Unauthorized access.")
         return redirect('home')
+
+
+def edit_department(request,id):
+    if 'update_hrm' in custom_data_views(request):
+        if request.method == 'POST':
+            department = request.POST['department']
+            department_obj = Department.objects.get(id=id)
+
+            department_obj = Department.objects.get(id=id)
+            department_obj.department=department
+            department_obj.save()
+            messages.info(request, "Department Edited Successfully")
+            return redirect(hrm_setup)
+        else:
+            department_data = Department.objects.get(id=id)
+            context= {
+                'department_data':department_data,
+            }
+            return render(request,'hrm/edit_department.html',context)
+    else:
+        messages.info(request, "Unauthorized access.")
+        return redirect('home')
     
+
 def delete_department(request,id):
     if 'delete_hrm' in custom_data_views(request):
         department = Department.objects.get(id=id)
@@ -162,6 +243,32 @@ def add_designation(request):
     else:
         messages.info(request, "Unauthorized access.")
         return redirect('home')
+
+def edit_designation(request,id):
+    if 'update_hrm' in custom_data_views(request):
+        if request.method == 'POST':
+            department = request.POST['department']
+            designation = request.POST['designation']
+            department = Department.objects.get(id=department)
+
+            designation_obj = Designation.objects.get(id=id)
+            designation_obj.department=department
+            designation_obj.designation=designation
+            designation_obj.save()
+            messages.info(request, "Designation Edited Successfully")
+            return redirect(hrm_setup)
+        else:
+            department = Department.objects.all()
+            designation_data = Designation.objects.get(id=id)
+            context= {
+                'designation_data':designation_data,
+                'department':department,
+            }
+            return render(request,'hrm/edit_designation.html',context)
+    else:
+        messages.info(request, "Unauthorized access.")
+        return redirect('home')
+    
 
 def delete_designation(request,id):
     if 'delete_hrm' in custom_data_views(request):

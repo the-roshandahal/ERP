@@ -8,17 +8,22 @@ from django.conf.urls.static import static
 urlpatterns = [
     path("hrm/", views.hrm, name="hrm"),
     path("hrm_setup/", views.hrm_setup, name="hrm_setup"),
+
     path("add_designation/", views.add_designation, name="add_designation"),
     path("delete_designation/<int:id>", views.delete_designation, name="delete_designation"),
+    path("edit_designation/<int:id>", views.edit_designation, name="edit_designation"),
 
     path("add_department/", views.add_department, name="add_department"),
     path("delete_department/<int:id>", views.delete_department, name="delete_department"),
+    path("edit_department/<int:id>", views.edit_department, name="edit_department"),
 
     path("add_year/", views.add_year, name="add_year"),
     path("delete_year/<int:id>", views.delete_year, name="delete_year"),
+    path("edit_year/<int:id>", views.edit_year, name="edit_year"),
     
     path("add_month/", views.add_month, name="add_month"),
     path("delete_month/<int:id>", views.delete_month, name="delete_month"),
+    path("edit_month/<int:id>", views.edit_month, name="edit_month"),
 
     path("employees/", views.employees, name="employees"),
     path("add_employee/", views.add_employee, name="add_employee"),
