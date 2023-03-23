@@ -30,15 +30,12 @@
                         <div class="col-xxl-12 mb-xxl-0 mb-4">
                             <h6>Type</h6>
                             <div class="form-group">
-                                <select class="form-select" name="product_type" required="">
-                                    {% if product.product_type == 'product' %}
-                                    <option value="product" selected>product</option>
-                                    <option value="service" >service</option>
-                                    {% else %}
-                                    <option value="service" selected>service</option>
-                                    <option value="product" >product</option>
-                                    {% endif %}
+                                <select class="form-select" name="product_type" required="" onchange="handleProductTypeChange()" id="product-type-select">
+                                    <option value="service" {% if product.product_type == 'service' %} selected {% endif %}>service</option>
+                                    <option value="product" {% if product.product_type == 'product' %} selected {% endif %}>product</option>
                                 </select>
+                                
+                                
                             </div>  
                         </div>
                         <div class="col-xxl-6 mb-xxl-0 mb-4">
@@ -76,19 +73,18 @@
                                 <input type="number" class="form-control" value="{{product.product_price}}" name = "product_price" required>
                             </div>
                         </div>
-                        <div class="col-xxl-12 mb-xxl-0 mb-4">
+                        <!-- <div class="col-xxl-12 mb-xxl-0 mb-4">
                             <h6>Available Quantity</h6>
                             <div class="form-group">
-                                <input type="number" class="form-control" value="{{product.product_quantity}}" name = "product_quantity" required>
+                                <input type="number" class="form-control" value="{{product.product_quantity}}" name = "product_quantity" id="product_quantity_field" required>
                             </div>
-                        </div>
+                        </div> -->
 
                         
 
                         <div class="col-xxl-12 mb-xxl-0 mb-4">
                             <h6>Description</h6>
                             <div class="form-group">
-                                <label class="form-label">Description</label>
                                 <textarea id="classic" name="product_description" placeholder="Description">{{product.product_description}}</textarea>
                             </div>
                         </div>
@@ -109,6 +105,21 @@
     </div>
 </div>
 
+<!-- 
+<script>
+    function handleProductTypeChange() {
+    var productTypeSelect = document.getElementById('product-type-select');
+    var quantityInput = document.getElementsByName('product_quantity')[0];
+    
+    if (productTypeSelect.value === 'service') {
+        quantityInput.disabled = true;
+    } else {
+        quantityInput.disabled = false;
+    }
+}
 
+// call the function on page load
+handleProductTypeChange();
 
+</script> -->
 	{% include 'footer.html' %}
