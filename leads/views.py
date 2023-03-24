@@ -194,7 +194,7 @@ def update_users(request,id):
             lead = Leads.objects.get(id=id)
             lead.assigned_to.set(assigned_to)
             lead.save()
-            messages.info(request, "Lead status updated")
+            messages.info(request, "Users updated successfully.")
 
             user = User.objects.get(username=request.user)
             changed_by = user.username
@@ -215,10 +215,11 @@ def add_note(request,id):
         assigned_lead = Leads.objects.get(id=id)
         lead_assigned_users=assigned_lead.assigned_to.all()
         logged_in_user = User.objects.get(username=request.user)
+        employees = Employee.objects.get(user=logged_in_user)
 
         assigned=False
         for lead_assigned_users in lead_assigned_users:
-            if str(lead_assigned_users) == str(logged_in_user):
+            if str(lead_assigned_users) == str(employees):
                 assigned=True
         
         if (assigned == True):
@@ -255,10 +256,11 @@ def add_call(request,id):
         assigned_lead = Leads.objects.get(id=id)
         lead_assigned_users=assigned_lead.assigned_to.all()
         logged_in_user = User.objects.get(username=request.user)
-        
+        employees = Employee.objects.get(user=logged_in_user)
+
         assigned=False
         for lead_assigned_users in lead_assigned_users:
-            if str(lead_assigned_users) == str(logged_in_user):
+            if str(lead_assigned_users) == str(employees):
                 assigned=True
         
         if (assigned == True):
@@ -291,10 +293,11 @@ def add_file(request,id):
         assigned_lead = Leads.objects.get(id=id)
         lead_assigned_users=assigned_lead.assigned_to.all()
         logged_in_user = User.objects.get(username=request.user)
-        
+        employees = Employee.objects.get(user=logged_in_user)
+
         assigned=False
         for lead_assigned_users in lead_assigned_users:
-            if str(lead_assigned_users) == str(logged_in_user):
+            if str(lead_assigned_users) == str(employees):
                 assigned=True
         
         if (assigned == True):
@@ -327,10 +330,11 @@ def update_lead_status(request,id):
         assigned_lead = Leads.objects.get(id=id)
         assignedddd=assigned_lead.assigned_to.all()
         logged_in_user = User.objects.get(username=request.user)
+        employees = Employee.objects.get(user=logged_in_user)
 
         assigned=False
         for assignedddd in assignedddd:
-            if str(assignedddd) == str(logged_in_user):
+            if str(assignedddd) == str(employees):
                 assigned=True
         
         if assigned == True:
@@ -386,10 +390,11 @@ def close_lead(request,id):
         assigned_lead = Leads.objects.get(id=id)
         assignedddd=assigned_lead.assigned_to.all()
         logged_in_user = User.objects.get(username=request.user)
+        employees = Employee.objects.get(user=logged_in_user)
 
         assigned=False
         for assignedddd in assignedddd:
-            if str(assignedddd) == str(logged_in_user):
+            if str(assignedddd) == str(employees):
                 assigned=True
         
         if assigned == True:
@@ -417,10 +422,11 @@ def reopen_lead(request,id):
         assigned_lead = Leads.objects.get(id=id)
         assignedddd=assigned_lead.assigned_to.all()
         logged_in_user = User.objects.get(username=request.user)
+        employees = Employee.objects.get(user=logged_in_user)
 
         assigned=False
         for assignedddd in assignedddd:
-            if str(assignedddd) == str(logged_in_user):
+            if str(assignedddd) == str(employees):
                 assigned=True
         
         if assigned == True:
