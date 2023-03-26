@@ -12,9 +12,10 @@ urlpatterns = [
     
     path("leads/", views.leads, name="leads"),
     path("crm_setup/", views.crm_setup, name="crm_setup"),
-    # path("source/", views.source, name="source"),
     path("create_stage/", views.create_stage, name="create_stage"),
+    path("edit_stage/<int:id>", views.edit_stage, name="edit_stage"),
     path("create_source/", views.create_source, name="create_source"),
+    path("edit_source/<int:id>", views.edit_source, name="edit_source"),
     path("delete_stage/<int:id>", views.delete_stage, name="delete_stage"),
     path("delete_source/<int:id>", views.delete_source, name="delete_source"),
     path("add_lead/", views.add_lead, name="add_lead"),

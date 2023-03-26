@@ -33,6 +33,25 @@ def create_stage(request):
     else:
         messages.info(request, "Unauthorized access.")
         return redirect('home')
+
+def edit_stage(request,id):
+    if 'manage_leads' in custom_data_views(request):
+        if request.method =="POST":
+            lead_stage = request.POST['lead_stage']
+            lead = LeadStage.objects.get(id=id)
+            lead.stage = lead_stage
+            lead.save()
+            messages.info(request, "Lead Stage Updated Successfully.")
+            return redirect('crm_setup')
+        else:
+            stage = LeadStage.objects.get(id=id)
+            context={
+                'stage':stage
+            }
+            return render(request,'leads/edit_stage.html',context)
+    else:
+        messages.info(request, "Unauthorized access.")
+        return redirect('home')
     
 def delete_stage(request,id):
     if 'delete_leads' in custom_data_views(request):
@@ -58,7 +77,25 @@ def create_source(request):
         messages.info(request, "Unauthorized access.")
         return redirect('home')
 
-   
+def edit_source(request,id):
+    if 'manage_leads' in custom_data_views(request):
+        if request.method =="POST":
+            lead_source = request.POST['lead_source']
+            lead = LeadSource.objects.get(id=id)
+            lead.source = lead_source
+            lead.save()
+            messages.info(request, "Lead Source Updated Successfully.")
+            return redirect('crm_setup')
+        else:
+            source = LeadSource.objects.get(id=id)
+            context={
+                'source':source
+            }
+            return render(request,'leads/edit_source.html',context)
+    else:
+        messages.info(request, "Unauthorized access.")
+        return redirect('home')
+      
 def delete_source(request,id):
     if 'delete_leads' in custom_data_views(request):
         source_data = LeadSource.objects.get(id=id)
@@ -75,9 +112,9 @@ def leads(request):
     if 'read_leads' in custom_data_views(request):
         logged_in_user = User.objects.get(username=request.user)
         company_user = Employee.objects.get(user=logged_in_user)
-        leads = Leads.objects.filter(active=1).order_by('created')
-        closed_leads = Leads.objects.filter(active=0).order_by('created')
-        my_leads = Leads.objects.filter(active=1,assigned_to = company_user).order_by('created')
+        leads = Leads.objects.filter(active=1).order_by('-created')
+        closed_leads = Leads.objects.filter(active=0).order_by('-created')
+        my_leads = Leads.objects.filter(active=1,assigned_to = company_user).order_by('-created')
         stage = LeadStage.objects.all()
         source = LeadSource.objects.all()
 
@@ -124,10 +161,17 @@ def add_lead(request):
             assigned_to = request.POST.getlist("assigned_to")
             contact = request.POST['contact']
 
+            lead_stage = LeadStage.objects.get(stage=stage)
+            lead_source = LeadSource.objects.get(source=source)
+            
             lead = Leads.objects.create(title=title,lead_name=lead_name,email=email,address=address,
-            company_name=company_name,source=source,stage=stage,contact=contact,active=1)
+            company_name=company_name,source=lead_source,stage=lead_stage,contact=contact,active=1)
             lead.assigned_to.set(assigned_to)
             lead.save()
+            user = User.objects.get(username=request.user)
+            changed_by = user.username
+            lead = Leads.objects.filter(id=lead.id)[0]
+            LeadLog.objects.create(lead=lead,changed_by=changed_by,activity=f'Added {title}')
             messages.info(request, "Lead Added")
 
             return redirect(leads)
@@ -339,15 +383,17 @@ def update_lead_status(request,id):
         
         if assigned == True:
             if request.method =='POST':
-                status = request.POST['status']
+                stage = request.POST['stage']
+                lead_stage = LeadStage.objects.get(id=stage)
+
                 user = User.objects.get(username=request.user)
                 changed_by = user.username
 
                 lead = Leads.objects.filter(id=id)[0]
-                lead.stage = status
+                lead.stage = lead_stage
                 lead.save()
-                messages.info(request, "Lead status updated")
-                activity = 'updated lead status to '+status
+                messages.info(request, "Lead stage updated")
+                activity = 'updated lead stage to '+str(lead_stage)
                 LeadLog.objects.create(lead=lead,changed_by=changed_by,activity=activity)
                 return redirect(view_lead,id)
             else:

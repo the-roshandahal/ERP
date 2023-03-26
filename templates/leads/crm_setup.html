@@ -94,7 +94,7 @@
 									<div  class="d-flex align-items-center justify-content-end">
 										{% if 'update_leads' in permissions or 'delete_leads' in permissions %}
 											{% if 'update_leads' in permissions%}
-												<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" href="#"><span class="icon"><span class="feather-icon"><i data-feather="edit-2"></i></span></span></a>
+												<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" href="{% url 'edit_stage' id=lead_stage.id %}"><span class="icon"><span class="feather-icon"><i data-feather="edit-2"></i></span></span></a>
 											{% endif %}
 											{% if 'delete_leads' in permissions %}
 												<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="modal" data-bs-target="#exampleModalCenter{{lead_stage.id}}" href=""><span class="icon"><span class="feather-icon"><i data-feather="archive"></i></span></span></a>
@@ -150,7 +150,7 @@
 								<td>
 									<div  class="d-flex align-items-center justify-content-end">
 									{% if 'manage_leads' in permissions%}
-										<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" href="#"><span class="icon"><span class="feather-icon"><i data-feather="edit-2"></i></span></span></a>
+										<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" href="{% url 'edit_source' id=lead_source.id %}"><span class="icon"><span class="feather-icon"><i data-feather="edit-2"></i></span></span></a>
 									{% endif %}
 									{% if 'manage_leads' in permissions %}
 										<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="modal" data-bs-target="#exampleModalCenter{{lead_source.id}}" href=""><span class="icon"><span class="feather-icon"><i data-feather="archive"></i></span></span></a>
