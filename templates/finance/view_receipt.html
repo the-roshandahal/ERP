@@ -1,131 +1,159 @@
+{% load static %}{% include 'nav_links.html' %}
 
-{% include 'header.html' %}              
-{% load static %}
-<div class="hk-pg-wrapper pb-0">
-    <div class="hk-pg-body py-0">
-        <div class="invoiceapp-wrap">
-            <div class="invoiceapp-detail-wrap">
-              <div class="card">
-                  <div class="card-body">
-                    <div class="container mb-5 mt-3">
-                      <div class="row d-flex align-items-baseline">
-                        <div class="col-xl-11">
-                          <p style="color: #7e8d9f;font-size: 20px;"><strong>Receipt:{{receipt.id}}</strong></p>
-                        </div>
-                        <div class="col-xl-1 float-end"  onclick="CreatePDFfromHTML()">
-                          
-                          <a class="btn btn-light text-capitalize" data-mdb-ripple-color="dark"><i
-                              class="far fa-file-pdf text-danger"></i> Export</a>
-                        </div>
-                        <hr>
-                      </div>
-                
-                      <div class="container html-content">
-                        <div class="col-md-12">
-                          <div class="text-center">
-                            <img src="{% static 'logo.png' %}" alt="logo" height="100">
-                            <p>Baneshwor 10, Kathmandu</p>
-                          </div>
-                
-                        </div>
-                
-                
-                        <div class="row">
-                          <div class="col-xl-8">
-                            <ul class="list-unstyled">
-                              <li class="text-muted">To: <span style="color:#5d9fc5 ;">{{receipt.customer.client_name}}</span></li>
-                              <li class="text-muted">{{receipt.customer.address}}</li>
-                            </ul>
-                          </div>
-                          <div class="col-xl-4">
-                            <p class="text-muted">receipt</p>
-                            <ul class="list-unstyled">
-                              <li class="text-muted"><i class="fas fa-circle" style="color:#84B0CA ;"></i> <span
-                                  class="fw-bold">ID:</span>#{{receipt.id}}</li>
-                              <li class="text-muted"><i class="fas fa-circle" style="color:#84B0CA ;"></i> <span
-                                  class="fw-bold">Date: </span>{{receipt.created}}</li>
-                            </ul>
-                          </div>
-                        </div>
-                
-                        <div class="row my-2 mx-1 justify-content-center">
-                          <table class="table table-striped table-borderless">
-                            <thead style="background-color:#d35c2e;" class="text-white">
-                              <tr>
-                                <th scope="col">Description</th>
-                                <th scope="col">Payment Mode</th>
-                                <th scope="col"></th>
-                                <th scope="col">Amount</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <td>Ampunt Paid</td>
-                                <td>{{receipt.payment_method}}</td>
-                                <td></td>
-                                <td>Rs. {{receipt.paid_amount}}</td>
-                              </tr>
-                            </tbody>
-                
-                          </table>
-                        </div>
-                        <div class="row">
-                          <div class="col-xl-8">
-                
-                          </div>
-                          <div class="col-xl-3">
-                            <p class="text-black float-start"><span class="text-black me-3"> Total Amount</span><span
-                                style="font-size: 25px;">Rs. {{receipt.paid_amount}}</span></p>
-                          </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                          
-                          <div class="col-xl-8"> 
-                              <p>Thank you for the purchase.</p>
-                          </div>
-                          <div class="col-xl-4">
-                              {% if receipt.payment_receipt %}
-                              <p>Receipt Screenshot</p>
-                              <img src="{{receipt.payment_receipt.url}}" alt="payment_receipt" height=" 300">
-                              {% endif %}
-                          </div>
-                        </div>
-                
-                      </div>
-                    </div>
-                  </div>
+<div class="container mt-5">
+    <div class="container html-content" id='printMe'>
+        <div class="template-invoice-wrap mt-xxl-5 p-md-5 p-3">
+            <div class="row logorow">
+                <div class="col-lg-3 col-md-5 order-md-0 order-1 logo">
+                    <img src="{{company.company_logo.url}}" alt="{{company.company_name}}" height="80">
                 </div>
-                <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
-              <script type="text/javascript" src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
-              <script>
-                  function CreatePDFfromHTML() {
-                      
-                      var HTML_Width = $(".html-content").width();
-                      var HTML_Height = $(".html-content").height();
-                      var top_left_margin = 15;
-                      var PDF_Width = HTML_Width + (top_left_margin * 2);
-                      var PDF_Height = (PDF_Width * 1.5) + (top_left_margin * 2);
-                      var canvas_image_width = HTML_Width;
-                      var canvas_image_height = HTML_Height;
-                  
-                      var totalPDFPages = Math.ceil(HTML_Height / PDF_Height) - 1;
-                  
-                      html2canvas($(".html-content")[0]).then(function (canvas) {
-                          var imgData = canvas.toDataURL("image/jpeg", 1.0);
-                          var pdf = new jsPDF('p', 'pt', [PDF_Width, PDF_Height]);
-                          pdf.addImage(imgData, 'JPG', top_left_margin, top_left_margin, canvas_image_width, canvas_image_height);
-                          for (var i = 1; i <= totalPDFPages; i++) { 
-                              pdf.addPage(PDF_Width, PDF_Height);
-                              pdf.addImage(imgData, 'JPG', top_left_margin, -(PDF_Height*i)+(top_left_margin*4),canvas_image_width,canvas_image_height);
-                          }
-                          pdf.save("spell_innovation_receipt_{{receipt.id}}.pdf");
-                      });
-                  }
-              </script>
+                <div class="col-lg-4 offset-lg-5 offset-md-3 col-md-4 mb-md-0 mb-2">
+                    <h2 class="d-flex justify-content-md-end mb-0 invoiceid">Receipt #{{receipt.id}}</h2>
+                </div>	
+            </div>	
+            <div class="row mt-4">
+                <div class="col-md-4 order-md-0 order-1">
+                    <div class="address-wrap">
+                        <h6>{{company.company_name}}</h6>
+                        <p>{{company.company_address}}</p>
+                        <p>{{company.company_email}}</p>
+                        <p>{{company.company_contact_number}}</p>
+                    </div>
+                </div>
+                <div class="col-md-5 offset-md-3 mb-4 mb-md-0">
+                    <div class="d-flex justify-content-md-end">
+                        <div class="text-md-end me-3">
+                            
+                            <div class="mb-1">Receipt Date*</div>
+                            <div>Created By</div>
+                        </div>
+                        <div class="text-dark">
+                            
+                            <div class="mb-1">{{receipt.created}}</div>
+                            <div>{{receipt.created_by}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="separator separator-light"></div>
+            <div class="row">
+                <div class="col-md-3">
+                    <h6 class="text-uppercase fs-7 mb-2">Billed To</h6>
+                    <div class="Billto-wrap">
+                        <h6>{{receipt.customer.client_name}}</h6>
+                        <p>{{receipt.customer.address}}</p>
+                        <p>{{receipt.customer.contact}}</p>
+                        <p>{{receipt.customer.email}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="table-wrap mt-6" >
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead class="thead-primary">
+                            <tr>
+                                <th  colspan="4" >Description</th>
+                                <th class="text-end">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                            <tr>
+                                <td class="w-70" colspan="4">
+                                    <h6>Paid Amount</h6>
+                                </td>
+                                <td class="w-20 text-end text-dark">Rs. {{receipt.paid_amount}}</td>
+                            </tr>
+                            
+                            <tr>
+                                <td colspan="4" class="text-dark border text-end ">Payment Method</td>
+                                <td class="text-end text-dark border">{{receipt.payment_method}}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" class="text-dark border text-end ">Total</td>
+                                <td class="text-end text-dark border">Rs. {{receipt.paid_amount}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>	
+            </div>
+            <div class="row">
+                <div class="col-lg-6 col-md-6">
+                    <h6>Thank you for the purchase.</h6>
+                </div>
+                <div class="col-lg-6 col-md-6">
+                  {% if receipt.payment_receipt %}
+                  <h6>Receipt Screenshot</h6>
+                    <img src="{{receipt.payment_receipt.url}}" alt="payment_receipt" width=" 600">
+                    {% endif %}
+                    
+                </div>
             </div>
         </div>
     </div>
+
+    <div class="container btns">
+        <button class="btn btn-outline-secondary me-3"  onclick="printDiv('printMe')">Print</button>
+        <button class="btn btn-primary" onclick="CreatePDFfromHTML()">Download</button>
+    </div>
 </div>
 
-{% include 'footer.html' %} 
+
+
+
+
+
+<style type = "text/css">
+       @media print {
+        * {
+                all: unset;
+            }
+
+          .logorow{
+            display: flex;
+            justify-content: space-between;
+          }
+          .invoiceid{
+            color: red;
+          }
+       }
+</style>
+<script>
+    function printDiv(divName){
+        var printContents = document.getElementById(divName).innerHTML;
+        var originalContents = document.body.innerHTML;
+
+        document.body.innerHTML = printContents;
+
+        window.print();
+
+        document.body.innerHTML = originalContents;
+
+    }
+</script>
+<script>
+    function CreatePDFfromHTML() {
+            var HTML_Width = $(".html-content").width();
+            var HTML_Height = $(".html-content").height();
+            var top_left_margin = 2;
+            var PDF_Width = HTML_Width + (top_left_margin * 2);
+            var PDF_Height = (PDF_Width * 1.5) + (top_left_margin * 2);
+            var canvas_image_width = HTML_Width;
+            var canvas_image_height = HTML_Height;
+        
+            var totalPDFPages = Math.ceil(HTML_Height / PDF_Height) - 1;
+        
+            html2canvas($(".html-content")[0]).then(function (canvas) {
+                var imgData = canvas.toDataURL("image/jpeg", 1.0);
+                var pdf = new jsPDF('p', 'pt', [PDF_Width, PDF_Height]);
+                pdf.addImage(imgData, 'JPG', top_left_margin, top_left_margin, canvas_image_width, canvas_image_height);
+                for (var i = 1; i <= totalPDFPages; i++) { 
+                    pdf.addPage(PDF_Width, PDF_Height);
+                    pdf.addImage(imgData, 'JPG', top_left_margin, -(PDF_Height*i)+(top_left_margin*4),canvas_image_width,canvas_image_height);
+                }
+                pdf.save("spell_innovation_receipt_{{receipt.id}}.pdf");
+            });
+        }
+    </script>
+
+{% include 'footer.html' %}

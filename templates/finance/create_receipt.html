@@ -7,7 +7,7 @@
                 <div class="container">
                     <div class="create-invoice-wrap mt-xxl-5 p-md-5 p-3">
                         <div class="separator separator-light"></div>
-                        <form action="{% url 'create_receipt' %}" method="POST">
+                        <form action="{% url 'create_receipt' %}" method="POST" enctype="multipart/form-data">
                             {% csrf_token %}
                             <div class="row">
                                 <div class="col-xxl-6 mb-xxl-0 mb-4">

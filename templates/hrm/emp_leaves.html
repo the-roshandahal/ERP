@@ -12,8 +12,7 @@
 				<div class="d-flex flex-wrap justify-content-between flex-1">
 					<div class="mb-md-0 mb-2 me-8">
 						<div class="d-flex align-items-center">
-							<h1 class="pg-title">CRM Dashboard</h1>
-							<span class="badge badge-soft-primary ms-3">Badge</span>
+							<h1 class="pg-title">Employee Leaves</h1>
 						</div>
 						<p id="greeting"></p>
 
@@ -36,13 +35,15 @@
 						
 					</div>
 					<div class="pg-header-action-wrap">
+                        {% if 'create_hrm' in permissions %}
                         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalCenterAddMonth">Add Leave</button>
+                        {% endif %}
 					</div>
 				</div>
 			</div>
 		</div>	
 		<div class="hk-pg-body">
-            <h3>Leave History</h3>                                                   
+            <h5>History</h5>                                                   
                 <ul class="nav nav-icon nav-icon-top nav-tabs nav-light">
                     <li class="nav-item">
                         <a class="nav-link active" data-bs-toggle="tab" href="#tab_block_112">
@@ -94,10 +95,12 @@
                                         <td>{{pending_leaves.status}}</td>
                                         <td>{{pending_leaves.reason}}</td>
                                         <td>
+                                            {% if 'update_hrm' in permissions %}
                                             <div  class="d-flex">
                                                 <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Approve" href="{% url 'accept_leave' id=pending_leaves.id %}"><span class="icon"><span class="feather-icon"><i class="bi bi-check2-circle"></i></span></span></a>
                                                 <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Deny" href="{% url 'deny_leave' id=pending_leaves.id %}"><span class="icon"><span class="feather-icon"><i class="bi bi-x-circle"></i></span></span></a>
                                             </div>
+                                            {% endif %}
                                         </td>
                                     </tr>
                                     

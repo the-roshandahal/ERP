@@ -22,7 +22,7 @@ def crm_setup(request):
         return redirect('home')
 
 def create_stage(request):
-    if 'create_leads' in custom_data_views(request):
+    if 'manage_leads' in custom_data_views(request):
         if request.method =="POST":
             lead_stage = request.POST['lead_stage']
             LeadStage.objects.create(stage=lead_stage)

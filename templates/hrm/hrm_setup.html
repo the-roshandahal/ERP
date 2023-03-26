@@ -11,8 +11,27 @@
 			<div class="d-flex">
 				<div class="d-flex flex-wrap justify-content-between flex-1">
 					<div class="mb-lg-0 mb-2 me-8">
-						<h1 class="pg-title">Welcome back</h1>
-						<p>Welcome to SPELL CRM Dashboard.</p>
+						<div class="d-flex align-items-center">
+							<h1 class="pg-title">HRM Setup</h1>
+						</div>
+						<p id="greeting"></p>
+
+						<script>
+							const now = new Date();
+							const hour = now.getHours();
+					
+							let greeting;
+					
+							if (hour < 12) {
+								greeting = "Good Morning";
+							} else if (hour < 18) {
+								greeting = "Good Afternoon";
+							} else {
+								greeting = "Good Evening";
+							}
+					
+							document.getElementById("greeting").innerHTML = greeting + " {{request.user.first_name}}!";
+						</script>
 					</div>
 					
 				</div>
@@ -48,7 +67,7 @@
                                     <td>
                                         <div class="d-flex align-items-center">
                                             <div class="d-flex">
-                                                {% if 'read_hrm' in permissions %}
+                                                {% if 'update_hrm' in permissions %}
                                                 <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" href="{% url 'edit_year' id=year.id %}"><span class="btn-icon-wrap"><span class="feather-icon"><i data-feather="edit"></i></span></span></a>
                                                 {% endif %}
                                                 {% if 'delete_hrm' in permissions %}
@@ -98,7 +117,7 @@
                             <td>
                                 <div class="d-flex align-items-center">
                                     <div class="d-flex">
-                                        {% if 'read_hrm' in permissions %}
+                                        {% if 'update_hrm' in permissions %}
                                         <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" href="{% url 'edit_month' id=month.id %}"><span class="btn-icon-wrap"><span class="feather-icon"><i data-feather="edit"></i></span></span></a>
                                         {% endif %}
                                         {% if 'delete_hrm' in permissions %}
@@ -144,7 +163,7 @@
                             <td>
                                 <div class="d-flex align-items-center">
                                     <div class="d-flex">
-                                        {% if 'read_hrm' in permissions %}
+                                        {% if 'update_hrm' in permissions %}
                                         <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" href="{% url 'edit_department' id=department.id %}"><span class="btn-icon-wrap"><span class="feather-icon"><i data-feather="edit"></i></span></span></a>
                                         {% endif %}
                                         {% if 'delete_hrm' in permissions %}
@@ -188,7 +207,7 @@
                             <td>
                                 <div class="d-flex align-items-center">
                                     <div class="d-flex">
-                                        {% if 'read_hrm' in permissions %}
+                                        {% if 'update_hrm' in permissions %}
                                         <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" href="{% url 'edit_designation' id=designation.id %}"><span class="btn-icon-wrap"><span class="feather-icon"><i data-feather="edit"></i></span></span></a>
                                         {% endif %}
                                         {% if 'delete_hrm' in permissions %}
@@ -202,30 +221,7 @@
                     </tbody>
                 </table>
             </div>
-        </div>														
-        <div class="table-responsive">
-  <table class="table">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th class="position-absolute">First Name</th>
-        
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>1</td>
-        <td class="position-absolute">John</td>
-     
-      </tr>
-      
-      <!-- Add more table rows here -->
-    </tbody>
-  </table>
-</div>
-
-                                     
-		
+        </div>
 	</div>
 </div>
 {% for month in month %}

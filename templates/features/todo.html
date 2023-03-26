@@ -5,96 +5,44 @@
 		<!-- Main Content -->
 		<div class="hk-pg-wrapper">
 			<div class="container-xxl">
-
-				<!-- Page Body -->
-				<div class="hk-pg-body">
-					<div class="tab-content">
-						<div class="tab-pane fade show active" id="tab_block_1">
-							<div class="row">
-								<div class="col-xxl-12 col-lg-8 col-md-7 mb-md-4 mb-3">
-									<div class="card card-border mb-0 h-100">
-										<div class="card-header card-header-action">
-											<h6>To Do</h6>
-											<div class="card-action-wrap">
-                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalCenter">
-                                                    <i class="zmdi zmdi-edit"></i>Add Task
-                                                </button>
-
-                                                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter" aria-hidden="true">
-                                                    <div class="modal-dialog modal-dialog-centered" role="document">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title">Add Task</h5>
-                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                                                                    <span aria-hidden="true">&times;</span>
-                                                                </button>
-                                                            </div>
-                                                            <form action="{% url 'add_todo' %}" method="POST">
-                                                                {% csrf_token %}
-                                                                <div class="modal-body">                                                                        
-                                                                    <div class="row">
-                                                                        <div class="col-xxl-12">
-                                                                            <h6>Task</h6>
-                                                                            <textarea class="form-control" rows="6" placeholder="Describe your task.." name="task"></textarea>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="separator separator-light"></div>
-
-                                                                    <div class="row">
-                                                                        <div class="col-xxl-12">
-                                                                            <h6>Deadline</h6>
-                                                                            <input type="date" class="form-control" name = "deadline" required>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="separator separator-light"></div>
-
-                                                                    <div class="row">
-                                                                        <div class="col-xxl-12 mb-xxl-0 mb-4">
-                                                                            <h6>Select Priority</h6>
-                                                                                <div class="form-group">
-                                                                                    <select class="form-select" name="priority" required="">
-                                                                                        <option value="high" selected>High</option>
-                                                                                        <option value="medium">Medium</option>
-                                                                                        <option value="low">Low</option>
-                                                                                    </select>
-                                                                                </div>
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <div class="separator separator-light"></div>
-                                                                    <div class="row">
-                                                                        <div class="col-xxl-12">
-                                                                            <h6>Assign To</h6>
-                                                                            {% for users in users %}
-                                                                              <div class="form-check">
-                                                                                <input class="form-check-input" name="selected" type="checkbox" value="{{users.id}}" id="flexCheckChecked" {%if users.username == request.user.username%}checked{%endif%}>
-                                                                                <label class="form-check-label" for="flexCheckChecked">
-                                                                                    {{users.user.username}}
-                                                                                </label>
-                                                                              </div>
-                                                                              {% endfor %}
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                                    <a href="#" ><button class="btn btn-primary ms-2 d-sm-inline-block d-none">Save</button></a>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                </div>	
-                                            </a>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
+                <div class="hk-pg-header">
+                    <div class="d-flex">
+                        <div class="d-flex flex-wrap justify-content-between flex-1">
+                            <div class="mb-md-0 mb-2 me-8">
+                                <div class="d-flex align-items-center">
+                                    <h1 class="pg-title">Todo</h1>
+                                    <!-- <span class="badge badge-soft-primary ms-3">Badge</span> -->
+                                </div>
+                                <p id="greeting"></p>
+        
+                                <script>
+                                    const now = new Date();
+                                    const hour = now.getHours();
+                            
+                                    let greeting;
+                            
+                                    if (hour < 12) {
+                                        greeting = "Good Morning";
+                                    } else if (hour < 18) {
+                                        greeting = "Good Afternoon";
+                                    } else {
+                                        greeting = "Good Evening";
+                                    }
+                            
+                                    document.getElementById("greeting").innerHTML = greeting + " {{request.user.first_name}}!";
+                                </script>
+                                
+                            </div>
+                            <div class="pg-header-action-wrap">
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalCenter">
+                                    <i class="zmdi zmdi-edit"></i>Add Task
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>	
 				<!-- /Page Body -->		
-                <ul class="nav nav-tabs nav-icon nav-light">
+                <ul class="nav nav-tabs nav-icon nav-light mt-5">
                     <li class="nav-item">
                         <a class="nav-link active" data-bs-toggle="tab" href="#tab_block_12">
                             <span class="nav-icon-wrap"><span class="feather-icon"><i data-feather="check-circle"></i></span></span>
@@ -269,7 +217,70 @@
     <!-- /Wrapper -->
 	
 
-    														
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Task</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="{% url 'add_todo' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="modal-body">                                                                        
+                        <div class="row">
+                            <div class="col-xxl-12">
+                                <h6>Task</h6>
+                                <textarea class="form-control" rows="6" placeholder="Describe your task.." name="task"></textarea>
+                            </div>
+                        </div>
+                        <div class="separator separator-light"></div>
+
+                        <div class="row">
+                            <div class="col-xxl-12">
+                                <h6>Deadline</h6>
+                                <input type="date" class="form-control" name = "deadline" required>
+                            </div>
+                        </div>
+                        <div class="separator separator-light"></div>
+
+                        <div class="row">
+                            <div class="col-xxl-12 mb-xxl-0 mb-4">
+                                <h6>Select Priority</h6>
+                                    <div class="form-group">
+                                        <select class="form-select" name="priority" required="">
+                                            <option value="high" selected>High</option>
+                                            <option value="medium">Medium</option>
+                                            <option value="low">Low</option>
+                                        </select>
+                                    </div>
+                            </div>
+                        </div>
+
+                        <div class="separator separator-light"></div>
+                        <div class="row">
+                            <div class="col-xxl-12">
+                                <h6>Assign To</h6>
+                                {% for users in users %}
+                                  <div class="form-check">
+                                    <input class="form-check-input" name="selected" type="checkbox" value="{{users.id}}" id="flexCheckChecked" {%if users.username == request.user.username%}checked{%endif%}>
+                                    <label class="form-check-label" for="flexCheckChecked">
+                                        {{users.user.username}}
+                                    </label>
+                                  </div>
+                                  {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <a href="#" ><button class="btn btn-primary ms-2 d-sm-inline-block d-none">Save</button></a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>												
 
 													
 

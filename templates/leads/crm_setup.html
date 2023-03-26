@@ -13,7 +13,7 @@
 						
 					</div>
 					<div class="pg-header-action-wrap">
-						{% if 'create_leads' in permissions %}
+						{% if 'manage_leads' in permissions %}
 						<button class="btn btn-outline-secondary me-3" data-bs-toggle="modal" data-bs-target="#createUserModal">Add  Stage</button>
 						<div class="modal fade" id="createUserModal" tabindex="-1" role="dialog" aria-labelledby="createUserModal" aria-hidden="true">
 							<div class="modal-dialog" role="document">
@@ -152,7 +152,7 @@
 									{% if 'manage_leads' in permissions%}
 										<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" href="{% url 'edit_source' id=lead_source.id %}"><span class="icon"><span class="feather-icon"><i data-feather="edit-2"></i></span></span></a>
 									{% endif %}
-									{% if 'manage_leads' in permissions %}
+									{% if 'delete_leads' in permissions %}
 										<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="modal" data-bs-target="#exampleModalCenter{{lead_source.id}}" href=""><span class="icon"><span class="feather-icon"><i data-feather="archive"></i></span></span></a>
 									{% endif %}
 											

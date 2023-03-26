@@ -602,33 +602,25 @@ def delete_employee(request,id):
         return redirect('home')
     
 def emp_payslip(request):
-    if 'read_hrm' in custom_data_views(request):
-        employee = Employee.objects.get(user=request.user)
-        payments_made = Salary.objects.filter(employee=employee )
-        context = {
-            'payments_made':payments_made,
-            }
-        return render(request,'hrm/emp_payslip.html',context)
-    else:
-        messages.info(request, "Unauthorized access.")
-        return redirect('home')
+    employee = Employee.objects.get(user=request.user)
+    payments_made = Salary.objects.filter(employee=employee )
+    context = {
+        'payments_made':payments_made,
+        }
+    return render(request,'hrm/emp_payslip.html',context)
 
 
 
 
 def leave(request):
-    if 'read_hrm' in custom_data_views(request):
-        employee = Employee.objects.get(user=request.user)
-        approved_leaves = Leave.objects.filter(employee=employee)
-        approved_leave_dates = LeaveDate.objects.filter(leave__in=approved_leaves)
-        context = {
-            'approved_leaves':approved_leaves,
-            'approved_leave_dates':approved_leave_dates
-            }
-        return render (request,'hrm/leave.html',context)
-    else:
-        messages.info(request, "Unauthorized access.")
-        return redirect('home')
+    employee = Employee.objects.get(user=request.user)
+    approved_leaves = Leave.objects.filter(employee=employee)
+    approved_leave_dates = LeaveDate.objects.filter(leave__in=approved_leaves)
+    context = {
+        'approved_leaves':approved_leaves,
+        'approved_leave_dates':approved_leave_dates
+        }
+    return render (request,'hrm/leave.html',context)
     
 
 def apply_leave(request):

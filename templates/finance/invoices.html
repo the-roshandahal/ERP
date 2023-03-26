@@ -3,18 +3,39 @@
 <div class="hk-pg-wrapper">
 	<div class="container-xxl">
 		<!-- Page Header -->
-		<div class="hk-pg-header pg-header-wth-tab pt-7">
+		<div class="hk-pg-header">
 			<div class="d-flex">
 				<div class="d-flex flex-wrap justify-content-between flex-1">
-					<div class="mb-lg-0 mb-2 me-8">
-						<h1 class="pg-title">Welcome back</h1>
-						<p>Welcome to SPELL CRM Dashboard.</p>
+					<div class="mb-md-0 mb-2 me-8">
+						<div class="d-flex align-items-center">
+							<h1 class="pg-title">Invoices</h1>
+							<!-- <span class="badge badge-soft-primary ms-3">Badge</span> -->
+						</div>
+						<p id="greeting"></p>
+
+						<script>
+							const now = new Date();
+							const hour = now.getHours();
+					
+							let greeting;
+					
+							if (hour < 12) {
+								greeting = "Good Morning";
+							} else if (hour < 18) {
+								greeting = "Good Afternoon";
+							} else {
+								greeting = "Good Evening";
+							}
+					
+							document.getElementById("greeting").innerHTML = greeting + " {{request.user.first_name}}!";
+						</script>
+						
 					</div>
-					{% if 'create_finance' in permissions %}
-					<div>
-						<a href="{% url 'create_invoice' %}"><button type="button" class="btn btn-success">Create Invoice</button></a>
-					</div>
-					{% endif %}
+					<div class="pg-header-action-wrap">
+						{% if 'create_finance' in permissions %}
+						<a href="{% url 'create_invoice' %}"><button class="btn btn-primary">Create Invoice</button></a>
+						{% endif %}
+					</div> 
 				</div>
 			</div>
 		</div>
