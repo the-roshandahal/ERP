@@ -8,7 +8,10 @@ from django.utils import timezone
 from account.context_processors import *
 
 def homepage(request):
-    return render (request,'homepage.html')
+    if request.user.is_authenticated:
+        return redirect('home') 
+    else:
+        return render (request,'homepage.html')
 
 def home(request):
     if request.user.is_authenticated:
