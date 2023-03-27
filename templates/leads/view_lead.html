@@ -694,10 +694,14 @@
                                 </div>
                         </div>
                         <div class="col-xxl-6 mb-xxl-0 mb-4">
-                            <h6>Source</h6>
+                            <h6>Lead Source</h6>
                                 <div class="form-group">
-                                    <input type="text" class="form-control" name = "source" value="{{lead.source}}" required>
-                                </div>
+                                    <select class="form-select" name="source" required="">
+                                        {% for source in source %}
+                                        <option value="{{source.source}}" {% if lead.source.id == source.id %} selected {% endif %}>{{source.source}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>  
                         </div>
                     </div>
                 </div>

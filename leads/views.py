@@ -110,11 +110,8 @@ def delete_source(request,id):
 
 def leads(request):
     if 'read_leads' in custom_data_views(request):
-        logged_in_user = User.objects.get(username=request.user)
-        company_user = Employee.objects.get(user=logged_in_user)
         leads = Leads.objects.filter(active=1).order_by('-created')
         closed_leads = Leads.objects.filter(active=0).order_by('-created')
-        my_leads = Leads.objects.filter(active=1,assigned_to = company_user).order_by('-created')
         stage = LeadStage.objects.all()
         source = LeadSource.objects.all()
 
@@ -135,15 +132,29 @@ def leads(request):
                 data_list.append({
                     'user': all_users,
                 })
-        context = {
-            'leads':leads,
-            'closed_leads':closed_leads,
-            'my_leads':my_leads,
-            'source':source,
-            'stage':stage,
-            'data_list':data_list,
-        }
-        return render (request,'leads/leads.html',context)
+        if request.user.is_superuser:
+            context = {
+                'leads':leads,
+                'closed_leads':closed_leads,
+                'source':source,
+                'stage':stage,
+                'data_list':data_list,
+            }
+            return render (request,'leads/leads.html',context)
+        else:
+            logged_in_user = User.objects.get(username=request.user)
+            company_user = Employee.objects.get(user=logged_in_user)
+            my_leads = Leads.objects.filter(active=1,assigned_to = company_user).order_by('-created')
+
+            context = {
+                'leads':leads,
+                'closed_leads':closed_leads,
+                'my_leads':my_leads,
+                'source':source,
+                'stage':stage,
+                'data_list':data_list,
+            }
+            return render (request,'leads/leads.html',context)
     else:
         messages.info(request, "Unauthorized access.")
         return redirect('home')
@@ -200,6 +211,7 @@ def view_lead(request,id):
         lead_files = LeadFiles.objects.filter(leads_id=id)
 
         stage = LeadStage.objects.all()
+        source = LeadSource.objects.all()
         filtered_users = Employee.objects.all()
 
         assign_to_user = []
@@ -220,6 +232,7 @@ def view_lead(request,id):
         context = {
             'lead':lead,
             'stage':stage,
+            'source':source,
             'lead_activity':lead_activity,
             'data_list':data_list,
             'lead_calls':lead_calls,
@@ -256,36 +269,51 @@ def update_users(request,id):
 
 def add_note(request,id):
     if 'update_leads' in custom_data_views(request):
-        assigned_lead = Leads.objects.get(id=id)
-        lead_assigned_users=assigned_lead.assigned_to.all()
-        logged_in_user = User.objects.get(username=request.user)
-        employees = Employee.objects.get(user=logged_in_user)
+        if request.user.is_superuser:
+            note = request.POST['note']
+            user = User.objects.get(username=request.user)
+            changed_by = user.username
 
-        assigned=False
-        for lead_assigned_users in lead_assigned_users:
-            if str(lead_assigned_users) == str(employees):
-                assigned=True
-        
-        if (assigned == True):
-            if request.method =='POST':
-                note = request.POST['note']
-                user = User.objects.get(username=request.user)
-                changed_by = user.username
+            lead = Leads.objects.filter(id=id)[0]
 
-                lead = Leads.objects.filter(id=id)[0]
+            LeadNotes.objects.create(leads=lead, notes=note)
+            
+            messages.info(request, "Note Added Successfully")
 
-                LeadNotes.objects.create(leads=lead, notes=note)
-                
-                messages.info(request, "Note Added Successfully")
-
-                activity = ' added note ' + note
-                LeadLog.objects.create(lead=lead,changed_by=changed_by,activity=activity)
-                return redirect(view_lead,id)
-            else:
-                return redirect(view_lead,id)
-        else:
-            messages.info(request, "You are not assigned to this lead.")
+            activity = ' added note ' + note
+            LeadLog.objects.create(lead=lead,changed_by=changed_by,activity=activity)
             return redirect(view_lead,id)
+        else:
+            assigned_lead = Leads.objects.get(id=id)
+            lead_assigned_users=assigned_lead.assigned_to.all()
+            logged_in_user = User.objects.get(username=request.user)
+            employees = Employee.objects.get(user=logged_in_user)
+
+            assigned=False
+            for lead_assigned_users in lead_assigned_users:
+                if str(lead_assigned_users) == str(employees):
+                    assigned=True
+            
+            if (assigned == True):
+                if request.method =='POST':
+                    note = request.POST['note']
+                    user = User.objects.get(username=request.user)
+                    changed_by = user.username
+
+                    lead = Leads.objects.filter(id=id)[0]
+
+                    LeadNotes.objects.create(leads=lead, notes=note)
+                    
+                    messages.info(request, "Note Added Successfully")
+
+                    activity = ' added note ' + note
+                    LeadLog.objects.create(lead=lead,changed_by=changed_by,activity=activity)
+                    return redirect(view_lead,id)
+                else:
+                    return redirect(view_lead,id)
+            else:
+                messages.info(request, "You are not assigned to this lead.")
+                return redirect(view_lead,id)
 
     else:
         messages.info(request, "Unauthorized access.")
@@ -297,35 +325,50 @@ def add_note(request,id):
 
 def add_call(request,id):
     if 'update_leads' in custom_data_views(request):
-        assigned_lead = Leads.objects.get(id=id)
-        lead_assigned_users=assigned_lead.assigned_to.all()
-        logged_in_user = User.objects.get(username=request.user)
-        employees = Employee.objects.get(user=logged_in_user)
+        if request.user.is_superuser:
+            purpose = request.POST['purpose']
+            duration = request.POST['duration']
+            summary = request.POST['summary']
+            user = User.objects.get(username=request.user)
+            called_by = user.username
 
-        assigned=False
-        for lead_assigned_users in lead_assigned_users:
-            if str(lead_assigned_users) == str(employees):
-                assigned=True
-        
-        if (assigned == True):
-            if request.method =='POST':
-                purpose = request.POST['purpose']
-                duration = request.POST['duration']
-                summary = request.POST['summary']
-                user = User.objects.get(username=request.user)
-                called_by = user.username
+            lead = Leads.objects.get(id=id)
+            LeadCall.objects.create(lead=lead,purpose=purpose,duration=duration,summary=summary,called_by=called_by)
+            messages.info(request, "Call Added Successfully")
 
-                lead = Leads.objects.get(id=id)
-                LeadCall.objects.create(lead=lead,purpose=purpose,duration=duration,summary=summary,called_by=called_by)
-                messages.info(request, "Call Added Successfully")
-
-                LeadLog.objects.create(lead=lead,changed_by=called_by,activity='added call data')
-                return redirect(view_lead,id)
-            else:
-                return redirect(view_lead,id)
-        else:
-            messages.info(request, "You are not assigned to this lead.")
+            LeadLog.objects.create(lead=lead,changed_by=called_by,activity='added call data')
             return redirect(view_lead,id)
+        else:
+            
+            assigned_lead = Leads.objects.get(id=id)
+            lead_assigned_users=assigned_lead.assigned_to.all()
+            logged_in_user = User.objects.get(username=request.user)
+            employees = Employee.objects.get(user=logged_in_user)
+
+            assigned=False
+            for lead_assigned_users in lead_assigned_users:
+                if str(lead_assigned_users) == str(employees):
+                    assigned=True
+            
+            if (assigned == True):
+                if request.method =='POST':
+                    purpose = request.POST['purpose']
+                    duration = request.POST['duration']
+                    summary = request.POST['summary']
+                    user = User.objects.get(username=request.user)
+                    called_by = user.username
+
+                    lead = Leads.objects.get(id=id)
+                    LeadCall.objects.create(lead=lead,purpose=purpose,duration=duration,summary=summary,called_by=called_by)
+                    messages.info(request, "Call Added Successfully")
+
+                    LeadLog.objects.create(lead=lead,changed_by=called_by,activity='added call data')
+                    return redirect(view_lead,id)
+                else:
+                    return redirect(view_lead,id)
+            else:
+                messages.info(request, "You are not assigned to this lead.")
+                return redirect(view_lead,id)
 
     else:
         messages.info(request, "Unauthorized access.")
@@ -334,17 +377,7 @@ def add_call(request,id):
 
 def add_file(request,id):
     if 'update_leads' in custom_data_views(request):
-        assigned_lead = Leads.objects.get(id=id)
-        lead_assigned_users=assigned_lead.assigned_to.all()
-        logged_in_user = User.objects.get(username=request.user)
-        employees = Employee.objects.get(user=logged_in_user)
-
-        assigned=False
-        for lead_assigned_users in lead_assigned_users:
-            if str(lead_assigned_users) == str(employees):
-                assigned=True
-        
-        if (assigned == True):
+        if request.user.is_superuser:
             if request.method =='POST':
                 title = request.POST['title']
                 file = request.FILES['file']
@@ -361,8 +394,35 @@ def add_file(request,id):
             else:
                 return redirect(view_lead,id)
         else:
-            messages.info(request, "You are not assigned to this lead.")
-            return redirect(view_lead,id)
+            assigned_lead = Leads.objects.get(id=id)
+            lead_assigned_users=assigned_lead.assigned_to.all()
+            logged_in_user = User.objects.get(username=request.user)
+            employees = Employee.objects.get(user=logged_in_user)
+
+            assigned=False
+            for lead_assigned_users in lead_assigned_users:
+                if str(lead_assigned_users) == str(employees):
+                    assigned=True
+            
+            if (assigned == True):
+                if request.method =='POST':
+                    title = request.POST['title']
+                    file = request.FILES['file']
+                
+                    user = User.objects.get(username=request.user)
+                    added_by = user.username
+
+                    lead = Leads.objects.get(id=id)
+                    LeadFiles.objects.create(leads=lead,title=title,file=file,added_by=added_by)
+                    messages.info(request, "File Added Successfully")
+
+                    LeadLog.objects.create(lead=lead,changed_by=added_by,activity='added file data')
+                    return redirect(view_lead,id)
+                else:
+                    return redirect(view_lead,id)
+            else:
+                messages.info(request, "You are not assigned to this lead.")
+                return redirect(view_lead,id)
 
     else:
         messages.info(request, "Unauthorized access.")
@@ -371,17 +431,7 @@ def add_file(request,id):
  
 def update_lead_status(request,id):
     if 'update_leads' in custom_data_views(request):
-        assigned_lead = Leads.objects.get(id=id)
-        assignedddd=assigned_lead.assigned_to.all()
-        logged_in_user = User.objects.get(username=request.user)
-        employees = Employee.objects.get(user=logged_in_user)
-
-        assigned=False
-        for assignedddd in assignedddd:
-            if str(assignedddd) == str(employees):
-                assigned=True
-        
-        if assigned == True:
+        if request.user.is_superuser:
             if request.method =='POST':
                 stage = request.POST['stage']
                 lead_stage = LeadStage.objects.get(id=stage)
@@ -399,8 +449,36 @@ def update_lead_status(request,id):
             else:
                 return redirect(view_lead,id)
         else:
-            messages.info(request, "You are not assigned to this lead.")
-            return redirect(view_lead,id)
+            assigned_lead = Leads.objects.get(id=id)
+            assignedddd=assigned_lead.assigned_to.all()
+            logged_in_user = User.objects.get(username=request.user)
+            employees = Employee.objects.get(user=logged_in_user)
+
+            assigned=False
+            for assignedddd in assignedddd:
+                if str(assignedddd) == str(employees):
+                    assigned=True
+            
+            if assigned == True:
+                if request.method =='POST':
+                    stage = request.POST['stage']
+                    lead_stage = LeadStage.objects.get(id=stage)
+
+                    user = User.objects.get(username=request.user)
+                    changed_by = user.username
+
+                    lead = Leads.objects.filter(id=id)[0]
+                    lead.stage = lead_stage
+                    lead.save()
+                    messages.info(request, "Lead stage updated")
+                    activity = 'updated lead stage to '+str(lead_stage)
+                    LeadLog.objects.create(lead=lead,changed_by=changed_by,activity=activity)
+                    return redirect(view_lead,id)
+                else:
+                    return redirect(view_lead,id)
+            else:
+                messages.info(request, "You are not assigned to this lead.")
+                return redirect(view_lead,id)
     else:
         messages.info(request, "Unauthorized access.")
         return redirect('home')
@@ -408,13 +486,15 @@ def update_lead_status(request,id):
 def edit_lead(request,id):
     if 'update_leads' in custom_data_views(request):
         if request.method == 'POST':
+            source=request.POST['source']
             lead_data = Leads.objects.get(id=id)
+            lead_source = LeadSource.objects.get(source=source)
             lead_data.title = request.POST.get("title")
             lead_data.lead_name = request.POST.get("lead_name")
             lead_data.email = request.POST.get("email")
             lead_data.address = request.POST.get("address")
             lead_data.company_name = request.POST.get("company_name")
-            lead_data.source = request.POST.get("contact")
+            lead_data.source = lead_source
             lead_data.contact = request.POST.get("contact")
             lead_data.save()
             messages.info(request, "Lead Edited Successfully.")
@@ -433,17 +513,7 @@ def edit_lead(request,id):
 
 def close_lead(request,id):
     if 'update_leads' in custom_data_views(request):
-        assigned_lead = Leads.objects.get(id=id)
-        assignedddd=assigned_lead.assigned_to.all()
-        logged_in_user = User.objects.get(username=request.user)
-        employees = Employee.objects.get(user=logged_in_user)
-
-        assigned=False
-        for assignedddd in assignedddd:
-            if str(assignedddd) == str(employees):
-                assigned=True
-        
-        if assigned == True:
+        if request.user.is_superuser:
             lead = Leads.objects.get(id=id)
             lead.active=0
             lead.save()
@@ -455,8 +525,30 @@ def close_lead(request,id):
             LeadLog.objects.create(lead=lead,changed_by=changed_by,activity=activity)
             return redirect(view_lead,id)
         else:
-            messages.info(request, "You are not assigned to this lead.")
-            return redirect(view_lead,id)
+            assigned_lead = Leads.objects.get(id=id)
+            assignedddd=assigned_lead.assigned_to.all()
+            logged_in_user = User.objects.get(username=request.user)
+            employees = Employee.objects.get(user=logged_in_user)
+
+            assigned=False
+            for assignedddd in assignedddd:
+                if str(assignedddd) == str(employees):
+                    assigned=True
+            
+            if assigned == True:
+                lead = Leads.objects.get(id=id)
+                lead.active=0
+                lead.save()
+                messages.info(request, "Lead closed.")
+
+                user = User.objects.get(username=request.user)
+                changed_by = user.username
+                activity = ' closed lead '
+                LeadLog.objects.create(lead=lead,changed_by=changed_by,activity=activity)
+                return redirect(view_lead,id)
+            else:
+                messages.info(request, "You are not assigned to this lead.")
+                return redirect(view_lead,id)
     else:
         messages.info(request, "Unauthorized access.")
         return redirect('home')
@@ -465,17 +557,7 @@ def close_lead(request,id):
 
 def reopen_lead(request,id):
     if 'update_leads' in custom_data_views(request):
-        assigned_lead = Leads.objects.get(id=id)
-        assignedddd=assigned_lead.assigned_to.all()
-        logged_in_user = User.objects.get(username=request.user)
-        employees = Employee.objects.get(user=logged_in_user)
-
-        assigned=False
-        for assignedddd in assignedddd:
-            if str(assignedddd) == str(employees):
-                assigned=True
-        
-        if assigned == True:
+        if request.user.is_superuser:
             lead = Leads.objects.get(id=id)
             lead.active=1
             lead.save()
@@ -487,8 +569,30 @@ def reopen_lead(request,id):
             LeadLog.objects.create(lead=lead,changed_by=changed_by,activity=activity)
             return redirect(view_lead,id)
         else:
-            messages.info(request, "You are not assigned to this lead.")
-            return redirect(view_lead,id)
+            assigned_lead = Leads.objects.get(id=id)
+            assignedddd=assigned_lead.assigned_to.all()
+            logged_in_user = User.objects.get(username=request.user)
+            employees = Employee.objects.get(user=logged_in_user)
+
+            assigned=False
+            for assignedddd in assignedddd:
+                if str(assignedddd) == str(employees):
+                    assigned=True
+            
+            if assigned == True:
+                lead = Leads.objects.get(id=id)
+                lead.active=1
+                lead.save()
+                messages.info(request, "Lead reopened.")
+
+                user = User.objects.get(username=request.user)
+                changed_by = user.username
+                activity = ' reopened lead '
+                LeadLog.objects.create(lead=lead,changed_by=changed_by,activity=activity)
+                return redirect(view_lead,id)
+            else:
+                messages.info(request, "You are not assigned to this lead.")
+                return redirect(view_lead,id)
     else:
         messages.info(request, "Unauthorized access.")
         return redirect('home')
