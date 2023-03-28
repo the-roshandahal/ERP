@@ -171,12 +171,14 @@ def edit_role(request, id):
         messages.info(request, "Unauthorized access.")
         return redirect('home')
 
-def delete_role(request,id):
+def delete_role(request, id):
     if 'delete_account' in custom_data_views(request):
         role_data = Role.objects.get(id=id)
-        permission = Permission.objects.filter(role=role_data)
-        if permission:
-            messages.info(request, f"Please assign the employees with {role_data} to another role before deleting")
+        permission = Permission.objects.get(role=role_data)
+        employees = Employee.objects.filter(permission=permission).exists()
+
+        if employees:
+            messages.info(request, f"Please assign the employees with '{role_data}' role to another role before deleting")
             return redirect('role')
         else:
             deleted_role = role_data.role
@@ -186,6 +188,7 @@ def delete_role(request,id):
     else:
         messages.info(request, "Unauthorized access.")
         return redirect('home')
+
 
 
 def view_role(request,id):
