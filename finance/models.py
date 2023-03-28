@@ -76,7 +76,7 @@ class ExpenseType(models.Model):
 class Expense(models.Model):
     expense_title = models.TextField()
     expense_amount  = models.FloatField()
-    expense_type  = models.ForeignKey(ExpenseType, on_delete=models.CASCADE)
+    expense_type  = models.ForeignKey(ExpenseType, on_delete=models.SET_NULL,null=True,blank=True)
     remarks = models.CharField(max_length = 255, null = True, blank = True)
     created = models.DateField(auto_now_add=True)
 

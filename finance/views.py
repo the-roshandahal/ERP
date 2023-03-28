@@ -169,95 +169,6 @@ def create_invoice(request):
             return render(request, "finance/create_invoice.html", context)
 
 
-# def create_invoice(request):
-#     if 'create_finance' in custom_data_views(request):
-#         if request.method == "POST":
-#             customer = request.POST["customer"]
-#             selected_product = request.POST.getlist("selected_product")
-#             selected_product_amount = request.POST.getlist("selected_product_amount")
-#             selected_product_discount = request.POST.getlist("selected_product_discount")
-#             selected_product_quantity = request.POST.getlist("selected_product_quantity")
-#             misc_name = request.POST["misc_name"]
-#             misc_amount = request.POST["misc_amount"]
-#             discount = request.POST["discount"]
-#             due_date = request.POST["due_date"]
-#             remarks = request.POST["remarks"]
-            
-
-#             product_vatable_amount = 0
-#             for i in range(len(selected_product)):
-#                 for selected_product in selected_product:
-#                     product = Product.objects.get(id = selected_product)
-#                     if product.is_vatable == True:
-#                         vatable_amount = product.product_price
-
-#             vatable_amount = product_vatable_amount+misc_amount
-
-#             total_vat_amount = vatable_amount*0.13
-
-
-#             total_product_amount = sum(float(amount) for amount in selected_product_amount)
-
-#             sub_total = float(total_product_amount) + float(misc_amount)
-
-#             vatable_amount = sub_total - float(discount)
-
-#             if product.is_vatable == True:
-#                 vat_amount = vatable_amount*0.13
-#             else:
-#                 vat_amount = 0
-
-#             total = vatable_amount + float(vat_amount)
-#             customer = Customer.objects.get(id=customer)
-#             created_by_user = User.objects.get(username=request.user)
-#             created_by = str(created_by_user)
-
-        
-#             invoice_1 = Invoice.objects.create(customer=customer,  misc_name=misc_name, misc_amount=misc_amount, discount=discount,
-#                                             vat_amount=vat_amount, remarks=remarks, created_by = created_by, invoice_amount = total)
-#             # invoice_1.product.set(selected_product)
-#             invoice_1.save()
-
-#             details = invoice_1.id
-#             details = "INV_NO_"+str(details)
-
-#             if(Statement.objects.filter(customer=customer).exists()):
-
-#                 bal = Statement.objects.filter(
-#                     customer=customer).order_by('-id')[:1].get()
-#                 initial_balance = bal.balance
-#                 balance = float(initial_balance) + float(total)
-
-#                 Statement.objects.create(
-#                     customer=customer, transaction='invoice', details=details, amount=total, balance=balance)
-#             else:
-#                 amount = 0
-#                 payment = 0
-#                 balance = 0
-#                 Statement.objects.create(customer=customer, transaction='Opening Balance',
-#                                         details='--', amount=amount, payment=payment, balance=balance)
-
-#                 bal = Statement.objects.filter(
-#                     customer=customer).order_by('-id')[:1].get()
-#                 initial_balance = bal.balance
-#                 balance = float(initial_balance) + float(total)
-
-#                 Statement.objects.create(
-#                     customer=customer, transaction='invoice', details=details, amount=total, balance=balance)
-#             messages.info(request, "Invoice Created Successfully.")
-#             return redirect(view_invoice, id=invoice_1.id)
-#         else:
-#             product = Product.objects.all()
-#             customer = Customer.objects.all()
-#             context = {
-#                 'product': product,
-#                 'customer': customer
-#             }
-#             return render(request, "finance/create_invoice.html", context)
-#     else:
-#         messages.info(request, "Unauthorized access.")
-#         return redirect('home')
-    
 
 def view_invoice(request, id):
     if 'read_finance' in custom_data_views(request):
@@ -431,20 +342,72 @@ def create_expense(request):
         messages.info(request, "Unauthorized access.")
         return redirect('home')
     
+def edit_expense(request,id):
+    if request.method =="POST":
+        expense_type = request.POST['expense_type']
+        expense_title = request.POST['expense_title']
+        expense_amount = request.POST['expense_amount']
+        expense_remarks = request.POST['expense_remarks']
+
+        expense_obj = Expense.objects.get(id=id)
+        exp_type = ExpenseType.objects.get(id=expense_type)
+        expense_obj.expense_type = exp_type
+        expense_obj.expense_title = expense_title
+        expense_obj.expense_amount = expense_amount
+        expense_obj.remarks = expense_remarks
+        expense_obj.save()
+
+        return redirect('expenses')
+    else:
+        expense = Expense.objects.get(id=id)
+        expense_type = ExpenseType.objects.all()
+        context = {
+            'expense_type':expense_type,
+            'expense':expense
+        }
+        return render(request,'finance/edit_expense.html',context)
+    
+def delete_expense(request,id):
+    expense = Expense.objects.get(id=id)
+    expense.delete()
+    return redirect('expenses')
 
 
 
+def finance_setup(request):
+    expense_type  = ExpenseType.objects.all()
+    context = {
+        'expense_type':expense_type
+    }
+    return render (request,'finance/finance_setup.html',context)
 
 
 
+def create_expense_type(request):
+    if request.method =="POST":
+        expense_type = request.POST['expense_type']
+        ExpenseType.objects.create(expense_type =expense_type)
+        return redirect('finance_setup')
+
+
+def delete_expense_type(request,id):
+    expense_type = ExpenseType.objects.get(id=id)
+    expense_type.delete()
+    return redirect('finance_setup')
 
 
 
-
-
-
-
-
-
-
+def edit_expense_type(request,id):
+    if request.method =="POST":
+        expense_type = request.POST['expense_type']
+        expense_obj = ExpenseType.objects.get(id=id)
+        expense_obj.expense_type = expense_type
+        expense_obj.save()
+        return redirect('finance_setup')
+    else:
+        expense_type = ExpenseType.objects.get(id=id)
+        context = {
+            'expense_type':expense_type
+        }
+        return render(request,'finance/edit_expense_type.html',context)
 

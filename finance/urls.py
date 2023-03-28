@@ -18,7 +18,13 @@ urlpatterns = [
     path("finance/", views.finance, name="finance"),
     path("expenses/", views.expenses, name="expenses"),
     path("create_expense/", views.create_expense, name="create_expense"),
-    # path("create_expense_type/", views.create_expense_type, name="create_expense"),
+    path("edit_expense/<int:id>", views.edit_expense, name="edit_expense"),
+    path("delete_expense/<int:id>", views.delete_expense, name="delete_expense"),
+
+    path("finance_setup/", views.finance_setup, name="finance_setup"),
+    path("create_expense_type/", views.create_expense_type, name="create_expense_type"),
+    path("delete_expense_type/<int:id>", views.delete_expense_type, name="delete_expense_type"),
+    path("edit_expense_type/<int:id>", views.edit_expense_type, name="edit_expense_type"),
 
     path("statement/", views.statement, name="statement"),
     path("single_statement/<int:id>", views.single_statement, name="single_statement"),
