@@ -110,7 +110,7 @@ def create_role(request):
                 print('something went wrong')
                 return redirect('role')
         else:
-            return redirect('role')
+            return render(request,'account/create_role.html')
     else:
         messages.info(request, "Unauthorized access.")
         return redirect('home')

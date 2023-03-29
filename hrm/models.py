@@ -61,7 +61,7 @@ class Employee(models.Model):
     contact = models.CharField(max_length=200,null=True, blank=True)
     address = models.CharField(max_length=200,null=True, blank=True)
     emp_salary = models.CharField(max_length=200,null=True, blank=True)
-    password = models.CharField(max_length=200,null=True, blank=True)
+    emp_password = models.CharField(max_length=200,null=True, blank=True)
     date_joined = models.DateTimeField(null=True, blank=True)
     date_modified = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)

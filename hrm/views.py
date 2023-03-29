@@ -492,12 +492,13 @@ def add_employee(request):
             last_name = request.POST['last_name']
 
             role = request.POST['role']
+            pass_obj= password
             user=User.objects.create_user(first_name=first_name,last_name=last_name,email=email,password=password,username=username)
             permission=Permission.objects.get(role=role)
             designation = Designation.objects.get(id=designation)
             department = designation.department
             
-            Employee.objects.create(user=user,password=password,permission=permission,designation =designation,department =department,email =email,contact =contact,address =address,emp_salary =salary,date_joined = date_joined)
+            Employee.objects.create(user=user,emp_password=pass_obj,permission=permission,designation =designation,department =department,email =email,contact =contact,address =address,emp_salary =salary,date_joined = date_joined)
             messages.info(request, "Employee Added Successfully")
 
             return redirect('employees')
@@ -533,6 +534,9 @@ def edit_employee(request,id):
             last_name = request.POST['last_name']
 
             role = request.POST['role']
+            pass_obj= password
+
+
             user_data = Employee.objects.get(id=id)
             permission=Permission.objects.get(role=role)
             department=Department.objects.get(id=department)
@@ -556,7 +560,7 @@ def edit_employee(request,id):
             user_data.emp_salary = salary
             user_data.email = email
             if password:
-                user_data.password=password
+                user_data.emp_password=pass_obj
             if date_joined:
                 user_data.date_joined = date_joined
             user_data.save()
