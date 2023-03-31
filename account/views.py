@@ -8,6 +8,8 @@ from django.contrib import messages, auth
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 import datetime
+from django.conf import settings
+from django.core.mail import send_mail
 
 from .context_processors import custom_data_views
 
@@ -220,3 +222,54 @@ def company_user(request):
 
 def page_not_found_view(request, exception):
     return render(request, "error404.html")
+
+
+
+# def forgot_password(request):
+#     return render(request,'account/forgot_password_email.html')
+
+
+
+def forgot_password(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            # If the user does not exist, display an error message
+            messages.error(request, "The email address you entered is not registered.")
+            return redirect('forgot_password')
+        
+        # Generate a 6 digit code and send it to the user's email
+        from random import randint
+        code = randint(100000, 999999)
+        user.forgot_password_code = code
+        user.save()
+        
+        subject = 'Password reset code'
+        message = f'Your password reset code is {code}.'
+        email_from = settings.EMAIL_HOST_USER
+        recipient_list = [
+            email,
+        ]
+        send_mail(subject, message, email_from, recipient_list)
+        # Redirect the user to the password reset page with a success message
+        messages.success(request, "We have sent a password reset code to your email.")
+        return redirect('password_reset')
+    
+    return render(request, 'account/forgot_password.html')
+
+
+def password_reset(request):
+    if request.method == 'POST':
+        code = request.POST.get('code')
+        new_password = request.POST.get('new_password')
+        user = request.user
+        if user.forgot_password_code == int(code):
+            user.set_password(new_password)
+            user.forgot_password_code = None
+            user.save()
+            messages.success(request, "Password Changed Successfully")
+            return redirect('login')
+    return render(request, 'account/password_reset.html')

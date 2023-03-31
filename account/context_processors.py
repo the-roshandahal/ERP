@@ -4,10 +4,9 @@ from features.models import Company
 
 def custom_data(request):
     permissions = []
-    company=None
+    company = Company.objects.all().order_by('-created').first()
     if request.user.is_authenticated:
         logged_in_user = User.objects.get(username=request.user)
-
         # Check if the logged in user is a superuser
         if logged_in_user.is_superuser:
             permissions = ['account', 'finance', 'hrm', 'products', 'leads', 
@@ -18,13 +17,13 @@ def custom_data(request):
                            'create_products', 'read_products', 'update_products', 'delete_products', 
                            'manage_company', 'manage_account', 'manage_finance', 'manage_hrm', 'manage_products', 'manage_leads']
 
-            company = Company.objects.all().order_by('-created').first()
+            
 
         else:
             user = Employee.objects.get(user=logged_in_user)
             role=Role.objects.get(role=user.permission)
             permission=Permission.objects.get(role=role)
-            company = Company.objects.all().order_by('-created').first()
+            
 
             if permission.create_account or permission.read_account or permission.update_account or permission.delete_account or permission.manage_account:
                 permissions.append('account')
