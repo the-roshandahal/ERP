@@ -225,8 +225,34 @@ def page_not_found_view(request, exception):
 
 
 
-# def forgot_password(request):
-#     return render(request,'account/forgot_password_email.html')
+def requires_sequence(allowed_views):
+    def decorator(view_func):
+        def wrapper(request, *args, **kwargs):
+            # Check if the previous view is in the allowed sequence
+            prev_view = request.session.get('prev_view', None)
+            if prev_view not in allowed_views:
+                # If the previous view is not in the allowed sequence,
+                # redirect to the first view in the sequence
+                return redirect(allowed_views[0])
+
+            # Check if the previous view is the last allowed view
+            if prev_view == allowed_views[-1]:
+                # If the previous view is the last allowed view, reset the session
+                request.session['prev_view'] = None
+
+            # Call the view function
+            response = view_func(request, *args, **kwargs)
+
+            # Set the current view as the previous view
+            request.session['prev_view'] = request.resolver_match.url_name
+            return response
+
+        return wrapper
+
+    return decorator
+
+
+
 
 
 
@@ -237,15 +263,14 @@ def forgot_password(request):
         try:
             user = User.objects.get(email=email)
         except User.DoesNotExist:
-            # If the user does not exist, display an error message
             messages.error(request, "The email address you entered is not registered.")
             return redirect('forgot_password')
         
-        # Generate a 6 digit code and send it to the user's email
+        employee = Employee.objects.get(user=user)
         from random import randint
         code = randint(100000, 999999)
-        user.forgot_password_code = code
-        user.save()
+        employee.code = code
+        employee.save()
         
         subject = 'Password reset code'
         message = f'Your password reset code is {code}.'
@@ -254,22 +279,120 @@ def forgot_password(request):
             email,
         ]
         send_mail(subject, message, email_from, recipient_list)
-        # Redirect the user to the password reset page with a success message
         messages.success(request, "We have sent a password reset code to your email.")
-        return redirect('password_reset')
-    
+        return redirect('verify_otp', email)
     return render(request, 'account/forgot_password.html')
 
-
-def password_reset(request):
+@requires_sequence(['forgot_password','verify_otp', 'reset_password'])
+def verify_otp(request, email):
     if request.method == 'POST':
         code = request.POST.get('code')
-        new_password = request.POST.get('new_password')
-        user = request.user
-        if user.forgot_password_code == int(code):
-            user.set_password(new_password)
-            user.forgot_password_code = None
+        email=email
+        user = User.objects.get(email=email)
+        
+        try:
+            employee = Employee.objects.get(user=user,code=code)
+            if employee:
+                messages.success(request, "OTP verified successfully")
+                return redirect(reset_password,email)
+        except:
+            messages.success(request, "OTP couldn't be verified")
+            return redirect(request.META.get('HTTP_REFERER'))
+    return render(request, 'account/verify_otp.html',{'email':email})
+
+
+@requires_sequence(['reset_password'])
+def reset_password(request, email):
+    if request.method == 'POST':
+        password = request.POST.get('password')
+        confirm_password = request.POST.get('confirm_password')
+        email=email
+        
+
+        if password == confirm_password:
+            user = User.objects.get(email=email)
+            employee = Employee.objects.get(user=user)
+            
+            user.set_password(password)
             user.save()
-            messages.success(request, "Password Changed Successfully")
+
+            employee.emp_password=password
+            employee.save()
+            messages.success(request, "Password changed successfully")
             return redirect('login')
-    return render(request, 'account/password_reset.html')
+        else:
+            messages.success(request, "Password do not match.")
+            return redirect(request.META.get('HTTP_REFERER'))
+    return render(request, 'account/reset_password.html',{'email':email})
+
+
+
+
+
+# def forgot_password(request):
+#     if request.method == 'POST':
+#         email = request.POST.get('email')
+        
+#         try:
+#             user = User.objects.get(email=email)
+#         except User.DoesNotExist:
+#             messages.error(request, "The email address you entered is not registered.")
+#             return redirect('forgot_password')
+        
+#         employee = Employee.objects.get(user=user)
+#         from random import randint
+#         code = randint(100000, 999999)
+#         employee.code = code
+#         employee.save()
+        
+#         subject = 'Password reset code'
+#         message = f'Your password reset code is {code}.'
+#         email_from = settings.EMAIL_HOST_USER
+#         recipient_list = [
+#             email,
+#         ]
+#         send_mail(subject, message, email_from, recipient_list)
+#         messages.success(request, "We have sent a password reset code to your email.")
+#         return redirect('verify_otp', email)
+#     return render(request, 'account/forgot_password.html')
+
+
+# def verify_otp(request,email):
+#     if request.method == 'POST':
+#         code = request.POST.get('code')
+#         email=email
+#         user = User.objects.get(email=email)
+        
+#         try:
+#             employee = Employee.objects.get(user=user,code=code)
+#             if employee:
+#                 messages.success(request, "OTP verified successfully")
+#                 return redirect(reset_password,email)
+#         except:
+#             messages.success(request, "OTP couldn't be verified")
+#             return redirect(request.META.get('HTTP_REFERER'))
+#     return render(request, 'account/verify_otp.html',{'email':email})
+
+
+# def reset_password(request,email):
+#     if request.method == 'POST':
+#         password = request.POST.get('password')
+#         confirm_password = request.POST.get('confirm_password')
+#         email=email
+        
+
+#         if password == confirm_password:
+#             user = User.objects.get(email=email)
+#             employee = Employee.objects.get(user=user)
+            
+#             user.set_password(password)
+#             user.save()
+
+#             employee.emp_password=password
+#             employee.save()
+#             messages.success(request, "Password changed successfully")
+#             return redirect('login')
+#         else:
+#             messages.success(request, "Password do not match.")
+#             return redirect(request.META.get('HTTP_REFERER'))
+#     return render(request, 'account/reset_password.html',{'email':email})

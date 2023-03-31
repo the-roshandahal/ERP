@@ -57,6 +57,7 @@ class Employee(models.Model):
     designation = models.ForeignKey(Designation, on_delete=models.SET_NULL,null=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     permission = models.ForeignKey(Permission,on_delete=models.SET_NULL,null=True, blank=True)
+    code = models.CharField(max_length=100,null=True, blank=True)
     email = models.CharField(max_length=200,null=True, blank=True)
     contact = models.CharField(max_length=200,null=True, blank=True)
     address = models.CharField(max_length=200,null=True, blank=True)
@@ -121,12 +122,3 @@ class LeaveDate(models.Model):
 
     class Meta:
         verbose_name_plural = "02. Leave Dates"
-
-# class ForgotPassword(models.Model):
-#     user = models.ForeignKey(Employee,on_delete=models.CASCADE)
-#     code = models.CharField(max_length=100)
-#     def __str__(self):
-#         return f"{self.user.user.username}"
-
-#     class Meta:
-#         verbose_name_plural = "Codes"

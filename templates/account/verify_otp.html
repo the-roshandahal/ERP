@@ -13,26 +13,27 @@
                  <div class="row">
                      <div class="col-sm-10 position-relative mx-auto">
                          <div class="auth-content py-8">
-                             <form class="w-100" method="post" action="{% url 'password_reset' %}" >
+                             <form class="w-100" method="post" action="{% url 'password_reset' email=email %}" >
                                  {% csrf_token %}
                                  <div class="row">
                                      <div class="col-lg-5 col-md-7 col-sm-10 mx-auto">
-                                         <div class="text-center mb-7">
-                                             <a class="navbar-brand me-0" href="{% url 'home' %}">
-                                                 <img class="brand-img d-inline-block" src="{{company.company_logo.url}}" alt="logo" width='200'>
-                                             </a>
-                                         </div>
+                                        {% if company.company_logo %}
+                                        <div class="text-center mb-7">
+                                            <a class="navbar-brand me-0" href="{% url 'home' %}">
+                                                <img class="brand-img d-inline-block" src="{{company.company_logo.url}}" alt="logo" width='200'>
+                                            </a>
+                                        </div>
+                                        {% endif %}
                                          <div class="card card-flush">
-                                            
                                                 <div class="card-body text-center">
                                                     <h4>Verification Code</h4>
-                                                    <p class="mb-4">Enter the vericfication code that we sent to your email.</p>
+                                                    <p class="mb-4">Enter the vericfication code that we sent to your email, {{email}}.</p>
                                                     <div class="row gx-3">
                                                         <div class="form-group col-lg-12">
                                                             <div class="form-label-group">
                                                                 <label>Verification Code</label>
                                                             </div>
-                                                            <input class="form-control" placeholder="111111" type="text" name='code' rquired>
+                                                            <input class="form-control" placeholder="458745" type="text" name='code' rquired>
                                                         </div>
                                                     </div>
                                                     <button class="btn btn-primary btn-uppercase btn-block" type="submit">Verify</button>

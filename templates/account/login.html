@@ -72,7 +72,7 @@ Contact: contact@hencework.com
 							<div class="auth-content flex-column pt-8 pb-md-8 pb-13">
 								<div class="text-center mb-7">
 									<a class="navbar-brand me-0" href="{% url 'home' %}">
-										<img class="brand-img d-inline-block" src="{% static 'logo.png' %}" alt="brand" height="100">
+										<img class="brand-img d-inline-block" src="{{company.company_logo.url}}" alt="brand" height="100">
 									</a>
 								</div>
 								<form class="w-100" method="POST" action = "{% url 'login' %}">
