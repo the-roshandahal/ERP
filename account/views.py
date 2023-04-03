@@ -224,38 +224,6 @@ def page_not_found_view(request, exception):
     return render(request, "error404.html")
 
 
-
-def requires_sequence(allowed_views):
-    def decorator(view_func):
-        def wrapper(request, *args, **kwargs):
-            # Check if the previous view is in the allowed sequence
-            prev_view = request.session.get('prev_view', None)
-            if prev_view not in allowed_views:
-                # If the previous view is not in the allowed sequence,
-                # redirect to the first view in the sequence
-                return redirect(allowed_views[0])
-
-            # Check if the previous view is the last allowed view
-            if prev_view == allowed_views[-1]:
-                # If the previous view is the last allowed view, reset the session
-                request.session['prev_view'] = None
-
-            # Call the view function
-            response = view_func(request, *args, **kwargs)
-
-            # Set the current view as the previous view
-            request.session['prev_view'] = request.resolver_match.url_name
-            return response
-
-        return wrapper
-
-    return decorator
-
-
-
-
-
-
 def forgot_password(request):
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -283,7 +251,6 @@ def forgot_password(request):
         return redirect('verify_otp', email)
     return render(request, 'account/forgot_password.html')
 
-@requires_sequence(['forgot_password','verify_otp', 'reset_password'])
 def verify_otp(request, email):
     if request.method == 'POST':
         code = request.POST.get('code')
@@ -300,8 +267,6 @@ def verify_otp(request, email):
             return redirect(request.META.get('HTTP_REFERER'))
     return render(request, 'account/verify_otp.html',{'email':email})
 
-
-@requires_sequence(['reset_password'])
 def reset_password(request, email):
     if request.method == 'POST':
         password = request.POST.get('password')
@@ -327,72 +292,80 @@ def reset_password(request, email):
 
 
 
+# from functools import wraps
 
-
-# def forgot_password(request):
-#     if request.method == 'POST':
-#         email = request.POST.get('email')
-        
-#         try:
-#             user = User.objects.get(email=email)
-#         except User.DoesNotExist:
-#             messages.error(request, "The email address you entered is not registered.")
-#             return redirect('forgot_password')
-        
-#         employee = Employee.objects.get(user=user)
-#         from random import randint
-#         code = randint(100000, 999999)
-#         employee.code = code
-#         employee.save()
-        
-#         subject = 'Password reset code'
-#         message = f'Your password reset code is {code}.'
-#         email_from = settings.EMAIL_HOST_USER
-#         recipient_list = [
-#             email,
-#         ]
-#         send_mail(subject, message, email_from, recipient_list)
-#         messages.success(request, "We have sent a password reset code to your email.")
-#         return redirect('verify_otp', email)
-#     return render(request, 'account/forgot_password.html')
-
-
-# def verify_otp(request,email):
-#     if request.method == 'POST':
-#         code = request.POST.get('code')
-#         email=email
-#         user = User.objects.get(email=email)
-        
-#         try:
-#             employee = Employee.objects.get(user=user,code=code)
-#             if employee:
-#                 messages.success(request, "OTP verified successfully")
-#                 return redirect(reset_password,email)
-#         except:
-#             messages.success(request, "OTP couldn't be verified")
-#             return redirect(request.META.get('HTTP_REFERER'))
-#     return render(request, 'account/verify_otp.html',{'email':email})
-
-
-# def reset_password(request,email):
-#     if request.method == 'POST':
-#         password = request.POST.get('password')
-#         confirm_password = request.POST.get('confirm_password')
-#         email=email
-        
-
-#         if password == confirm_password:
-#             user = User.objects.get(email=email)
-#             employee = Employee.objects.get(user=user)
-            
-#             user.set_password(password)
-#             user.save()
-
-#             employee.emp_password=password
-#             employee.save()
-#             messages.success(request, "Password changed successfully")
-#             return redirect('login')
+# def verify_otp_required(func):
+#     @wraps(func)
+#     def wrapper(*args, **kwargs):
+#         if not kwargs.get('otp_verified'):
+#             print("OTP not verified. Please verify OTP first.")
 #         else:
-#             messages.success(request, "Password do not match.")
-#             return redirect(request.META.get('HTTP_REFERER'))
-#     return render(request, 'account/reset_password.html',{'email':email})
+#             return func(*args, **kwargs)
+#     return wrapper
+
+# def reset_password_required(func):
+#     @wraps(func)
+#     def wrapper(*args, **kwargs):
+#         if not kwargs.get('password_reset'):
+#             print("Password not reset. Please reset password first.")
+#         else:
+#             return func(*args, **kwargs)
+#     return wrapper
+
+# def send_otp(email):
+#     print(f"OTP sent to {email}")
+#     return True
+
+# def verify_otp(otp, saved_otp):
+#     if otp == saved_otp:
+#         print("OTP verified successfully")
+#         return True
+#     else:
+#         print("OTP verification failed")
+#         return False
+
+# def reset_password(new_password):
+#     print(f"Password reset to {new_password}")
+#     return True
+
+# @verify_otp_required
+# def reset_password_flow(saved_otp, new_password, otp_verified=False, password_reset=False):
+#     if not otp_verified:
+#         print("Please verify OTP first.")
+#     elif not password_reset:
+#         reset_password(new_password)
+#         return {'otp_verified': True, 'password_reset': True}
+#     else:
+#         print("Password has already been reset.")
+#         return {'otp_verified': True, 'password_reset': True}
+
+# @reset_password_required
+# def verify_otp_flow(otp, saved_otp, otp_verified=False, password_reset=False):
+#     if not otp_verified:
+#         if verify_otp(otp, saved_otp):
+#             return {'otp_verified': True, 'password_reset': False}
+#         else:
+#             return {'otp_verified': False, 'password_reset': False}
+#     else:
+#         print("OTP has already been verified.")
+#         return {'otp_verified': True, 'password_reset': False}
+
+# def forgot_password(email, saved_otp):
+#     if send_otp(email):
+#         otp = input("Please enter the OTP sent to your email: ")
+#         otp_status = verify_otp_flow(otp, saved_otp, otp_verified=False, password_reset=False)
+#         return otp_status
+
+# # example usage
+# saved_otp = 1234
+# email = "example@gmail.com"
+
+# otp_status = forgot_password(email, saved_otp)
+# if otp_status.get('otp_verified'):
+#     new_password = input("Please enter your new password: ")
+#     password_reset_status = reset_password_flow(saved_otp, new_password, otp_verified=True, password_reset=False)
+#     if password_reset_status.get('password_reset'):
+#         print("Password reset successfully.")
+
+
+
