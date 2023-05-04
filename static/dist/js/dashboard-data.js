@@ -120,7 +120,7 @@ var options1 = {
 		data: invoice_data
 	}],
 	chart: {
-		type: 'bar',
+		type: 'line',
 		height: 250,
 		stacked: false,
 		toolbar: {
@@ -142,11 +142,12 @@ var options1 = {
 	xaxis: {
 		type: 'datetime',
 		categories: categories,
+
 	},
 	legend: {
 		show:false
 	},
-	colors: ['#007D88', '#25cba1', '#ebf3fe'],
+	colors: ['#007D88', '#25cba1', '#585858'],
 	fill: {
 		opacity: 1
 	},
@@ -155,6 +156,8 @@ var options1 = {
 	}
 };
 var chart1 = new ApexCharts(document.querySelector("#column_chart_2"), options1);
+console.log(chart1,'sdad')
+console.log(options1,'sdad')
 chart1.render();
 
 
@@ -198,6 +201,7 @@ var options2 = {
 };
 
 var chart2 = new ApexCharts(document.querySelector("#radial_chart_2"), options2);
+console.log(options2,'sdasdadad')
 chart2.render();
 
 /*Animated Map*/	

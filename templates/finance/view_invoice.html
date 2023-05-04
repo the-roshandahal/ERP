@@ -1,5 +1,32 @@
 {% load static %}{% include 'nav_links.html' %}
-
+<style>
+    @media print {
+        thead tr th{
+            background-color: #007d88 !important;
+            -webkit-print-color-adjust:exact;
+        }
+        .companycol{
+            width:50%;
+        }
+        .invoicecol{
+            width:50%;
+        }
+        .headrow{
+            display:flex;
+            justify-content:space-between;
+        }
+        .termsncond{
+            width:50%;
+        }
+        .notetoclient{
+            width:50%;
+        }
+        .bottomrow{
+            display:flex;
+            justify-content:space-between;
+        }
+      }
+</style>
 <div class="container mt-5">
     <div class="container html-content" id='printMe'>
         <div class="template-invoice-wrap mt-xxl-5 p-md-5 p-3">
@@ -11,8 +38,8 @@
                     <h2 class="d-flex justify-content-md-end mb-0 invoiceid">Invoice #{{invoice.id}}</h2>
                 </div>	
             </div>	
-            <div class="row mt-4">
-                <div class="col-md-4 order-md-0 order-1">
+            <div class="row mt-4 headrow">
+                <div class="col-md-4 order-md-0 order-1 companycol">
                     <div class="address-wrap">
                         <h6>{{company.company_name}}</h6>
                         <p>{{company.company_address}}</p>
@@ -20,7 +47,7 @@
                         <p>{{company.company_contact_number}}</p>
                     </div>
                 </div>
-                <div class="col-md-5 offset-md-3 mb-4 mb-md-0">
+                <div class="col-md-5 offset-md-3 mb-4 mb-md-0 invoicecol">
                     <div class="d-flex justify-content-md-end">
                         <div class="text-md-end me-3">
                             
@@ -56,17 +83,17 @@
                             <tr>
                                 <th  colspan="4" >Item</th>
                                 <th class="text-center">Quantity</th>
-                                <th class="text-end">Amount</th>
+                                <th class="text-center">Amount</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for product in product %}
                             <tr>
-                                <td class="w-70" colspan="4">
+                                <td class="w-60" colspan="4">
                                     <h6>{{product.product}}</h6>
                                 </td>
                                 <td class="w-20 text-center text-dark">{{product.product_quantity}}</td>
-                                <td class="w-20 text-end text-dark">Rs. {{product.product_price}}</td>
+                                <td class="w-30 text-center text-dark">Rs. {{product.product_price}}</td>
                             </tr>
                             {% endfor %}
     
@@ -74,39 +101,37 @@
                             {% if invoice.misc_name and invoice.misc_amount %}
                             <tr>
                                 
-                                <td class="w-70" colspan="4">
+                                <td class="w-60" colspan="4">
                                     <h6>{{invoice.misc_name}}</h6>
                                 </td>
                                 <td></td>
-                                <td class="w-20 text-end text-dark">Rs. {{invoice.misc_amount}}</td>
+                                <td class="w-30 text-center text-dark">Rs. {{invoice.misc_amount}}</td>
                             </tr>
                             {% endif %}
     
                             {% if vat_amount %}
                             <tr>
                                 <td></td>
-                                <td colspan="4" class="border-0 text-end ">13% VAT</td>
-                                <td class="text-end text-dark">Rs. {{invoice.vat_amount}}</td>
+                                <td colspan="4" class="border-0 text-center ">13% VAT</td>
+                                <td class="text-center text-dark">Rs. {{invoice.vat_amount}}</td>
                             </tr>
                             {% endif %}
                             
                             <tr>
                                 <td></td>
-                                <td colspan="4" class="text-dark border text-end ">Grand Total</td>
-                                <td class="text-end text-dark border">Rs. {{invoice.invoice_amount}}</td>
+                                <td colspan="4" class="text-dark border text-center ">Grand Total</td>
+                                <td class="text-center text-dark border">Rs. {{invoice.invoice_amount}}</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>	
             </div>
-            <div class="row">
-                <div class="col-lg-6 col-md-6">
+            <div class="row bottomrow">
+                <div class="col-lg-6 col-md-6 notetoclient">
                     <h6>Note to client</h6>
-                    
                     <p>{{company.payment_details|safe}}</p>
-                    {% comment %} <img src="{% static 'qr.png' %}" alt="qr code" height="300"> {% endcomment %}
                 </div>
-                <div class="col-lg-6 col-md-6">
+                <div class="col-lg-6 col-md-6 termsncond">
                     <h6>Terms & Conditions</h6>
                     <p>{{company.payment_terms|safe}}</p>
                     
@@ -116,8 +141,7 @@
     </div>
 
     <div class="container btns">
-        <button class="btn btn-outline-secondary me-3"  onclick="printDiv('printMe')">Print</button>
-        <button class="btn btn-primary" onclick="CreatePDFfromHTML()">Download</button>
+        <button class="btn btn-primary me-3"  onclick="printDiv('printMe')">Print</button>
     </div>
 </div>
 
@@ -126,21 +150,6 @@
 
 
 
-<style type = "text/css">
-       @media print {
-        * {
-                all: unset;
-            }
-
-          .logorow{
-            display: flex;
-            justify-content: space-between;
-          }
-          .invoiceid{
-            color: red;
-          }
-       }
-</style>
 <script>
     function printDiv(divName){
         var printContents = document.getElementById(divName).innerHTML;
@@ -154,29 +163,4 @@
 
     }
 </script>
-<script>
-    function CreatePDFfromHTML() {
-            var HTML_Width = $(".html-content").width();
-            var HTML_Height = $(".html-content").height();
-            var top_left_margin = 2;
-            var PDF_Width = HTML_Width + (top_left_margin * 2);
-            var PDF_Height = (PDF_Width * 1.5) + (top_left_margin * 2);
-            var canvas_image_width = HTML_Width;
-            var canvas_image_height = HTML_Height;
-        
-            var totalPDFPages = Math.ceil(HTML_Height / PDF_Height) - 1;
-        
-            html2canvas($(".html-content")[0]).then(function (canvas) {
-                var imgData = canvas.toDataURL("image/jpeg", 1.0);
-                var pdf = new jsPDF('p', 'pt', [PDF_Width, PDF_Height]);
-                pdf.addImage(imgData, 'JPG', top_left_margin, top_left_margin, canvas_image_width, canvas_image_height);
-                for (var i = 1; i <= totalPDFPages; i++) { 
-                    pdf.addPage(PDF_Width, PDF_Height);
-                    pdf.addImage(imgData, 'JPG', top_left_margin, -(PDF_Height*i)+(top_left_margin*4),canvas_image_width,canvas_image_height);
-                }
-                pdf.save("spell_innovation_invoice_{{invoice.id}}.pdf");
-            });
-        }
-    </script>
-
 {% include 'footer.html' %}

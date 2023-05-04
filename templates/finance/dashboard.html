@@ -1,4 +1,5 @@
 {% load static %}{% include 'header.html' %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <!-- Main Content -->
 <div class="hk-pg-wrapper">
 	<div class="container-xxl">
@@ -35,12 +36,13 @@
 				</div>
 			</div>
 		</div>	
+
 		
 		<div class="row mt-3">
-			<div class="col-xxl-9 col-lg-8 col-md-7 mb-md-4 mb-3">
+			<div class="col-xxl-12 col-lg-12 col-md-12 mb-md-4 mb-3">
 				<div class="card card-border mb-0 h-100">
 					<div class="card-header card-header-action">
-						<h6>Finance Overview</h6>
+						<h6>Weekly Finance Overview</h6>
 					</div>
 					<div class="card-body">
 						<div class="text-center">
@@ -52,18 +54,18 @@
 							</div>
 							<div class="d-inline-block ms-3">
 								<span class="badge-status">
-									<span class="badge bg-primary-light-4 badge-indicator badge-indicator-nobdr"></span>
+									<span class="badge bg-primary-light-4 badge-indicator badge-indicator-nobdr" style="background-color:#585858;"></span>
 									<span class="badge-label">Receipt Amount</span>
 								</span>
 							</div>
 							<div class="d-inline-block ms-3">
 								<span class="badge-status">
-									<span class="badge bg-primary-light-2 badge-indicator badge-indicator-nobdr"></span>
+									<span class="badge badge-indicator badge-indicator-nobdr" style="background-color:#585858;"></span>
 									<span class="badge-label">Invoice Amount</span>
 								</span>
 							</div>
 						</div>
-						<div id="column_chart_2" style="min-height: 265px;"></div>
+						<canvas id="myChart"></canvas>
 						<div class="separator-full mt-5"></div>
 						<div class="flex-grow-1 ms-lg-3">
 							<div class="row">
@@ -91,49 +93,70 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-xxl-3 col-lg-4 col-md-5 mb-md-4 mb-3">
-				<div class="card card-border mb-0  h-100">
-					<div class="card-header card-header-action">
-						<h6>Cash Collection</h6>
-					</div>
-					<div class="card-body text-center">
-						<div id="radial_chart_2" style="min-height: 233.7px;"></div>
-						<div class="d-inline-block mt-4">
-							<div class="mb-4">
-								<span class="d-block badge-status lh-1">
-									<span class="badge bg-primary badge-indicator badge-indicator-nobdr d-inline-block"></span>
-									<span class="badge-label d-inline-block">Invoice Amount</span>
-								</span>
-								<span class="d-block text-dark fs-5 fw-medium mb-0 mt-1">Rs.{{total_invoice_amt}}</span>
-							</div>
-							<div>
-								<span class="badge-status lh-1">
-									<span class="badge bg-primary-light-2 badge-indicator badge-indicator-nobdr"></span>
-									<span class="badge-label">Receipt Amount</span>
-								</span>
-								<span class="d-block text-dark fs-5 fw-medium mb-0 mt-1">Rs.{{total_receipt_amt}}</span>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
+			
 		</div>
 	</div>
 </div>
 
-<script>
-    var total_invoice_amt = "{{ total_invoice_amt }}";
-    var total_receipt_amt = "{{ total_receipt_amt }}";
-    var percent_1 = "80";
-    var percent_2 = "60";
 
-	{% comment %} var expense_data = [44, 55, 41, 67, 22, 43,44, 55];
-	var receipt_data = [13, 23, 20, 8, 13, 27,13, 23];
-	var invoice_data = [1, 17, 15, 15, 21, 14,11, 17]; {% endcomment %}
-	var invoice_data = [{% for totals in totals_by_day %}'{{ totals.invoice_total }}',{% endfor %}];
-	var receipt_data = [{% for totals in totals_by_day %}'{{ totals.receipt_total }}',{% endfor %}];
-	var expense_data = [{% for totals in totals_by_day %}'{{ totals.expense_total }}',{% endfor %}];
-	var categories = [{% for totals in totals_by_day %}'{{ totals.date }}',{% endfor %}];
-	
-  </script>
+
+
+<script>
+  // Define the data for Invoice, expense, and receipt
+  const invoiceData = [{% for totals in totals_by_day %}{{ totals.invoice_total|default_if_none:0 }}{% if not forloop.last %}, {% endif %}{% endfor %}];
+  const expenseData = [{% for totals in totals_by_day %}{{ totals.expense_total|default_if_none:0 }}{% if not forloop.last %}, {% endif %}{% endfor %}];
+  const receiptData = [{% for totals in totals_by_day %}{{ totals.receipt_total|default_if_none:0 }}{% if not forloop.last %}, {% endif %}{% endfor %}];
+
+  // Define the labels for the last 7 days
+  const labels = [{% for totals in totals_by_day %}"{{ totals.date }}"{% if not forloop.last %}, {% endif %}{% endfor %}];
+  // Create the chart
+  const ctx = document.getElementById('myChart').getContext('2d');
+  const chart = new Chart(ctx, {
+	type: 'line',
+	data: {
+	  labels: labels,
+	  datasets: [{
+		label: 'Invoice',
+		data: invoiceData,
+		borderColor: '#585858',
+		fill: false
+	  }, {
+		label: 'Expense',
+		data: expenseData,
+		borderColor: '#007D88',
+		fill: false
+	  }, {
+		label: 'Receipt',
+		data: receiptData,
+		borderColor: '#25cba1',
+		fill: false
+	  }]
+	},
+	options: {
+		legend: {
+		  show: false
+		},
+		responsive: true,
+		scales: {
+		  xAxes: [{
+			display: true,
+			scaleLabel: {
+			  display: true,
+			  labelString: 'Date'
+			}
+		  }],
+		  yAxes: [{
+			display: true,
+			scaleLabel: {
+			  display: true,
+			  labelString: 'Amount'
+			}
+		  }]
+		}
+	  }
+	});
+	const legend = chart.generateLegend();
+	legend.style.display = 'none';
+</script>
+
 {% include 'footer.html' %}
