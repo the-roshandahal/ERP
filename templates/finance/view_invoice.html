@@ -6,14 +6,24 @@
             -webkit-print-color-adjust:exact;
         }
         .companycol{
-            width:50%;
+            float: left;
+            width:65%;
         }
         .invoicecol{
-            width:50%;
+            width:35%;
+            align-items: right;
+        }
+        .logo{
+            width:70%;
+            float: left;
+        }
+        .invoiceidcol{
+            width:30%;
+            float: right;
         }
         .headrow{
             display:flex;
-            justify-content:space-between;
+            flex-direction: row-reverse;
         }
         .termsncond{
             width:50%;
@@ -25,19 +35,51 @@
             display:flex;
             justify-content:space-between;
         }
+        p,li,span,td{
+            font-size: 13px;
+        }
+
+
+
+        .flex-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin-top: 50px;
+          }
+          
+          .company-signature {
+            font-weight: bold;
+            border-top: 1px solid #007d88;
+          }
+          
+          .receiver-signature {
+            border-top: 1px solid #007d88;
+            font-weight: bold;
+        }
+          
+          .spacer {
+            flex-grow: 1;
+          }
       }
+      
+      
+      
 </style>
 <div class="container mt-5">
     <div class="container html-content" id='printMe'>
         <div class="template-invoice-wrap mt-xxl-5 p-md-5 p-3">
-            <div class="row logorow">
+            <div class="row logorow headrow">
                 <div class="col-lg-3 col-md-5 order-md-0 order-1 logo">
                     <img src="{{company.company_logo.url}}" alt="{{company.company_name}}" height="80">
                 </div>
-                <div class="col-lg-4 offset-lg-5 offset-md-3 col-md-4 mb-md-0 mb-2">
+                <div class="col-lg-4 offset-lg-5 offset-md-3 col-md-4 mb-md-0 mb-2 invoiceidcol">
                     <h2 class="d-flex justify-content-md-end mb-0 invoiceid">Invoice #{{invoice.id}}</h2>
                 </div>	
             </div>	
+            <div class="separator separator-light"></div>
+
             <div class="row mt-4 headrow">
                 <div class="col-md-4 order-md-0 order-1 companycol">
                     <div class="address-wrap">
@@ -51,15 +93,15 @@
                     <div class="d-flex justify-content-md-end">
                         <div class="text-md-end me-3">
                             
-                            <div class="mb-1">Invoice Date*</div>
-                            <div class="mb-1">Due Date*</div>
-                            <div>Created By</div>
+                            <div class="mb-1"><span>Invoice Date*</span></div>
+                            <div class="mb-1"><span>Due Date*</span></div>
+                            <div><span>Created By</span></div>
                         </div>
                         <div class="text-dark">
                             
-                            <div class="mb-1">{{invoice.created}}</div>
-                            <div class="mb-1">{{invoice.due_date}}</div>
-                            <div>{{invoice.created_by}}</div>
+                            <div class="mb-1"><span>{{invoice.created}}</span></div>
+                            <div class="mb-1"><span>{{invoice.due_date}}</span></div>
+                            <div><span>{{invoice.created_by}}</span></div>
                         </div>
                     </div>
                 </div>
@@ -90,7 +132,7 @@
                             {% for product in product %}
                             <tr>
                                 <td class="w-60" colspan="4">
-                                    <h6>{{product.product}}</h6>
+                                    {{product.product}}
                                 </td>
                                 <td class="w-20 text-center text-dark">{{product.product_quantity}}</td>
                                 <td class="w-30 text-center text-dark">Rs. {{product.product_price}}</td>
@@ -102,7 +144,7 @@
                             <tr>
                                 
                                 <td class="w-60" colspan="4">
-                                    <h6>{{invoice.misc_name}}</h6>
+                                    {{invoice.misc_name}}
                                 </td>
                                 <td></td>
                                 <td class="w-30 text-center text-dark">Rs. {{invoice.misc_amount}}</td>
@@ -126,6 +168,8 @@
                     </table>
                 </div>	
             </div>
+            <div class="separator separator-light"></div>
+
             <div class="row bottomrow">
                 <div class="col-lg-6 col-md-6 notetoclient">
                     <h6>Note to client</h6>
@@ -137,6 +181,15 @@
                     
                 </div>
             </div>
+
+
+
+            <div class="flex-container">
+                <div class="company-signature">Company Signature</div>
+                <div class="spacer"></div>
+                <div class="receiver-signature">Receiver Signature</div>
+              </div>
+              
         </div>
     </div>
 
