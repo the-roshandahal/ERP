@@ -86,8 +86,9 @@ class LogSheet(models.Model):
 
     class Meta:
         verbose_name_plural = "01. Log Sheet"
+
 class Salary(models.Model):
-    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    employee = models.ForeignKey(Employee, on_delete=models.SET_NULL, null = True)
     month = models.ForeignKey(MonthSetup, on_delete=models.SET_NULL,null=True)
     leave_deduction = models.FloatField(max_length=255,null=True, blank=True)
     tax_deduction = models.FloatField(max_length=255,null=True, blank=True)

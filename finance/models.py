@@ -3,11 +3,8 @@ from customer.models import *
 from products.models import *
 # Create your models here.
 
-
-        
-
 class Invoice(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, null = True)
     misc_name = models.CharField(max_length=255,null = True, blank = True)
     misc_amount = models.FloatField(null = True, blank = True)
     discount = models.FloatField(null = True, blank = True)
@@ -25,15 +22,15 @@ class Invoice(models.Model):
         verbose_name_plural = "01. Invoices"
 
 class InvoiceProduct(models.Model):
-    invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    invoice = models.ForeignKey(Invoice, on_delete=models.SET_NULL, null = True)
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null = True)
     product_quantity = models.IntegerField()
     product_price = models.FloatField()
     def __str__(self):
         return f"{self.product.product_title} x {self.product_quantity}"
 
 class Receipt(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, null = True)
     paid_amount  = models.FloatField()
     payment_method = models.CharField(max_length=255)
     remarks = models.CharField(max_length = 255, null = True, blank = True)
@@ -48,7 +45,7 @@ class Receipt(models.Model):
         verbose_name_plural = "02. Receipts"
 
 class Statement(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, null = True)
     transaction = models.CharField(max_length=255)
     details = models.CharField(max_length=255)
     amount = models.FloatField(null = True, blank = True)

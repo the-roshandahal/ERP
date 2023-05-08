@@ -42,13 +42,8 @@ class Leads(models.Model):
         verbose_name_plural = "01. Leads"
 
 
-
-
-
-
-
 class LeadLog(models.Model):
-    lead = models.ForeignKey(Leads,on_delete=models.CASCADE)
+    lead = models.ForeignKey(Leads, on_delete=models.CASCADE)
     changed_by = models.CharField(max_length=200)
     activity = models.CharField(max_length=200)
     created = models.DateTimeField(auto_now_add=True)
@@ -61,7 +56,7 @@ class LeadLog(models.Model):
 
 
 class LeadCall(models.Model):
-    lead = models.ForeignKey(Leads,on_delete=models.CASCADE)
+    lead = models.ForeignKey(Leads, on_delete=models.CASCADE)
     purpose = models.CharField(max_length=200)
     called_by = models.CharField(max_length=200)
     duration = models.CharField(max_length=200)
