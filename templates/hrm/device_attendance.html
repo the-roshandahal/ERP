@@ -1,0 +1,122 @@
+{% load static %}{% include 'header.html' %}
+<!-- Main Content -->
+<div class="hk-pg-wrapper">
+	<div class="container-xxl">
+
+		<div class="hk-pg-header">
+			<div class="d-flex">
+				<div class="d-flex flex-wrap justify-content-between flex-1">
+					<div class="mb-md-0 mb-2 me-8">
+						<div class="d-flex align-items-center">
+							<h1 class="pg-title">CRM Leads</h1>
+						</div>
+						<p id="greeting"></p>
+
+						<script>
+							const now = new Date();
+							const hour = now.getHours();
+					
+							let greeting;
+					
+							if (hour < 12) {
+								greeting = "Good Morning";
+							} else if (hour < 18) {
+								greeting = "Good Afternoon";
+							} else {
+								greeting = "Good Evening";
+							}
+					
+							document.getElementById("greeting").innerHTML = greeting + " {{request.user.first_name}}!";
+						</script>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- /Add other contents below -->
+		<div class="container mt-5"></div>
+			<ul class="nav nav-justified nav-light nav-tabs nav-segmented-tabs">
+				<li class="nav-item">
+					<a class="nav-link active" data-bs-toggle="tab" href="#my_leads">
+						<span class="nav-link-text">Today Attendance</span>
+					</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" data-bs-toggle="tab" href="#active_leads">
+						<span class="nav-link-text">Attendance History</span>
+					</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" data-bs-toggle="tab" href="#closed_leads">
+						<span class="nav-link-text">Users</span>
+					</a>
+				</li>
+			</ul>
+			<div class="tab-content">
+				<div class="tab-pane fade show active" id="my_leads">
+					<div class="card-action-wrap mt-5 mb-5" style="display:flex; justify-content: flex-end;">
+                        <a href="{% url 'get_zkattendance' %}"><button class="btn btn-sm btn-primary ms-3"><span><span class="btn-text">Refresh</span></span></button> </a>
+                    </div>
+                    <div class="row">
+                        <table class="table nowrap w-100 mb-5">
+                            <thead>
+                                <tr>
+                                    <th>User Id</th>
+                                    <th>Name</th>
+                                    <th>Date</th>
+                                    <th>Punch In Time</th>
+                                    <th>Punch Out Time</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for att_user_att_data in att_user_att_data %}
+                                <tr>
+                                    <td>{{att_user_att_data.att_user.uid}}</td>
+                                    <td>{{att_user_att_data.att_user.name}}</td>
+                                    <td>{{att_user_att_data.date}}</td>
+                                    <td>{{att_user_att_data.punchin_timestamp}}</td>
+                                    <td>{{att_user_att_data.punchout_timestamp}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    
+                    
+				</div>
+				<div class="tab-pane fade" id="active_leads">
+					
+                    <h5>None</h5>
+				</div>
+				<div class="tab-pane fade" id="closed_leads">
+					
+                    <div class="row">
+                        <div class="card-action-wrap mt-5 mb-5" style="display:flex; justify-content: flex-end;">
+                            <a href="{% url 'get_zkusers' %}"><button class="btn btn-sm btn-primary ms-3"><span><span class="btn-text">Refresh</span></span></button> </a>
+                        </div>
+                        <table class="table nowrap w-100 mb-5">
+                            <thead>
+                                <tr>
+                                    <th>User Id</th>
+                                    <th>Name</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for att_user_data in att_user_data %}
+                                <tr>
+                                    <td>{{att_user_data.uid}}</td>
+                                    <td>{{att_user_data.name}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</div>
+{% include 'footer.html' %}

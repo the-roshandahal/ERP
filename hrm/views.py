@@ -10,7 +10,9 @@ from django.core.paginator import Paginator
 from account.context_processors import custom_data_views
 # Create your views here.
 from django.db.models import Count
-
+from zk import ZK, const
+from datetime import datetime
+from django.utils.timezone import make_aware
 
 
 def hrm(request):
@@ -928,4 +930,88 @@ def pay_salary(request):
         messages.info(request, "Unauthorized access.")
         return redirect('home')
     
+def get_zkusers(request):
+    conn = None
+    device_data = DeviceData.objects.all()[:1].get()
+    ip = device_data.ip_address
+    port = int(device_data.port)
+    zk = ZK(ip, port=port, timeout=5)
+    
+    try:
+        conn = zk.connect()
+        users = conn.get_users()
+        
+        for user in users:
+            deviceuser, created = DeviceAttendanceUser.objects.get_or_create(uid=user.uid, defaults={'name': user.name})
+            if created:
+                deviceuser.save()
 
+    except Exception as e:
+        print("Exception occurred: ", e)
+
+    finally:
+        if conn:
+            conn.disconnect()
+    return redirect('device_attendance')
+
+
+
+
+
+def device_attendance(request):
+    today = datetime.today().strftime('%Y-%m-%d')
+    
+    att_user_data = DeviceAttendanceUser.objects.all()
+    att_user_att_data = DeviceAttendance.objects.filter(date = today)
+
+    context = {
+        'att_user_att_data':att_user_att_data,
+        'att_user_data':att_user_data
+    }
+    return render (request, 'hrm/device_attendance.html',context)
+
+
+
+
+
+def get_zkattendance(request):
+    today = datetime.today().strftime('%Y-%m-%d')
+    conn = None
+    device_data = DeviceData.objects.all()[:1].get()
+    ip = device_data.ip_address
+    port = int(device_data.port)
+    
+    zk = ZK(ip, port=port, timeout=5)
+    try:
+        conn = zk.connect()
+        attendances = conn.get_attendance()
+        today_attendances = [a for a in attendances if a.timestamp.strftime('%Y-%m-%d') == today]
+        
+        for attendance in today_attendances:
+            user_id = attendance.user_id
+            punch_time = attendance.timestamp
+            punch_time = make_aware(punch_time)  
+
+            try:
+                att_data = DeviceAttendance.objects.get(att_user__uid=user_id, date=today)
+                if att_data.punchout_timestamp is None:
+                    if att_data.punchin_timestamp != punch_time.time():
+                        att_data.punchout_timestamp = punch_time.time()
+                        att_data.save()
+                else:
+                    att_data.punchout_timestamp = max(att_data.punchout_timestamp, punch_time.time())
+                    att_data.save()
+            except DeviceAttendance.DoesNotExist:
+                try:
+                    att_user = DeviceAttendanceUser.objects.get(uid=user_id)
+                except DeviceAttendanceUser.DoesNotExist:
+                    att_user = DeviceAttendanceUser.objects.create(uid=user_id)
+                DeviceAttendance.objects.create(att_user=att_user, date=today, punchin_timestamp=punch_time.time())
+
+    except Exception as e:
+        print("Exception occurred: ", e)
+
+    finally:
+        if conn:
+            conn.disconnect()
+    return redirect('device_attendance')

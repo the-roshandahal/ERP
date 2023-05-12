@@ -13,3 +13,8 @@ admin.site.register(YearSetup)
 admin.site.register(Holidays)
 admin.site.register(Employee)
 admin.site.register(LogSheet)
+
+
+admin.site.register(DeviceAttendance)
+admin.site.register(DeviceAttendanceUser)
+admin.site.register(DeviceData)
