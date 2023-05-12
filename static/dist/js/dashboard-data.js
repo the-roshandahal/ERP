@@ -156,8 +156,6 @@ var options1 = {
 	}
 };
 var chart1 = new ApexCharts(document.querySelector("#column_chart_2"), options1);
-console.log(chart1,'sdad')
-console.log(options1,'sdad')
 chart1.render();
 
 

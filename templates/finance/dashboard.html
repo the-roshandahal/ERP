@@ -10,7 +10,7 @@
 					<div class="mb-md-0 mb-2 me-8">
 						<div class="d-flex align-items-center">
 							<h1 class="pg-title">Accounting Dashboard</h1>
-							<span class="badge badge-soft-primary ms-3">Badge</span>
+							
 						</div>
 						<p id="greeting"></p>
 
@@ -72,19 +72,19 @@
 								<div class="col-xxl-4 col-sm-6 mb-xxl-0 mb-3">
 									<span class="d-block fw-medium fs-7">Invoice Summary</span>
 									<div class="d-flex align-items-center">
-										<span class="d-block fs-4 fw-medium text-dark mb-0">Rs. {{today_invoice_total}}</span>
+										<span class="d-block fs-4 fw-medium text-dark mb-0">Rs. {{weekly_invoice_total}}</span>
 									</div>
 								</div>
 								<div class="col-xxl-4 col-sm-6 mb-xxl-0 mb-3">
 									<span class="d-block fw-medium fs-7">Expenses Summary</span>
 									<div class="d-flex align-items-center">
-										<span class="d-block fs-4 fw-medium text-dark mb-0">Rs. {{today_expense_total}}</span>
+										<span class="d-block fs-4 fw-medium text-dark mb-0">Rs. {{weekly_expense_total}}</span>
 									</div>
 								</div>
 								<div class="col-xxl-4 col-sm-6 mb-xxl-0 mb-3">
 									<span class="d-block fw-medium fs-7">Receipt summary</span>
 									<div class="d-flex align-items-center">
-										<span class="d-block fs-4 fw-medium text-dark mb-0">Rs. {{today_receipt_total}}</span>
+										<span class="d-block fs-4 fw-medium text-dark mb-0">Rs. {{weekly_receipt_total}}</span>
 									</div>
 								</div>
 								
@@ -134,7 +134,7 @@
 	},
 	options: {
 		legend: {
-		  show: false
+			show:false
 		},
 		responsive: true,
 		scales: {
@@ -155,8 +155,6 @@
 		}
 	  }
 	});
-	const legend = chart.generateLegend();
-	legend.style.display = 'none';
 </script>
 
 {% include 'footer.html' %}

@@ -32,9 +32,20 @@ def finance(request):
     if 'read_finance' in custom_data_views(request):
         invoice = Invoice.objects.all()
         receipt = Receipt.objects.all()
-        today_invoice_total = Invoice.objects.filter(created=date.today()).aggregate(total=Sum('invoice_amount'))['total'] or 0
-        today_receipt_total = Receipt.objects.filter(created=date.today()).aggregate(total=Sum('paid_amount'))['total'] or 0
-        today_expense_total = Expense.objects.filter(created=date.today()).aggregate(total=Sum('expense_amount'))['total'] or 0
+        end_date = datetime.today()
+        start_date = end_date - timedelta(days=7)
+
+        weekly_invoice_total = Invoice.objects.filter(
+            created__gte=start_date, created__lte=end_date
+        ).aggregate(total=Sum('invoice_amount'))['total'] or 0
+
+        weekly_receipt_total = Receipt.objects.filter(
+            created__gte=start_date, created__lte=end_date
+        ).aggregate(total=Sum('paid_amount'))['total'] or 0
+
+        weekly_expense_total = Expense.objects.filter(
+            created__gte=start_date, created__lte=end_date
+        ).aggregate(total=Sum('expense_amount'))['total'] or 0
         
         total_invoice_amt=0
         if invoice:
@@ -62,9 +73,9 @@ def finance(request):
             ],
             'total_invoice_amt':total_invoice_amt,
             'total_receipt_amt':total_receipt_amt,
-            'today_invoice_total':today_invoice_total,
-            'today_receipt_total':today_receipt_total,
-            'today_expense_total':today_expense_total,
+            'weekly_invoice_total':weekly_invoice_total,
+            'weekly_receipt_total':weekly_receipt_total,
+            'weekly_expense_total':weekly_expense_total,
         }
         return render (request, 'finance/dashboard.html',context)
     else:

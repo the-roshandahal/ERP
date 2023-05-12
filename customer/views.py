@@ -82,8 +82,8 @@ def delete_client(request,id):
 def view_client(request,id):
     if 'read_finance' in custom_data_views(request):
         client = Customer.objects.get(id=id)
-        invoices = Invoice.objects.filter(customer=id)
-        receipts = Receipt.objects.filter(customer=id)
+        invoices = Invoice.objects.filter(customer=id)[:5]
+        receipts = Receipt.objects.filter(customer=id)[:5]
         context = {
             'client': client,
             'invoices': invoices,

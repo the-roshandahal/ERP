@@ -1,18 +1,82 @@
 {% load static %}{% include 'nav_links.html' %}
-
+<style>
+    @media print {
+        thead tr th{
+            background-color: #007d88 !important;
+            -webkit-print-color-adjust:exact;
+        }
+        .companycol{
+            float: left;
+            width:65%;
+        }
+        .invoicecol{
+            width:35%;
+            align-items: right;
+        }
+        .logo{
+            width:70%;
+            float: left;
+        }
+        .invoiceidcol{
+            width:30%;
+            float: right;
+        }
+        .headrow{
+            display:flex;
+            flex-direction: row-reverse;
+        }
+        .termsncond{
+            width:50%;
+        }
+        .notetoclient{
+            width:50%;
+        }
+        .bottomrow{
+            display:flex;
+            justify-content:space-between;
+        }
+        p,li,span,td{
+            font-size: 13px;
+        }
+        .flex-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin-top: 50px;
+          }
+          
+          .company-signature {
+            font-weight: bold;
+            border-top: 1px solid #007d88;
+          }
+          
+          .receiver-signature {
+            border-top: 1px solid #007d88;
+            font-weight: bold;
+        }
+          
+          .spacer {
+            flex-grow: 1;
+          }
+      }
+      
+      
+      
+</style>
 <div class="container mt-5">
     <div class="container html-content" id='printMe'>
         <div class="template-invoice-wrap mt-xxl-5 p-md-5 p-3">
-            <div class="row logorow">
+            <div class="row logorow headrow">
                 <div class="col-lg-3 col-md-5 order-md-0 order-1 logo">
                     <img src="{{company.company_logo.url}}" alt="{{company.company_name}}" height="80">
                 </div>
-                <div class="col-lg-4 offset-lg-5 offset-md-3 col-md-4 mb-md-0 mb-2">
+                <div class="col-lg-4 offset-lg-5 offset-md-3 col-md-4 mb-md-0 mb-2 invoiceidcol">
                     <h2 class="d-flex justify-content-md-end mb-0 invoiceid">Receipt #{{receipt.id}}</h2>
                 </div>	
             </div>	
-            <div class="row mt-4">
-                <div class="col-md-4 order-md-0 order-1">
+            <div class="row mt-4 headrow">
+                <div class="col-md-4 order-md-0 order-1 companycol">
                     <div class="address-wrap">
                         <h6>{{company.company_name}}</h6>
                         <p>{{company.company_address}}</p>
@@ -20,7 +84,7 @@
                         <p>{{company.company_contact_number}}</p>
                     </div>
                 </div>
-                <div class="col-md-5 offset-md-3 mb-4 mb-md-0">
+                <div class="col-md-5 offset-md-3 mb-4 mb-md-0 invoicecol">
                     <div class="d-flex justify-content-md-end">
                         <div class="text-md-end me-3">
                             
@@ -53,7 +117,7 @@
                         <thead class="thead-primary">
                             <tr>
                                 <th  colspan="4" >Description</th>
-                                <th class="text-end">Amount</th>
+                                <th class="text-center">Amount</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -62,16 +126,16 @@
                                 <td class="w-70" colspan="4">
                                     <h6>Paid Amount</h6>
                                 </td>
-                                <td class="w-20 text-end text-dark">Rs. {{receipt.paid_amount}}</td>
+                                <td class="w-20 text-center text-dark">Rs. {{receipt.paid_amount}}</td>
                             </tr>
                             
                             <tr>
-                                <td colspan="4" class="text-dark border text-end ">Payment Method</td>
-                                <td class="text-end text-dark border">{{receipt.payment_method}}</td>
+                                <td colspan="4" class="text-dark border">Payment Method</td>
+                                <td class="text-center text-dark border">{{receipt.payment_method}}</td>
                             </tr>
                             <tr>
-                                <td colspan="4" class="text-dark border text-end ">Total</td>
-                                <td class="text-end text-dark border">Rs. {{receipt.paid_amount}}</td>
+                                <td colspan="4" class="text-dark border">Total</td>
+                                <td class="text-center text-dark border">Rs. {{receipt.paid_amount}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -83,7 +147,7 @@
                 </div>
                 <div class="col-lg-6 col-md-6">
                   {% if receipt.payment_receipt %}
-                  <h6>Receipt Screenshot</h6>
+                  <h6>Payment Evidence</h6>
                     <img src="{{receipt.payment_receipt.url}}" alt="payment_receipt" width=" 600">
                     {% endif %}
                     
@@ -93,31 +157,12 @@
     </div>
 
     <div class="container btns">
-        <button class="btn btn-outline-secondary me-3"  onclick="printDiv('printMe')">Print</button>
-        <button class="btn btn-primary" onclick="CreatePDFfromHTML()">Download</button>
+        <button class="btn btn-primary me-3"  onclick="printDiv('printMe')">Print</button>
     </div>
 </div>
 
 
 
-
-
-
-<style type = "text/css">
-       @media print {
-        * {
-                all: unset;
-            }
-
-          .logorow{
-            display: flex;
-            justify-content: space-between;
-          }
-          .invoiceid{
-            color: red;
-          }
-       }
-</style>
 <script>
     function printDiv(divName){
         var printContents = document.getElementById(divName).innerHTML;
@@ -131,29 +176,5 @@
 
     }
 </script>
-<script>
-    function CreatePDFfromHTML() {
-            var HTML_Width = $(".html-content").width();
-            var HTML_Height = $(".html-content").height();
-            var top_left_margin = 2;
-            var PDF_Width = HTML_Width + (top_left_margin * 2);
-            var PDF_Height = (PDF_Width * 1.5) + (top_left_margin * 2);
-            var canvas_image_width = HTML_Width;
-            var canvas_image_height = HTML_Height;
-        
-            var totalPDFPages = Math.ceil(HTML_Height / PDF_Height) - 1;
-        
-            html2canvas($(".html-content")[0]).then(function (canvas) {
-                var imgData = canvas.toDataURL("image/jpeg", 1.0);
-                var pdf = new jsPDF('p', 'pt', [PDF_Width, PDF_Height]);
-                pdf.addImage(imgData, 'JPG', top_left_margin, top_left_margin, canvas_image_width, canvas_image_height);
-                for (var i = 1; i <= totalPDFPages; i++) { 
-                    pdf.addPage(PDF_Width, PDF_Height);
-                    pdf.addImage(imgData, 'JPG', top_left_margin, -(PDF_Height*i)+(top_left_margin*4),canvas_image_width,canvas_image_height);
-                }
-                pdf.save("spell_innovation_receipt_{{receipt.id}}.pdf");
-            });
-        }
-    </script>
 
 {% include 'footer.html' %}
