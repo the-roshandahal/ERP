@@ -73,9 +73,9 @@
                                             <td><input type="checkbox" class="check" name="selected_employees" value="{{data_list.emp_id.id}}"></td>
                                             {% endif %}
                                             <td>{{data_list.employee}}</td>
-                                            <td>{{data_list.salary}}</td>
+                                            <td name="salary">{{data_list.salary}}</td>
                                             <td>{{data_list.absent_days}}</td>
-                                            <td>{{data_list.advance_this_month}}</td>
+                                            <td name="advance_this_month">{{data_list.advance_this_month}}</td>
                                             <td><input type="text" class="form-control form-control-sm"  id="row-57-age" value="{{data_list.leave_deduction|floatformat:2}}" name="leave_deduction"></td>
                                             <td><input type="text" class="form-control form-control-sm"  id="row-57-age" value="{{data_list.tax_deduction|floatformat:2}}" name="tax_deduction"></td>
                                             <td><input type="text" class="form-control form-control-sm"  id="row-57-age" value="0.00" name="company_deduction"></td>
@@ -140,7 +140,34 @@
                 });
               });
               
-        </script>          
+
+
+              $(document).ready(function() {
+                // Listen for changes to any input field in the table body
+                $('tbody').on('input', 'input', function() {
+                  // Find the parent row of the changed input field
+                  var row = $(this).closest('tr');
+                  
+                  // Get the values of all the relevant input fields in that row
+                  var salary = parseFloat(row.find('[name="salary"]').text());
+                  var advance = parseFloat(row.find('[name="advance_this_month"]').text());
+                  var tax = parseFloat(row.find('[name="tax_deduction"]').val());
+                  var leave = parseFloat(row.find('[name="leave_deduction"]').val());
+                  var company = parseFloat(row.find('[name="company_deduction"]').val());
+                  
+                  // Calculate the final salary
+                  var finalSalary = salary - advance - tax - leave - company;
+                  
+                  // Update the final salary input field in the same row
+                  row.find('[name="final_salary"]').val(finalSalary.toFixed(2));
+                });
+              });
+              
+              
+              
+              
+        </script>    
+              
     </div>
     <!-- /Main Content -->
 </div>

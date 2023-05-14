@@ -93,7 +93,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Select Month and Employees</h5>
+                <h5 class="modal-title">Select Source, Month and Employees</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -101,6 +101,17 @@
             <form action="{% url 'salary_payment' %}" method="POST">
                 {% csrf_token %}
                 <div class="modal-body">                                                                        
+                    <div class="row">
+                        <div class="col-xxl-12 mb-xxl-0 mb-4">
+                            <h6>Select Source</h6>
+                            <div class="form-group">
+                                <select class="form-select" name="source" required>
+                                    <option value = 'attendance_device'>Device Attendance</option>
+                                    <option value = 'leaves'>Leaves</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-xxl-12 mb-xxl-0 mb-4">
                             <h6>Select Month</h6>

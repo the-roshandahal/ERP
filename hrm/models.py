@@ -27,7 +27,7 @@ class MonthSetup(models.Model):
         verbose_name_plural = "05. Month"
 
 class Holidays(models.Model):
-    month = models.ForeignKey(MonthSetup,on_delete=models.CASCADE)
+    month = models.ForeignKey(MonthSetup,on_delete=models.CASCADE, related_name='holidays')
     holiday = models.DateField(blank=True)
 
     def __str__(self):
@@ -137,7 +137,7 @@ class DeviceData(models.Model):
 class DeviceAttendanceUser(models.Model):
     uid = models.IntegerField()
     name = models.CharField(max_length=100,null=True, blank=True)
-
+    employee = models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return f"User - {self.uid} - {self.name}"

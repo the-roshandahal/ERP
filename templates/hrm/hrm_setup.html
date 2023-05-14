@@ -53,7 +53,7 @@
                 </div>
                 <div class="flex">
                     <div class="table-responsive">
-                        <table class="table table-hover mb-0">
+                        <table class="table mb-0">
                             <thead>
                                 <tr>
                                     <th>Year</th>
@@ -97,34 +97,36 @@
                 </div>
 
                     <div class="table-responsive">                                                             
-                <table class="table table-hover mb-0">
+                <table class="table mb-0">
                     <thead>
                         <tr>
                             <th>Month</th>
                             <th>Year</th>
                             <th>Start Date</th>
                             <th>End Date</th>
+                            <th>Holidays</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for month in month %}
+                        {% for month_dict  in month_list  %}
                         <tr>
-                            <td>{{month.month}}</td>
-                            <th>{{month.year}}</th>
-                            <td>{{month.start_date}}</td>
-                            <td>{{month.end_date}}</td>
+                            <td>{{month_dict.month.month}}</td>
+                            <th>{{month_dict.month.year}}</th>
+                            <td>{{month_dict.month.start_date}}</td>
+                            <td>{{month_dict.month.end_date}}</td>
+                            <td>{{ month_dict.holiday_count }}</td>
                             <td>
                                 <div class="d-flex align-items-center">
                                     <div class="d-flex">
                                         {% if 'manage_hrm' in permissions %}
-                                        <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" href="{% url 'edit_month' id=month.id %}"><span class="btn-icon-wrap"><span class="feather-icon"><i data-feather="edit"></i></span></span></a>
+                                        <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" href="{% url 'edit_month' id=month_dict.month.id %}"><span class="btn-icon-wrap"><span class="feather-icon"><i data-feather="edit"></i></span></span></a>
                                         {% endif %}
                                         {% if 'delete_hrm' in permissions %}
-                                        <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="modal" data-bs-target="#exampleModalCentermonthDelete{{month.id}}" href="#"><span class="icon"><span class="feather-icon"><i data-feather="archive"></i></span></span></a>
+                                        <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="modal" data-bs-target="#exampleModalCentermonthDelete{{month_dict.month.id}}"><span class="icon"><span class="feather-icon"><i data-feather="archive"></i></span></span></a>
                                         {% endif %}
                                         {% if 'read_hrm' in permissions %}
-                                        <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover del-button"  data-bs-toggle="modal" data-bs-target="#exampleModalCenterViewMonth{{month.id}}"><span class="btn-icon-wrap"><span class="feather-icon"><i data-feather="eye"></i></span></span></a>
+                                        <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover del-button"  data-bs-toggle="modal" data-bs-target="#exampleModalCenterViewMonth{{month_dict.month.month.id}}"><span class="btn-icon-wrap"><span class="feather-icon"><i data-feather="eye"></i></span></span></a>
                                         {% endif %}
                                     </div>
                                 </div>
@@ -149,7 +151,7 @@
                 </div>
 
                                                                                         
-                <table class="table table-hover mb-0">
+                <table class="table mb-0">
                     <thead>
                         <tr>
                             <th>Department</th>
@@ -191,7 +193,7 @@
                 </div>
 
                                                                                         
-                <table class="table table-hover mb-0">
+                <table class="table mb-0">
                     <thead>
                         <tr>
                             <th>Designation</th>
@@ -237,7 +239,7 @@
                 </div>
                 {% if device_data %}
                 
-                <table class="table table-hover mb-0">
+                <table class="table mb-0">
                     <thead>
                         <tr>
                             <th>IP Address</th>
@@ -271,8 +273,8 @@
 	</div>
 </div>
 
-{% for month in month %}
-<div class="modal fade" id="exampleModalCenterViewMonth{{month.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterViewMonth{{month.id}}" aria-hidden="true">
+{% for month_dict in month_list %}
+<div class="modal fade" id="exampleModalCenterViewMonth{{month_dict.month.month.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterViewMonth{{month_dict.month.month.id}}" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -285,22 +287,22 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <h5 class="modal-title">Year</h5>
-                        <p>{{month.year}}</p>
+                        <p>{{month_dict.month.year}}</p>
                     </div>
                     <div class="col-lg-6">
                         <h5 class="modal-title">Month </h5>
-                        <p>{{month.month}}</p>
+                        <p>{{month_dict.month.month}}</p>
                     </div>
                 </div>
                 <div class="separator"></div>
                 <div class="row">
                     <div class="col-lg-6">
                         <h5 class="modal-title">Start Date </h5>
-                        <p>{{month.start_date}}</p>
+                        <p>{{month_dict.month.start_date}}</p>
                     </div>
                     <div class="col-lg-6">
                         <h5 class="modal-title">End Date </h5>
-                        <p>{{month.end_date}}</p>
+                        <p>{{month_dict.month.end_date}}</p>
                     </div>
                 </div>
                 <div class="separator"></div>
@@ -308,7 +310,7 @@
                     <div class="col-lg-12">
                         <h5 class="modal-title">Holidays </h5>
                         {% for holiday in holidays %}
-                        {% if holiday.month.id == month.id %}{{holiday.holiday}}, {% endif %}
+                        {% if holiday.month.id == month_dict.month.id %}{{holiday.holiday}}, {% endif %}
                         {% endfor %}
                     </div>
                 </div>
@@ -593,8 +595,8 @@
 
 
 
-{% for month in month %}
-<div class="modal fade" id="exampleModalCentermonthDelete{{month.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCentermonthDelete{{month.id}}" aria-hidden="true">
+{% for month_dict in month_list %}
+<div class="modal fade" id="exampleModalCentermonthDelete{{month_dict.month.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCentermonthDelete{{month_dict.month.id}}" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -604,11 +606,11 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p>Are you sure you want to delete {{month.month}}?</p>
+                <p>Are you sure you want to delete {{month_dict.month.month}}?</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <a href="{% url 'delete_month' id=month.id %}"><button type="button" class="btn btn-primary">Delete</button></a>
+                <a href="{% url 'delete_month' id=month_dict.month.id %}"><button type="button" class="btn btn-primary">Delete</button></a>
             </div>
         </div>
     </div>
