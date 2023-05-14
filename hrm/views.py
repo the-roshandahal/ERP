@@ -49,12 +49,23 @@ def hrm_setup(request):
         year = YearSetup.objects.all()
         department = Department.objects.all()
         designation = Designation.objects.all()
+
+
+        if DeviceData.objects.all().exists():
+            device_data = DeviceData.objects.order_by('created')[0]
+            can_add = False
+        else:
+            device_data = None
+            can_add = True
+        
         context = {
             'month':month, 
             'holidays':holidays, 
             'year':year,
             'department':department, 
             'designation':designation,
+            'device_data':device_data,
+            'can_add':can_add,
         }
         return render (request,'hrm/hrm_setup.html',context)
     else:
@@ -930,6 +941,66 @@ def pay_salary(request):
         messages.info(request, "Unauthorized access.")
         return redirect('home')
     
+
+
+
+
+
+def add_device_data(request):
+    if 'create_hrm' in custom_data_views(request):
+        if request.method=="POST":
+            ip_address = request.POST['ip_address']
+            port = request.POST['port']
+            data = DeviceData.objects.create(ip_address=ip_address, port=port)
+            data.save()
+            return redirect('hrm_setup')
+    else:
+        messages.info(request, "Unauthorized access.")
+        return redirect('home')
+
+
+def edit_device_data(request,id):
+    if 'manage_hrm' in custom_data_views(request):
+        if request.method=="POST":
+            ip_address = request.POST['ip_address']
+            port = request.POST['port']
+            data = DeviceData.objects.get(id=id)
+            data.ip_address = ip_address
+            data.port = port
+            data.save()
+            return redirect('hrm_setup')
+        else:
+            device_data = DeviceData.objects.get(id=id)
+            return render (request, 'hrm/edit_device_data.html', {'device_data':device_data})
+    else:
+        messages.info(request, "Unauthorized access.")
+        return redirect('home')
+
+def delete_device_data(request,id):
+    if 'delete_hrm' in custom_data_views(request):
+        device_data = DeviceData.objects.get(id=id)
+    
+        device_data.delete()
+        messages.info(request, "Device Data Deleted")
+        return redirect('hrm_setup')
+    else:
+        messages.info(request, "Unauthorized access.")
+        return redirect('home')
+
+def device_attendance(request):
+    today = datetime.today().strftime('%Y-%m-%d')
+    
+    att_user_data = DeviceAttendanceUser.objects.all().order_by('uid')
+    att_user_att_data = DeviceAttendance.objects.filter(date = today).order_by('-punchin_timestamp')
+    all_attendance = DeviceAttendance.objects.all().order_by('-date', '-punchin_timestamp')[:30]
+    context = {
+        'att_user_att_data':att_user_att_data,
+        'att_user_data':att_user_data,
+        'all_attendance':all_attendance,
+    }
+    return render (request, 'hrm/device_attendance.html',context)
+
+
 def get_zkusers(request):
     conn = None
     device_data = DeviceData.objects.all()[:1].get()
@@ -958,24 +1029,9 @@ def get_zkusers(request):
 
 
 
-def device_attendance(request):
-    today = datetime.today().strftime('%Y-%m-%d')
-    
-    att_user_data = DeviceAttendanceUser.objects.all()
-    att_user_att_data = DeviceAttendance.objects.filter(date = today)
-
-    context = {
-        'att_user_att_data':att_user_att_data,
-        'att_user_data':att_user_data
-    }
-    return render (request, 'hrm/device_attendance.html',context)
-
-
-
-
+from django.db.models import Max
 
 def get_zkattendance(request):
-    today = datetime.today().strftime('%Y-%m-%d')
     conn = None
     device_data = DeviceData.objects.all()[:1].get()
     ip = device_data.ip_address
@@ -985,15 +1041,22 @@ def get_zkattendance(request):
     try:
         conn = zk.connect()
         attendances = conn.get_attendance()
-        today_attendances = [a for a in attendances if a.timestamp.strftime('%Y-%m-%d') == today]
-        
-        for attendance in today_attendances:
+        last_attendance_date = DeviceAttendance.objects.aggregate(Max('date'))['date__max']
+        if last_attendance_date:
+            last_attendance_date = last_attendance_date.strftime('%Y-%m-%d')
+        else:
+            # Set an arbitrary date as the start date
+            last_attendance_date = '2023-03-13'  
+        attendance_data = [a for a in attendances if a.timestamp.strftime('%Y-%m-%d') > last_attendance_date]
+
+        for attendance in attendance_data:
             user_id = attendance.user_id
             punch_time = attendance.timestamp
             punch_time = make_aware(punch_time)  
-
+            attendance_date = punch_time.strftime('%Y-%m-%d')
+            
             try:
-                att_data = DeviceAttendance.objects.get(att_user__uid=user_id, date=today)
+                att_data = DeviceAttendance.objects.get(att_user__uid=user_id, date=attendance_date)
                 if att_data.punchout_timestamp is None:
                     if att_data.punchin_timestamp != punch_time.time():
                         att_data.punchout_timestamp = punch_time.time()
@@ -1006,7 +1069,7 @@ def get_zkattendance(request):
                     att_user = DeviceAttendanceUser.objects.get(uid=user_id)
                 except DeviceAttendanceUser.DoesNotExist:
                     att_user = DeviceAttendanceUser.objects.create(uid=user_id)
-                DeviceAttendance.objects.create(att_user=att_user, date=today, punchin_timestamp=punch_time.time())
+                DeviceAttendance.objects.create(att_user=att_user, date=attendance_date, punchin_timestamp=punch_time.time())
 
     except Exception as e:
         print("Exception occurred: ", e)
@@ -1015,3 +1078,31 @@ def get_zkattendance(request):
         if conn:
             conn.disconnect()
     return redirect('device_attendance')
+
+
+
+
+
+def edit_att_user(request,id):
+    if 'manage_hrm' in custom_data_views(request):
+        if request.method=="POST":
+            name = request.POST['name']
+            data = DeviceAttendanceUser.objects.get(id=id)
+            data.name = name
+            data.save()
+            return redirect('device_attendance')
+    else:
+        messages.info(request, "Unauthorized access.")
+        return redirect('home')
+
+def delete_att_user(request,id):
+    if 'delete_hrm' in custom_data_views(request):
+        device_user_data = DeviceAttendanceUser.objects.get(id=id)
+    
+        device_user_data.delete()
+        messages.info(request, "Device User Deleted")
+        return redirect('device_attendance')
+    else:
+        messages.info(request, "Unauthorized access.")
+        return redirect('home')
+    

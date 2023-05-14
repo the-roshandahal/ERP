@@ -8,7 +8,7 @@
 				<div class="d-flex flex-wrap justify-content-between flex-1">
 					<div class="mb-md-0 mb-2 me-8">
 						<div class="d-flex align-items-center">
-							<h1 class="pg-title">CRM Leads</h1>
+							<h1 class="pg-title">Attendance</h1>
 						</div>
 						<p id="greeting"></p>
 
@@ -88,7 +88,34 @@
 				</div>
 				<div class="tab-pane fade" id="active_leads">
 					
-                    <h5>None</h5>
+					<div class="card-action-wrap mt-5 mb-5" style="display:flex; justify-content: flex-end;">
+
+                        <a href="{% url 'get_zkattendance' %}"><button class="btn btn-sm btn-primary ms-3"><span><span class="btn-text">Refresh</span></span></button> </a>
+                    </div>
+					<div class="row">
+                        <table class="table nowrap w-100 mb-5">
+                            <thead>
+                                <tr>
+                                    <th>User Id</th>
+                                    <th>Name</th>
+                                    <th>Date</th>
+                                    <th>Punch In Time</th>
+                                    <th>Punch Out Time</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for all_attendance in all_attendance %}
+                                <tr>
+                                    <td>{{all_attendance.att_user.uid}}</td>
+                                    <td>{{all_attendance.att_user.name}}</td>
+                                    <td>{{all_attendance.date}}</td>
+                                    <td>{{all_attendance.punchin_timestamp}}</td>
+                                    <td>{{all_attendance.punchout_timestamp}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
 				</div>
 				<div class="tab-pane fade" id="closed_leads">
 					
@@ -101,6 +128,7 @@
                                 <tr>
                                     <th>User Id</th>
                                     <th>Name</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -108,6 +136,18 @@
                                 <tr>
                                     <td>{{att_user_data.uid}}</td>
                                     <td>{{att_user_data.name}}</td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="d-flex">
+                                                {% if 'manage_hrm' in permissions %}
+                                                <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="modal" data-bs-target="#exampleModalCenterEditAttUser{{att_user_data.uid}}" data-bs-placement="top" title="" data-bs-original-title="Edit"><span class="btn-icon-wrap"><span class="feather-icon"><i data-feather="edit"></i></span></span></a>
+                                                {% endif %}
+                                                {% if 'manage_hrm' in permissions %}
+                                                <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="modal" data-bs-target="#exampleModalCenterDeleteAttUser{{att_user_data.uid}}" href=""><span class="icon"><span class="feather-icon"><i data-feather="archive"></i></span></span></a>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -119,4 +159,60 @@
 		
 	</div>
 </div>
+
+
+
+
+{% for att_user_data in att_user_data %}
+<div class="modal fade" id="exampleModalCenterEditAttUser{{att_user_data.uid}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterEditAttUser{{att_user_data.uid}}" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit User Data</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'edit_att_user' id=att_user_data.id %}" method="POST">
+                    {% csrf_token %}
+
+                    <div class="modal-body">
+                        <div class="col-md-12 mb-3">
+                            <label for="">Name</label>
+                            <input type="text" class="form-control"  placeholder="Alex Nepali" name='name' value = "{{att_user_data.name}}">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+
+{% for att_user_data in att_user_data %}
+<div class="modal fade" id="exampleModalCenterDeleteAttUser{{att_user_data.uid}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterDeleteAttUser{{att_user_data.uid}}" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete Device Data</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <a href="{% url 'delete_att_user' id=att_user_data.id %}"><button type="button" class="btn btn-primary">Delete</button></a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
 {% include 'footer.html' %}

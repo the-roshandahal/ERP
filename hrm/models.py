@@ -128,12 +128,14 @@ class LeaveDate(models.Model):
 class DeviceData(models.Model):
     ip_address = models.CharField(max_length=100)
     port = models.IntegerField()
+    created = models.DateField(auto_now_add=True)
+
     def __str__(self):
         return self.ip_address
     
     
 class DeviceAttendanceUser(models.Model):
-    uid = models.CharField(max_length=100)
+    uid = models.IntegerField()
     name = models.CharField(max_length=100,null=True, blank=True)
 
 

@@ -46,7 +46,7 @@
                         <div class="mb-lg-0 mb-2 me-8">
                             <h4>Year</h4>
                         </div>
-                        {% if 'create_hrm' in permissions %}
+                        {% if 'manage_hrm' in permissions %}
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalCenterAddYear">Add</button> 
                         {% endif %}                         
                     </div>
@@ -67,7 +67,7 @@
                                     <td>
                                         <div class="d-flex align-items-center">
                                             <div class="d-flex">
-                                                {% if 'update_hrm' in permissions %}
+                                                {% if 'manage_hrm' in permissions %}
                                                 <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" href="{% url 'edit_year' id=year.id %}"><span class="btn-icon-wrap"><span class="feather-icon"><i data-feather="edit"></i></span></span></a>
                                                 {% endif %}
                                                 {% if 'delete_hrm' in permissions %}
@@ -90,7 +90,7 @@
                         <div class="mb-lg-0 mb-2 me-8">
                             <h4>Months</h4>
                         </div>
-                        {% if 'create_hrm' in permissions %}
+                        {% if 'manage_hrm' in permissions %}
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalCenterAddMonth">Add</button> 
                         {% endif %}                         
                     </div>
@@ -117,7 +117,7 @@
                             <td>
                                 <div class="d-flex align-items-center">
                                     <div class="d-flex">
-                                        {% if 'update_hrm' in permissions %}
+                                        {% if 'manage_hrm' in permissions %}
                                         <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" href="{% url 'edit_month' id=month.id %}"><span class="btn-icon-wrap"><span class="feather-icon"><i data-feather="edit"></i></span></span></a>
                                         {% endif %}
                                         {% if 'delete_hrm' in permissions %}
@@ -142,7 +142,7 @@
                         <div class="mb-lg-0 mb-2 me-8">
                             <h4>Department</h4>
                         </div>
-                        {% if 'create_hrm' in permissions %}
+                        {% if 'manage_hrm' in permissions %}
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalCenterAddDepartment">Add</button> 
                         {% endif %}                         
                     </div>
@@ -163,7 +163,7 @@
                             <td>
                                 <div class="d-flex align-items-center">
                                     <div class="d-flex">
-                                        {% if 'update_hrm' in permissions %}
+                                        {% if 'manage_hrm' in permissions %}
                                         <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" href="{% url 'edit_department' id=department.id %}"><span class="btn-icon-wrap"><span class="feather-icon"><i data-feather="edit"></i></span></span></a>
                                         {% endif %}
                                         {% if 'delete_hrm' in permissions %}
@@ -184,7 +184,7 @@
                         <div class="mb-lg-0 mb-2 me-8">
                             <h4>Designation</h4>
                         </div>
-                        {% if 'create_hrm' in permissions %}
+                        {% if 'manage_hrm' in permissions %}
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalCenterAddDesignation">Add</button> 
                         {% endif %}                         
                     </div>
@@ -207,7 +207,7 @@
                             <td>
                                 <div class="d-flex align-items-center">
                                     <div class="d-flex">
-                                        {% if 'update_hrm' in permissions %}
+                                        {% if 'manage_hrm' in permissions %}
                                         <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" href="{% url 'edit_designation' id=designation.id %}"><span class="btn-icon-wrap"><span class="feather-icon"><i data-feather="edit"></i></span></span></a>
                                         {% endif %}
                                         {% if 'delete_hrm' in permissions %}
@@ -221,9 +221,56 @@
                     </tbody>
                 </table>
             </div>
+            <div class="separator"></div>
+            <div class="row mt-3">
+                <div class="d-flex">
+                    <div class="d-flex flex-wrap justify-content-between flex-1">
+                        <div class="mb-lg-0 mb-2 me-8">
+                            <h4>Attendance Device</h4>
+                        </div>
+                        {% if can_add == True %}
+                        {% if 'manage_hrm' in permissions %}
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalCenterAddAttendanceDevice">Add</button> 
+                        {% endif %}                         
+                        {% endif %}                         
+                    </div>
+                </div>
+                {% if device_data %}
+                
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>IP Address</th>
+                            <th>Port</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{device_data.ip_address}}</td>
+                            <td>{{device_data.port}}</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="d-flex">
+                                        {% if 'manage_hrm' in permissions %}
+                                        <a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" href="{% url 'edit_device_data' id=device_data.id %}"><span class="btn-icon-wrap"><span class="feather-icon"><i data-feather="edit"></i></span></span></a>
+                                        {% endif %}
+                                        {% if 'manage_hrm' in permissions %}
+										<a class="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover" data-bs-toggle="modal" data-bs-target="#exampleModalCenterDeleteDeviceData" href=""><span class="icon"><span class="feather-icon"><i data-feather="archive"></i></span></span></a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        
+                    </tbody>
+                </table>
+                {% endif %}
+            </div>
         </div>
 	</div>
 </div>
+
 {% for month in month %}
 <div class="modal fade" id="exampleModalCenterViewMonth{{month.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterViewMonth{{month.id}}" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered" role="document">
@@ -433,6 +480,45 @@
 
 
 
+<div class="modal fade" id="exampleModalCenterAddAttendanceDevice" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterAddAttendanceDevice" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Add Device Data</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+                <form action="{% url 'add_device_data' %}" method="POST">
+                    {% csrf_token %}
+
+                    <div class="modal-body">
+                        <div class="col-md-12 mb-3">
+                            <label for="">IP Address</label>
+                            <input type="text" class="form-control"  placeholder="192.168.1.255" name='ip_address'>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <div class="col-md-12 mb-3">
+                            <label for="">Port</label>
+                            <input type="number" class="form-control"  placeholder="44656" name='port'>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Add</button>
+                    </div>
+                </form>
+            </div>
+		</div>
+        
+	</div>
+</div>
+
+
+
+
 
 
 
@@ -529,8 +615,29 @@
 </div>
 {% endfor %}
 
+{% if device_data %}
+<div class="modal fade" id="exampleModalCenterDeleteDeviceData" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterDeleteDeviceData" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete Device Data</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <a href="{% url 'delete_device_data' id=device_data.id %}"><button type="button" class="btn btn-primary">Delete</button></a>
+            </div>
+        </div>
+    </div>
+</div>
 
 
+{% endif %}
 
 
 
