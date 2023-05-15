@@ -127,7 +127,8 @@
                             <thead>
                                 <tr>
                                     <th>User Id</th>
-                                    <th>Name</th>
+                                    <th>Device Name</th>
+                                    <th>Employee Name</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -136,6 +137,7 @@
                                 <tr>
                                     <td>{{att_user_data.uid}}</td>
                                     <td>{{att_user_data.name}}</td>
+                                    <td>{{att_user_data.employee.user.first_name}}</td>
                                     <td>
                                         <div class="d-flex align-items-center">
                                             <div class="d-flex">
@@ -176,8 +178,21 @@
             <div class="modal-body">
                 <form action="{% url 'edit_att_user' id=att_user_data.id %}" method="POST">
                     {% csrf_token %}
+                    
 
                     <div class="modal-body">
+                        <div class="col-xxl-12 mb-xxl-0 mb-4">
+                            <h6>Select Employee</h6>
+                            <div class="form-group">
+                                <select class="form-select" name="employee" required>
+                                    <option value="">Choose</option>
+                                    {% for employee in employee %}
+                                    <option value="{{employee.id}}" {% if att_user_data.employee.id == employee.id %} selected {% endif %} >{{employee.user.first_name}} {{employee.user.last_name}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>  
+                        </div>
+
                         <div class="col-md-12 mb-3">
                             <label for="">Name</label>
                             <input type="text" class="form-control"  placeholder="Alex Nepali" name='name' value = "{{att_user_data.name}}">
