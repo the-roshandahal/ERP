@@ -164,6 +164,7 @@ def edit_month(request,id):
             start_date = request.POST['start_date']
             end_date = request.POST['end_date']
             holidays = request.POST['holidays']
+            is_active = request.POST.get('is_active', 0)
             year = YearSetup.objects.get(id=year)
 
             month_obj = MonthSetup.objects.get(id=id)
@@ -171,6 +172,7 @@ def edit_month(request,id):
             month_obj.month=month
             month_obj.start_date=start_date
             month_obj.end_date=end_date
+            month_obj.is_active=is_active
             month_obj.save()
 
             prev_holidays = Holidays.objects.filter(month=id)
@@ -184,6 +186,7 @@ def edit_month(request,id):
         else:
             year = YearSetup.objects.all()
             month_data = MonthSetup.objects.get(id=id)
+            print(month_data.is_active)
             month_holidays = Holidays.objects.filter(month = month_data.id)
             context= {
                 'year':year,
@@ -437,15 +440,17 @@ def attendance (request):
 
 def payroll(request):
     if 'read_hrm' in custom_data_views(request):
-        months = MonthSetup.objects.all()
+        months = MonthSetup.objects.filter(is_active = True)      
         current_datetime = date.today()
         date_object = current_datetime
         today_date = date_object.strftime('%Y-%m-%d')
         all_employees = Employee.objects.all()
         recent_salary = Salary.objects.all().order_by('created')
-        paginator = Paginator(recent_salary, 10)
-        page_number = request.GET.get('page')
-        recent_salary = paginator.get_page(page_number)
+        
+
+        # paginator = Paginator(recent_salary, 10)
+        # page_number = request.GET.get('page')
+        # recent_salary = paginator.get_page(page_number)
         context = {
             'months':months,
             'today_date':today_date,

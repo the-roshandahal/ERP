@@ -18,6 +18,7 @@ class MonthSetup(models.Model):
     month = models.CharField(max_length=255)
     start_date = models.DateField()
     end_date = models.DateField()
+    is_active = models.BooleanField(default = True)
 
     def __str__(self):
         return self.month

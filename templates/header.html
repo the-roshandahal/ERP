@@ -113,19 +113,65 @@
 										
 									</a>
 								</li>
-								{% if 'manage_company' in permissions %}
-								  
+								
+
+
+								{% if 'leads' in permissions %}
 								<li class="nav-item">
-									<a class="nav-link" href="{% url 'company_setup' %}" >
+									<a class="nav-link" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#dash_chat_company_settings_setup">
 										<span class="nav-icon-wrap">
-											<span class="svg-icon">
-												<i class="bi bi-gear"></i>
-											</span>
+											<i class="bi bi-gear"></i>
 										</span>
-										<span class="nav-link-text">Company Setup</span>
-									</a>	
+										<span class="nav-link-text">Settings</span>
+									</a>
+									<ul id="dash_chat_company_settings_setup" class="nav flex-column collapse  nav-children">
+										<li class="nav-item">
+											<ul class="nav flex-column">
+												{% if 'manage_company' in permissions %}
+												<li class="nav-item">
+													<a class="nav-link" href="{% url 'company_setup' %}"><span class="nav-link-text">Company Setup</span></a>
+												</li>
+												{% endif %}
+
+												{% if 'manage_account' in permissions %}
+												<li class="nav-item">
+													<a class="nav-link" href="{% url 'role' %}"><span class="nav-link-text">Roles & Permission</span></a>
+												</li>
+												{% endif %}
+
+												{% if 'manage_leads' in permissions %}
+												<li class="nav-item">
+													<a class="nav-link" href="{% url 'crm_setup' %}"><span class="nav-link-text">CRM Setup</span></a>
+												</li>
+												{% endif %}
+												
+												{% if 'manage_hrm' in permissions %}
+												<li class="nav-item">
+													<a class="nav-link" href=" {% url 'hrm_setup' %} "><span class="nav-link-text">HRM Setup</span></a>
+												</li>
+												{% endif %}
+												
+												{% if 'manage_products' in permissions %}
+												<li class="nav-item">
+													<a class="nav-link" href="{% url 'product_setup' %}"><span class="nav-link-text">Product Setup</span></a>
+												</li>
+												{% endif %}
+												
+												{% if 'manage_finance' in permissions %}
+												<li class="nav-item">
+													<a class="nav-link" href="{% url 'finance_setup' %}"><span class="nav-link-text">Finance Setup</span></a>
+												</li>
+												{% endif %}
+											</ul>	
+										</li>	
+									</ul>	
 								</li>
 								{% endif %}
+
+
+
+
+
 							</ul>	
 						</div>
 						<div class="menu-gap"></div>
@@ -172,9 +218,6 @@
 												<li class="nav-item">
 													<a class="nav-link" href="{% url 'leads' %}"><span class="nav-link-text">Leads</span></a>
 												</li>
-												<li class="nav-item">
-													<a class="nav-link" href="{% url 'crm_setup' %}"><span class="nav-link-text">CRM Setup</span></a>
-												</li>
 											</ul>	
 										</li>	
 									</ul>	
@@ -209,10 +252,6 @@
 												<li class="nav-item">
 													<a class="nav-link" href="{% url 'payroll' %}"><span class="nav-link-text">PayRoll</span></a>
 												</li>
-												<li class="nav-item">
-													<a class="nav-link" href=" {% url 'hrm_setup' %} "><span class="nav-link-text">HRM Setup</span></a>
-												</li>
-												</li>
 											</ul>	
 										</li>	
 									</ul>	
@@ -234,9 +273,6 @@
 												</li>
 												<li class="nav-item">
 													<a class="nav-link" href="{% url 'product_stock' %}"><span class="nav-link-text">Product Stock</span></a>
-												</li>
-												<li class="nav-item">
-													<a class="nav-link" href="{% url 'product_setup' %}"><span class="nav-link-text">Product Setup</span></a>
 												</li>
 											</ul>	
 										</li>	
@@ -270,9 +306,6 @@
 												</li>
 												<li class="nav-item">
 													<a class="nav-link" href="{% url 'expenses' %}"><span class="nav-link-text">Expenses</span></a>
-												</li>
-												<li class="nav-item">
-													<a class="nav-link" href="{% url 'finance_setup' %}"><span class="nav-link-text">Setup</span></a>
 												</li>
 											</ul>	
 										</li>	

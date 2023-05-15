@@ -105,6 +105,7 @@
                             <th>Start Date</th>
                             <th>End Date</th>
                             <th>Holidays</th>
+                            <th>Is Active</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -116,6 +117,7 @@
                             <td>{{month_dict.month.start_date}}</td>
                             <td>{{month_dict.month.end_date}}</td>
                             <td>{{ month_dict.holiday_count }}</td>
+                            <td>{{ month_dict.month.is_active }}</td>
                             <td>
                                 <div class="d-flex align-items-center">
                                     <div class="d-flex">
