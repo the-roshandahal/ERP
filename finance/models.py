@@ -16,7 +16,7 @@ class Invoice(models.Model):
     created = models.DateField(auto_now_add=True)
 
     def __str__(self):
-        return self.customer.client_name
+        return "Invoice"
 
     class Meta:
         verbose_name_plural = "01. Invoices"
@@ -39,7 +39,7 @@ class Receipt(models.Model):
     created = models.DateField(auto_now_add=True)
 
     def __str__(self):
-        return self.customer.client_name
+        return "Receipts"
     
     class Meta:
         verbose_name_plural = "02. Receipts"
@@ -54,7 +54,7 @@ class Statement(models.Model):
     created = models.DateField(auto_now_add=True)
 
     def __str__(self):
-        return self.customer.client_name
+        return self.details
 
     class Meta:
         verbose_name_plural = "05. Statements"

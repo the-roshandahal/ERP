@@ -46,16 +46,14 @@
                                 <p>{{company_setup.company_address}} </p>
                             </div>
                         </div>
+                        
                         <div class="separator"></div>
                         <div class="row">
-                            <div class="col-lg-12">
+                            <div class="col-lg-6">
                                 <h5 class="card-title">Company Payment Details</h5>
                                 <p>{{company_setup.payment_details|safe}} </p>
                             </div>
-                        </div>
-                        <div class="separator"></div>
-                        <div class="row">
-                            <div class="col-lg-12">
+                            <div class="col-lg-6">
                                 <h5 class="card-title">Company Payment Terms</h5>
                                 <p>{{company_setup.payment_terms|safe}} </p>
                             </div>
@@ -86,6 +84,93 @@
                         <h5 class="card-title">Add Company Details</h5>
                         <p class="card-text">You havent added any company details.</p>
                         <a href="{% url 'add_company_setup' %}" class="btn btn-primary">Add Details</a>
+                    </div>
+                </div>
+            </div>
+        </div>                                                                        
+        {% endif %}                                  
+        
+        
+        
+        
+        
+        {% if credentials %}
+        <div class="row mt-5">
+            <div class="col-lg-12 col-sm-12">
+                <div class="card">
+                    <div class="card-header card-header-action">
+                        <h6>Company Credentials</h6>
+                        <p>These credentials will be used while sending notice and resetting password.</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <h5 >Email Credentials</h5>
+                            <div class="col-lg-6">
+                                <h5 class="card-title">Email</h5>
+                                <p>{{credentials.email}} </p>
+                            </div>
+                            <div class="col-lg-6">
+                                <h5 class="card-title">Password</h5>
+                                <p>{{credentials.password}} </p>
+                            </div>
+                        </div>
+                        <div class="separator"></div>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <h5 class="card-title">Host</h5>
+                                <p>{{credentials.host}} </p>
+                            </div>
+                            <div class="col-lg-6">
+                                <h5 class="card-title">Port</h5>
+                                <p>{{credentials.port}} </p>
+                            </div>
+                        </div>
+                        <div class="separator"></div>
+                        
+                        <div class="row">
+                            <h5 >SMS Credentials</h5>
+                            <div class="col-lg-6">
+                                <h5 class="card-title">Username</h5>
+                                <p>{{credentials.sms_username}} </p>
+                            </div>
+                            <div class="col-lg-6">
+                                <h5 class="card-title">Password</h5>
+                                <p>{{credentials.sms_password}} </p>
+                            </div>
+                        </div>
+                        <div class="separator"></div>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <h5 class="card-title">Campaign</h5>
+                                <p>{{credentials.campaign}} </p>
+                            </div>
+                            <div class="col-lg-6">
+                                <h5 class="card-title">Route</h5>
+                                <p>{{credentials.route}} </p>
+                            </div>
+                        </div>
+
+
+
+                        <div class="separator-full"></div>
+                        <a href="{% url 'edit_company_credentials' id=credentials.id %}" class="btn btn-primary" >Edit</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        {% else %}   
+        														
+        <div class="row mt-5">
+            <div class="col-lg-12 col-sm-12">
+                <div class="card">
+                        <div class="card-header card-header-action">
+                            <h6>Credentials Setup.</h6>
+                        </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Add Company Credentials</h5>
+                        <p class="card-text">You havent added any Credentials.</p>
+                        <a href="{% url 'add_company_credentials' %}" class="btn btn-primary">Add Details</a>
                     </div>
                 </div>
             </div>

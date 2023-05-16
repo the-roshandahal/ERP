@@ -44,3 +44,25 @@ class Company(models.Model):
 
     class Meta:
         verbose_name_plural = "03. Company Setup"
+
+
+class Credentials(models.Model):
+    host = models.CharField(max_length=100)
+    port = models.CharField(max_length=100)
+    email = models.EmailField()
+    password = models.CharField(max_length=100)
+
+
+    sms_username = models.CharField(max_length=100)
+    sms_password = models.CharField(max_length=100)
+    campaign = models.CharField(max_length=100)
+    route = models.CharField(max_length=100)
+
+    created = models.DateField(auto_now_add=True)
+    
+
+    def __str__(self):
+        return "Company Credentials"
+
+    class Meta:
+        verbose_name_plural = "04. Company Credentials"

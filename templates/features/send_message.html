@@ -1,0 +1,43 @@
+{% include 'header.html' %}
+
+<div class="hk-pg-wrapper pb-0">
+    <div class="hk-pg-body py-0">
+        <div class="invoiceapp-wrap invoiceapp-setting-active">
+            <div class="invoice-body">
+                <div class="container">
+                    <div class="create-invoice-wrap mt-xxl-5 p-md-5 p-3">
+                        
+                        <form action="{% url 'send_message' %}" method="POST">
+                            {% csrf_token %}
+                            
+                            
+                            
+                            <div class="row mb-3">
+                                <div class="col-xxl-6">
+                                    <h6>Phone Number</h6>
+                                    <input type="text" class="form-control" name = "number">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-xxl-6">
+                                    <h6>Message</h6>
+                                    <textarea class="form-control" rows="6" placeholder="Write an internal note" name="message"></textarea>
+                                </div>
+                            </div>
+                            <a href="#" ><button class="btn btn-primary ms-2 d-sm-inline-block d-none">Send</button></a>
+                        </form>
+                    </div>
+                </div>
+                
+            <div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- /Main Content -->
+{% include 'footer.html' %}
+
+
+

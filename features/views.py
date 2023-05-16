@@ -18,6 +18,8 @@ def home(request):
         return render (request,'index.html') 
     else:
         return redirect('login')
+    
+
 def add_company_setup(request):
     if 'manage_company' in custom_data_views(request):
         if Company.objects.all().exists():
@@ -158,10 +160,107 @@ def reassign(request,id):
 def company_setup(request):
     if 'manage_company' in custom_data_views(request):
         company_setup= Company.objects.all().order_by('-created').first()
+        credentials= Credentials.objects.all().order_by('-created').first()
         context = {
-            'company_setup':company_setup
+            'company_setup':company_setup,
+            'credentials':credentials
         }
         return render (request,'features/company_setup.html',context)
     else:
         messages.info(request, "Unauthorized access.")
         return redirect('home')
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def add_company_credentials(request):
+    if 'manage_company' in custom_data_views(request):
+        if Credentials.objects.all().exists():
+            messages.info(request, "You have already added credentials.")
+            return redirect('company_setup')
+        else:
+            if request.method=='POST':
+                host = request.POST['host']
+                port = request.POST['port']
+                email = request.POST['email']
+                password = request.POST['password']
+                sms_username = request.POST['sms_username']
+                sms_password = request.POST['sms_password']
+                campaign = request.POST['campaign']
+                route = request.POST['route']
+
+                Credentials.objects.create(host = host,port = port,
+                                    email = email,password = password,sms_username = sms_username,
+                                    sms_password = sms_password,campaign = campaign,route=route)
+                return redirect('company_setup')
+            else:
+                return render(request,'features/add_company_credentials.html')
+    else:
+        messages.info(request, "Unauthorized access.")
+        return redirect('home')
+    
+
+
+def edit_company_credentials(request,id):
+    if 'manage_company' in custom_data_views(request):
+        if request.method=='POST':
+            credentials = Credentials.objects.get(id=id)
+
+            credentials.host = request.POST['host']
+            credentials.port = request.POST['port']
+            credentials.email = request.POST['email']
+            credentials.password = request.POST['password']
+
+            credentials.sms_username = request.POST['sms_username']
+            credentials.sms_password = request.POST['sms_password']
+            credentials.campaign = request.POST['campaign']
+            credentials.route = request.POST['route']
+            credentials.save()
+            return redirect('company_setup')
+        else:
+            credentials = Credentials.objects.get(id=id)
+            context = {
+            'credentials':credentials
+            }
+            return render(request,'features/edit_company_credentials.html',context)
+    else:
+        messages.info(request, "Unauthorized access.")
+        return redirect('home')
+    
+import urllib.request
+
+def send_message(request):
+    if request.method == "POST":
+        number = request.POST['number']
+        message = request.POST['message']
+        credentials = Credentials.objects.all().order_by('-created').first()
+
+
+        username = f'{credentials.sms_username}'
+        password = f'{credentials.sms_password}'
+        contacts = f'{number}'
+        route_id = f'{credentials.route}'
+        campaign = f'{credentials.campaign}'
+        sms_text = f'{message}'
+
+        sms_text_encoded = urllib.parse.quote(sms_text)
+        api_url = f"https://spellcpaas.com/api/smsapi?username={username}&password={password}&campaign={campaign}&routeid={route_id}&type=text&contacts={contacts}&msg={sms_text_encoded}"
+
+        # Submit to server
+        with urllib.request.urlopen(api_url) as response:
+            response_text = response.read().decode('utf-8')
+            print(response_text)
+        return redirect("send_message")
+    return render(request,'features/send_message.html')

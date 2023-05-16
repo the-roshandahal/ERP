@@ -50,6 +50,7 @@ def finance(request):
         total_invoice_amt=0
         if invoice:
             for invoice in invoice :
+                
                 total_invoice_amt = total_invoice_amt+ invoice.invoice_amount
 
 
@@ -60,11 +61,24 @@ def finance(request):
 
         today = date.today()
         last_7_days = today - timedelta(days=6)
+        
+        customers = Customer.objects.all()
+        recent_statements = []
+        for customer in customers:
+            try:
+                recent_statement = Statement.objects.filter(customer=customer).latest('id')
+                recent_statements.append(recent_statement)
+            except Statement.DoesNotExist:
+                return redirect('home')
+        recent_statements = sorted(recent_statements, key=lambda x: x.balance, reverse=True)[:5]
 
+        
+        
+        day_format = '%B %d'
         context = {
             'totals_by_day': [
                 {
-                    'date': last_7_days + timedelta(days=i),
+                    'date': (last_7_days + timedelta(days=i)).strftime(day_format),
                     'invoice_total': Invoice.objects.filter(created=last_7_days + timedelta(days=i)).aggregate(total=Sum('invoice_amount'))['total'] or 0,
                     'receipt_total': Receipt.objects.filter(created=last_7_days + timedelta(days=i)).aggregate(total=Sum('paid_amount'))['total'] or 0,
                     'expense_total': Expense.objects.filter(created=last_7_days + timedelta(days=i)).aggregate(total=Sum('expense_amount'))['total'] or 0,
@@ -76,6 +90,7 @@ def finance(request):
             'weekly_invoice_total':weekly_invoice_total,
             'weekly_receipt_total':weekly_receipt_total,
             'weekly_expense_total':weekly_expense_total,
+            'recent_statements': recent_statements,
         }
         return render (request, 'finance/dashboard.html',context)
     else:

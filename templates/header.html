@@ -168,6 +168,31 @@
 								</li>
 								{% endif %}
 
+								<li class="nav-item">
+									<a class="nav-link" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#dash_chat_messaging">
+										<span class="nav-icon-wrap">
+											<i class="bi bi-chat-dots"></i>
+										</span>
+										<span class="nav-link-text">Messaging</span>
+									</a>
+									<ul id="dash_chat_messaging" class="nav flex-column collapse  nav-children">
+										<li class="nav-item">
+											<ul class="nav flex-column">
+												
+												<li class="nav-item">
+													<a class="nav-link" href="{% url 'send_message' %}"><span class="nav-link-text">Custom</span></a>
+												</li>
+												<li class="nav-item">
+													<a class="nav-link" href="{% url 'send_message' %}"><span class="nav-link-text">Employees</span></a>
+												</li>
+												<li class="nav-item">
+													<a class="nav-link" href="{% url 'send_message' %}"><span class="nav-link-text">Customer</span></a>
+												</li>
+												
+											</ul>	
+										</li>	
+									</ul>	
+								</li>
 
 
 

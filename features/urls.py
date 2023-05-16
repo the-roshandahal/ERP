@@ -18,7 +18,10 @@ urlpatterns = [
     path("reassign/<int:id>", views.reassign, name="reassign"),
 
 
+    path("add_company_credentials/", views.add_company_credentials, name="add_company_credentials"),
+    path("edit_company_credentials/<int:id>", views.edit_company_credentials, name="edit_company_credentials"),
     
+    path("send_message/", views.send_message, name="send_message"),
 
     re_path(r"^media/(?P<path>.*)$", serve, {"document_root": settings.MEDIA_ROOT}),
     re_path(r"^static/(?P<path>.*)$", serve, {"document_root": settings.STATIC_ROOT}),
