@@ -1229,7 +1229,6 @@ def get_zkusers(request):
 
 
 
-
 from django.db.models import Max
 
 def get_zkattendance(request):
@@ -1242,34 +1241,41 @@ def get_zkattendance(request):
     try:
         conn = zk.connect()
         attendances = conn.get_attendance()
-        last_attendance_date = DeviceAttendance.objects.aggregate(Max('date'))['date__max']
-        if last_attendance_date:
-            last_attendance_date = last_attendance_date.strftime('%Y-%m-%d')
-        else:
-            # Set an arbitrary date as the start date
-            last_attendance_date = '2023-03-13'  
-        attendance_data = [a for a in attendances if a.timestamp.strftime('%Y-%m-%d') > last_attendance_date]
-
+        
+        # Get the latest attendance date from DeviceAttendance model
+        latest_attendance_date = DeviceAttendance.objects.aggregate(max_date=Max('date'))['max_date']
+        
+        # Filter the attendance data to include only records after the latest attendance date
+        attendance_data = [a for a in attendances if a.timestamp.date() >= latest_attendance_date]
+        
+        # Loop through the attendance data and update the DeviceAttendance model as needed
         for attendance in attendance_data:
             user_id = attendance.user_id
             punch_time = attendance.timestamp
             punch_time = make_aware(punch_time)  
-            attendance_date = punch_time.strftime('%Y-%m-%d')
+            attendance_date = punch_time.date()
             
             try:
+                # Get the DeviceAttendance object for the user and date
                 att_data = DeviceAttendance.objects.get(att_user__uid=user_id, date=attendance_date)
+                
+                # If the punchout time has not been recorded, update it
                 if att_data.punchout_timestamp is None:
                     if att_data.punchin_timestamp != punch_time.time():
                         att_data.punchout_timestamp = punch_time.time()
                         att_data.save()
                 else:
+                    # If the punchout time has already been recorded, update it only if the new time is later
                     att_data.punchout_timestamp = max(att_data.punchout_timestamp, punch_time.time())
                     att_data.save()
+                    
             except DeviceAttendance.DoesNotExist:
                 try:
                     att_user = DeviceAttendanceUser.objects.get(uid=user_id)
                 except DeviceAttendanceUser.DoesNotExist:
                     att_user = DeviceAttendanceUser.objects.create(uid=user_id)
+                
+                # Create a new DeviceAttendance object if one does not already exist for the user and date
                 DeviceAttendance.objects.create(att_user=att_user, date=attendance_date, punchin_timestamp=punch_time.time())
 
     except Exception as e:
@@ -1278,8 +1284,8 @@ def get_zkattendance(request):
     finally:
         if conn:
             conn.disconnect()
+    
     return redirect('device_attendance')
-
 
 
 
