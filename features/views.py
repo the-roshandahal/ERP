@@ -62,6 +62,7 @@ def edit_company_setup(request,id):
             return redirect('company_setup')
         else:
             setup = Company.objects.get(id=id)
+            print(setup.company_name)
             context = {
             'setup':setup
             }
