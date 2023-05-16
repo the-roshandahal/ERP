@@ -247,17 +247,16 @@ def send_message(request):
         message = request.POST['message']
         credentials = Credentials.objects.all().order_by('-created').first()
 
-
         username = f'{credentials.sms_username}'
         password = f'{credentials.sms_password}'
-        contacts = f'{number}'
         route_id = f'{credentials.route}'
         campaign = f'{credentials.campaign}'
+        contacts = f'{number}'
         sms_text = f'{message}'
 
         sms_text_encoded = urllib.parse.quote(sms_text)
         api_url = f"https://spellcpaas.com/api/smsapi?username={username}&password={password}&campaign={campaign}&routeid={route_id}&type=text&contacts={contacts}&msg={sms_text_encoded}"
-
+        print(api_url)
         # Submit to server
         with urllib.request.urlopen(api_url) as response:
             response_text = response.read().decode('utf-8')
