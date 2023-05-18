@@ -7,15 +7,20 @@
                 <div class="container">
                     <div class="create-invoice-wrap mt-xxl-5 p-md-5 p-3">
                         
-                        <form action="{% url 'send_message' %}" method="POST">
+                        <form action="{% url 'message_emp_client' %}" method="POST">
                             {% csrf_token %}
                             
                             
                             
                             <div class="row mb-3">
-                                <div class="col-xxl-6">
-                                    <h6>Phone Number</h6>
-                                    <input type="text" class="form-control" name = "number" placeholder="XXXXXXXXXX">
+                                <div class="col-xxl-6 mb-xxl-0 mb-4">
+                                    <h6>Send To</h6>
+                                    <div class="form-group">
+                                        <select class="form-select" name="send_to" required="">
+                                            <option value="client">Client</option>
+                                            <option value="employees">Employees</option>
+                                        </select>
+                                    </div>  
                                 </div>
                             </div>
                             <div class="row mb-3">

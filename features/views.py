@@ -4,8 +4,12 @@ from django.shortcuts import render, redirect
 from django.shortcuts import render
 from .models import *
 from account.models import *
+from customer.models import *
 from django.utils import timezone
 from account.context_processors import *
+import json
+import urllib.parse
+import urllib.request
 
 def homepage(request):
     if request.user.is_authenticated:
@@ -236,9 +240,6 @@ def edit_company_credentials(request,id):
     else:
         messages.info(request, "Unauthorized access.")
         return redirect('home')
-import json
-import urllib.parse
-import urllib.request
 
 def send_message(request):
     if request.method == "POST":
@@ -279,5 +280,57 @@ def send_message(request):
             print(response_text)
         
         return redirect("send_message")
-    
-    return render(request,'features/send_message.html')
+    else:
+        return render(request,'features/send_message.html')
+
+
+
+
+
+def message_emp_client(request):
+    if request.method == "POST":
+        message = request.POST['message']
+        send_to = request.POST['send_to']
+        credentials = Credentials.objects.all().order_by('-created').first()
+
+        api_key = f'{credentials.api_key}'
+        route_id = f'{credentials.route}'
+        campaign = f'{credentials.campaign}'
+        
+        if send_to == 'employees':
+            employees = Employee.objects.all()
+            contact_numbers = [employee.contact for employee in employees]
+            contacts = ",".join(contact_numbers)
+
+        elif send_to == 'client':
+            clients = Customer.objects.all()
+            contact_numbers = [client.contact for client in clients]
+            contacts = ",".join(contact_numbers)
+        else:
+            contacts =''
+        sms_text = f'{message}'
+
+        api_url = "https://spellcpaas.com/api/smsapi"
+        
+        data = {
+            'key': api_key,
+            'campaign': campaign,
+            'routeid': route_id,
+            'type': 'text',
+            'contacts': contacts,
+            'msg': sms_text
+        }
+        
+        encoded_data = json.dumps(data).encode('utf-8')
+        
+        req = urllib.request.Request(api_url, data=encoded_data, method='POST')
+        
+        req.add_header('Content-Type', 'application/json')
+        
+        with urllib.request.urlopen(req) as response:
+            response_text = response.read().decode('utf-8')
+            print(response_text)
+        
+        return redirect("message_emp_client")
+    else:
+        return render (request,'features/message_emp_client.html')
