@@ -53,8 +53,7 @@ class Credentials(models.Model):
     password = models.CharField(max_length=100)
 
 
-    sms_username = models.CharField(max_length=100)
-    sms_password = models.CharField(max_length=100)
+    api_key = models.CharField(max_length=100)
     campaign = models.CharField(max_length=100)
     route = models.CharField(max_length=100)
 

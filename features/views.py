@@ -196,14 +196,13 @@ def add_company_credentials(request):
                 port = request.POST['port']
                 email = request.POST['email']
                 password = request.POST['password']
-                sms_username = request.POST['sms_username']
-                sms_password = request.POST['sms_password']
+                api_key = request.POST['api_key']
                 campaign = request.POST['campaign']
                 route = request.POST['route']
 
                 Credentials.objects.create(host = host,port = port,
-                                    email = email,password = password,sms_username = sms_username,
-                                    sms_password = sms_password,campaign = campaign,route=route)
+                                    email = email,password = password,api_key = api_key,
+                                    campaign = campaign,route=route)
                 return redirect('company_setup')
             else:
                 return render(request,'features/add_company_credentials.html')
@@ -223,8 +222,7 @@ def edit_company_credentials(request,id):
             credentials.email = request.POST['email']
             credentials.password = request.POST['password']
 
-            credentials.sms_username = request.POST['sms_username']
-            credentials.sms_password = request.POST['sms_password']
+            credentials.api_key = request.POST['api_key']
             credentials.campaign = request.POST['campaign']
             credentials.route = request.POST['route']
             credentials.save()
@@ -238,7 +236,8 @@ def edit_company_credentials(request,id):
     else:
         messages.info(request, "Unauthorized access.")
         return redirect('home')
-    
+import json
+import urllib.parse
 import urllib.request
 
 def send_message(request):
@@ -247,19 +246,38 @@ def send_message(request):
         message = request.POST['message']
         credentials = Credentials.objects.all().order_by('-created').first()
 
-        username = f'{credentials.sms_username}'
-        password = f'{credentials.sms_password}'
+        api_key = f'{credentials.api_key}'
         route_id = f'{credentials.route}'
         campaign = f'{credentials.campaign}'
         contacts = f'{number}'
         sms_text = f'{message}'
 
-        sms_text_encoded = urllib.parse.quote(sms_text)
-        api_url = f"https://spellcpaas.com/api/smsapi?username={username}&password={password}&campaign={campaign}&routeid={route_id}&type=text&contacts={contacts}&msg={sms_text_encoded}"
-        print(api_url)
-        # Submit to server
-        with urllib.request.urlopen(api_url) as response:
+        api_url = "https://spellcpaas.com/api/smsapi"
+        
+        # Prepare the data for the request body
+        data = {
+            'key': api_key,
+            'campaign': campaign,
+            'routeid': route_id,
+            'type': 'text',
+            'contacts': contacts,
+            'msg': sms_text
+        }
+        
+        # Encode the data as JSON
+        encoded_data = json.dumps(data).encode('utf-8')
+        
+        # Prepare the request
+        req = urllib.request.Request(api_url, data=encoded_data, method='POST')
+        
+        # Set the content type header
+        req.add_header('Content-Type', 'application/json')
+        
+        # Submit the request
+        with urllib.request.urlopen(req) as response:
             response_text = response.read().decode('utf-8')
             print(response_text)
+        
         return redirect("send_message")
+    
     return render(request,'features/send_message.html')
