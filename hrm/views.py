@@ -1294,7 +1294,10 @@ def edit_att_user(request,id):
     if 'manage_hrm' in custom_data_views(request):
         if request.method=="POST":
             name = request.POST['name']
+            emp_id = request.POST['employee']
+            employee = Employee.objects.get(id=emp_id)
             data = DeviceAttendanceUser.objects.get(id=id)
+            data.employee=employee
             data.name = name
             data.save()
             return redirect('device_attendance')
