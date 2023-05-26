@@ -469,6 +469,7 @@ def advance_salary(request):
             month = request.POST['month']
             employee = request.POST['employee']
             amount = request.POST['amount']
+            adv_type = request.POST['adv_type']
             type='advance'
             leave_deduction=0
             tax_deduction=0
@@ -478,7 +479,14 @@ def advance_salary(request):
             if salary_obj:
                 messages.info(request, "You have already paid the salary of this employee for this month. Please select another month for advance payment.")
             else:
-                Salary.objects.create(employee=employee,month=sel_month,paid_salary=amount,type=type,leave_deduction=leave_deduction,tax_deduction=tax_deduction)
+                if adv_type == "addition":
+                    Salary.objects.create(employee=employee,month=sel_month,paid_salary=amount,type=type,leave_deduction=leave_deduction,tax_deduction=tax_deduction)
+                else:
+                    print('HERE')
+                    amount = float(amount) * -1
+                    print(amount)
+                    Salary.objects.create(employee=employee,month=sel_month,paid_salary=amount,type=type,leave_deduction=leave_deduction,tax_deduction=tax_deduction)
+
                 messages.info(request, "Advance issued successfully.")
 
             return redirect('payroll')
