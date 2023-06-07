@@ -153,7 +153,7 @@ def create_invoice(request):
                     invoice=invoice,
                     product=product,
                     product_quantity=product_quantity,
-                    product_price=product_amount - product_discount,
+                    product_price=product_quantity * (product_amount - product_discount),
                 )
                 product_quantity_new = product.product_quantity
                 product.product_quantity = product_quantity_new - product_quantity

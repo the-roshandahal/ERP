@@ -59,7 +59,7 @@ def add_product(request):
             Product.objects.create(product_type=product_type,product_title=product_title, product_description=product_description, 
                                 product_price=product_price, product_quantity=product_quantity,is_vatable=is_vatable, 
                                 product_category=product_category,product_unit=product_unit)
-            return redirect(products)
+            return redirect('products')
         else:
             products = Product.objects.all()
             category = ProductCategory.objects.all()
