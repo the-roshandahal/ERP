@@ -32,9 +32,8 @@
 					<thead>
 						<tr>
 							<th>Title</th>
-                            <th>Type</th>
                             <th>Category</th>
-                            <th>Price</th>
+                            <th>Unit</th>
                             <th>Is Vatable</th>
                             <th>Action</th>
 						</tr>
@@ -43,9 +42,8 @@
 						{% for products in products %}
 						<tr>
 							<td>{{products.product_title}}</td>
-                            <td>{{products.product_type}}</td>
                             <td>{{products.product_category}}</td>
-                            <td>{{products.product_price}}</td>
+                            <td>{{products.product_unit}}</td>
                             <td>{% if products.is_vatable == True %}Yes {% else %}No{% endif %}</td>
                             
                             <td>
@@ -67,109 +65,6 @@
 
 	
 
-<div class="modal fade" id="createUserModal" tabindex="-1" role="dialog" aria-labelledby="createUserModal" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <form action="{% url 'add_product' %}" method="POST">
-                {% csrf_token %}
-                <div class="modal-header">
-                    <h5 class="modal-title" id="createUserModal">Create Service</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">                                                                        
-                    <div class="row">
-                        <div class="col-xxl-12 mb-xxl-0 mb-4">
-                            <h6>Type</h6>
-                            <div class="form-group">
-                                <select class="form-select" name="product_type" required="" onchange="handleProductTypeChange()">
-                                    <option value="product">product</option>
-                                    <option value="service">service</option>
-                                </select>
-                            </div>  
-                        </div>
-                        
-                        <div class="col-xxl-6 mb-xxl-0 mb-4">
-                            <h6>Category</h6>
-                            <div class="form-group">
-                                <select class="form-select" name="product_category" required="">
-                                    <option value="">Select category</option>
-                                    {% for category in category %}
-                                    <option value="{{category.id}}">{{category.product_category}}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>  
-                        </div>
-                        <div class="col-xxl-6 mb-xxl-0 mb-4">
-                            <h6>Unit</h6>
-                            <div class="form-group">
-                                <select class="form-select" name="product_unit" required="">
-                                    <option value="">Select unit</option>
-                                    {% for unit in unit %}
-                                    <option value="{{unit.id}}">{{unit.product_unit}}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>  
-                        </div>
-                        <div class="col-xxl-12 mb-xxl-0 mb-4">
-                            <h6>Title</h6>
-                            <div class="form-group">
-                                <input type="text" class="form-control" name = "product_title" required>
-                            </div>
-                        </div>
-
-                        <div class="col-xxl-12 mb-xxl-0 mb-4">
-                            <h6>Price</h6>
-                            <div class="form-group">
-                                <input type="number" class="form-control" name = "product_price" required>
-                            </div>
-                        </div>
-
-                        <div class="col-xxl-12 mb-xxl-0 mb-4">
-                            <h6>Available Quantity</h6>
-                            <div class="form-group">
-                                <input type="number" class="form-control" name="product_quantity" required id="product_quantity_field">
-                            </div>
-                        </div>
-                        
-
-                        
-
-                        <div class="col-xxl-12 mb-xxl-0 mb-4">
-                            <h6>Description</h6>
-                            <div class="form-group">
-                                <textarea id="classic" name="product_description" placeholder="Description"></textarea>
-                            </div>
-                        </div>
-                        <div class="col-xxl-12 mb-xxl-0 mb-4">
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="is_vatable" checked value="True" name="is_vatable">
-                                <label class="form-check-label" for="customCheck2">Is Vatable?</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-<script>
-    function handleProductTypeChange() {
-        const productType = document.querySelector('select[name="product_type"]');
-        const productQuantityField = document.querySelector('#product_quantity_field');
-
-        if (productType.value === 'service') {
-            productQuantityField.disabled = true;
-        } else {
-            productQuantityField.disabled = false;
-        }
-    }
-</script>
 
 {% for products in products %}
 <div class="modal fade" id="exampleModalCenter{{products.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter{{products.id}}" aria-hidden="true">

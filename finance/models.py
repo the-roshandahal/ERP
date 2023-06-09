@@ -23,11 +23,19 @@ class Invoice(models.Model):
 
 class InvoiceProduct(models.Model):
     invoice = models.ForeignKey(Invoice, on_delete=models.SET_NULL, null = True)
-    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null = True)
+    product = models.ForeignKey(ProductBatch, on_delete=models.SET_NULL, null = True)
     product_quantity = models.IntegerField()
     product_price = models.FloatField()
     def __str__(self):
         return f"{self.product.product_title} x {self.product_quantity}"
+
+class InvoiceService(models.Model):
+    invoice = models.ForeignKey(Invoice, on_delete=models.SET_NULL, null = True)
+    service = models.ForeignKey(Service, on_delete=models.SET_NULL, null = True)
+    service_quantity = models.IntegerField()
+    service_price = models.FloatField()
+    def __str__(self):
+        return f"{self.service.service_title} x {self.service_quantity}"
 
 class Receipt(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, null = True)

@@ -23,7 +23,7 @@
         </div>
         <!-- /Page Header -->
         <div class="container">
-            <form action="{% url 'edit_product' product.id %}" method="POST">
+            <form action="{% url 'edit_service' service.id %}" method="POST">
                 {% csrf_token %}
                 <div class="modal-body">                                                                        
                     <div class="row">
@@ -31,10 +31,10 @@
                         <div class="col-xxl-6 mb-xxl-0 mb-4">
                             <h6>Category</h6>
                             <div class="form-group">
-                                <select class="form-select" name="product_category" required="">
+                                <select class="form-select" name="service_category" required="">
                                     <option>Select Category</option>
                                     {% for category in category %}
-                                    <option value="{{category.id}}" {% if category.product_category == product.product_category.product_category %}selected{% endif %} >{{category.product_category}}</option>
+                                    <option value="{{category.id}}" {% if category.product_category == service.service_category.product_category %}selected{% endif %} >{{category.product_category}}</option>
                                     {% endfor %}
                                 </select>
                             </div>  
@@ -42,10 +42,10 @@
                         <div class="col-xxl-6 mb-xxl-0 mb-4">
                             <h6>Unit</h6>
                             <div class="form-group">
-                                <select class="form-select" name="product_unit" required="">
+                                <select class="form-select" name="service_unit" required="">
                                     <option>Select unit</option>
                                     {% for unit in unit %}
-                                    <option value="{{unit.id}}" {% if unit.product_unit == product.product_unit.product_unit %}selected{% endif %}>{{unit.product_unit}}</option>
+                                    <option value="{{unit.id}}" {% if unit.product_unit == service.service_unit.product_unit %}selected{% endif %}>{{unit.product_unit}}</option>
                                     {% endfor %}
                                 </select>
                             </div>  
@@ -53,18 +53,24 @@
                         <div class="col-xxl-6 mb-xxl-0 mb-4">
                             <h6>Title</h6>
                             <div class="form-group">
-                                <input type="text" class="form-control" value="{{product.product_title}}" name = "product_title" required>
+                                <input type="text" class="form-control" value="{{service.service_title}}" name = "service_title" required>
+                            </div>
+                        </div>
+                        <div class="col-xxl-6 mb-xxl-0 mb-4">
+                            <h6>Price</h6>
+                            <div class="form-group">
+                                <input type="text" class="form-control" value="{{service.service_price}}" name = "service_price" required>
                             </div>
                         </div>
                         <div class="col-xxl-12 mb-xxl-0 mb-4">
                             <h6>Description</h6>
                             <div class="form-group">
-                                <textarea id="classic" name="product_description" placeholder="Description">{{product.product_description}}</textarea>
+                                <textarea id="classic" name="service_description" placeholder="Description">{{service.service_description}}</textarea>
                             </div>
                         </div>
                         <div class="col-xxl-12 mb-xxl-0 mb-4">
                             <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="is_vatable" {% if product.is_vatable == True %}checked{% endif %} value="True" name="is_vatable">
+                                <input type="checkbox" class="form-check-input" id="is_vatable" {% if service.is_vatable == True %}checked{% endif %} value="True" name="is_vatable">
                                 <label class="form-check-label" for="customCheck2">Is Vatable?</label>
                             </div>
                         </div>
@@ -78,16 +84,4 @@
 
     </div>
 </div>
-<script>
-    function handleProductTypeChange() {
-        const productType = document.querySelector('select[name="product_type"]');
-        const productBatchField = document.querySelector('#product_batch_field');
-
-        if (productType.value === 'service') {
-            productBatchField.disabled = true;
-        } else {
-            productBatchField.disabled = false;
-        }
-    }
-</script>
-	{% include 'footer.html' %}
+{% include 'footer.html' %}

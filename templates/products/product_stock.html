@@ -16,6 +16,7 @@
                     {% if 'update_products' in permissions %}
                     <div class="card-action-wrap">
                         <button class="btn btn-sm btn-primary ms-3" data-bs-toggle="modal" data-bs-target="#createUserModal"><span><span class="icon"><span class="feather-icon"><i data-feather="plus"></i></span></span><span class="btn-text">Update Product Stock</span></span></button>
+                        <button class="btn btn-sm btn-primary ms-3" data-bs-toggle="modal" data-bs-target="#updateBatchModal"><span><span class="icon"><span class="feather-icon"><i data-feather="plus"></i></span></span><span class="btn-text">Add New Batch</span></span></button>
                     </div>
                     {% endif %}
                 </div>
@@ -28,28 +29,26 @@
 				<table id="datable_1" class="table nowrap w-100 mb-5">
 					<thead>
 						<tr>
-							<th>Title</th>
+							<th>Product</th>
                             <th>Batch</th>
-                            <th>Category</th>
-                            <th>Price</th>
+                            <th>Purchase Price</th>
+                            <th>Sales Price</th>
                             <th>Available Quantity</th>
-                            <th>Is Vatable</th>
                             <th>Action</th>
 						</tr>
 					</thead>
 					<tbody>
-						{% for product_stock in product_stock %}
+						{% for product_batch in product_batch %}
 						<tr>
-							<td>{{product_stock.product_title}}</td>
-                            <td>{{product_stock.product_batch}}</td>
-                            <td>{{product_stock.product_category}}</td>
-                            <td>{{product_stock.product_price}}</td>
-                            <td>{{product_stock.product_quantity}}</td>
-                            <td>{% if product_stock.is_vatable == True %}Yes {% else %}No{% endif %}</td>
+							<td>{{product_batch.product.product_title}}</td>
+                            <td>{{product_batch.product_batch}}</td>
+                            <td>{{product_batch.purchase_price}}</td>
+                            <td>{{product_batch.product_price}}</td>
+                            <td>{{product_batch.product_quantity}}</td>
                             
                             <td>
                                 {% if 'update_products' in permissions %}
-                                <a href="{% url 'edit_product' id=product_stock.id %}" class="btn btn-icon btn-rounded btn-flush-primary flush-soft-hover" data-bs-toggle="tooltip" data-bs-original-title="Edit" ><span class="icon"><span class="feather-icon"><i data-feather="edit-3"></i></span></span></a>
+                                <a href="{% url 'edit_product' id=product_batch.id %}" class="btn btn-icon btn-rounded btn-flush-primary flush-soft-hover" data-bs-toggle="tooltip" data-bs-original-title="Edit" ><span class="icon"><span class="feather-icon"><i data-feather="edit-3"></i></span></span></a>
                                 {% endif %}
                                 {% comment %} {% if 'delete_products' in permissions %}
                                 <a href="{% url 'delete_product' id=product_stock.id %}" class="btn btn-icon btn-rounded btn-flush-danger flush-soft-hover" data-bs-toggle="tooltip" data-bs-original-title="Delete" ><span class="icon"><span class="feather-icon"><i data-feather="trash-2"></i></span></span></a>
@@ -83,8 +82,8 @@
                             <div class="form-group">
                                 <select class="form-select" name="product" required="">
                                     <option value="">Select</option>
-                                    {% for product in product_stock %}
-                                    <option value="{{product.id}}">{{product.product_title}}</option>
+                                    {% for batch in product_batch %}
+                                    <option value="{{batch.id}}">{{batch.product.product_title}}-{{batch.product_batch}}</option>
                                     {% endfor %}
                                 </select>
                             </div>  
@@ -110,6 +109,67 @@
                             <h6>Remarks</h6>
                             <div class="form-group">
                                 <textarea class="form-control" rows="6" placeholder="Write an internal note" name="remarks" autocomplete="off"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="updateBatchModal" tabindex="-1" role="dialog" aria-labelledby="updateBatchModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <form action="{% url 'add_batch' %}" method="POST">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <h5 class="modal-title" id="updateBatchModal">Add New Batch</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">                                                                        
+                    <div class="row">
+                        <div class="col-xxl-12 mb-xxl-0 mb-4">
+                            <h6>Product</h6>
+                            <div class="form-group">
+                                <select class="form-select" name="product" required="">
+                                    <option value="">Select</option>
+                                    {% for product in products %}
+                                    <option value="{{product.id}}">{{product.product_title}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>  
+                        </div>
+                        
+                        
+                        
+                        <div class="col-xxl-12 mb-xxl-0 mb-4">
+                            <h6>Quantity</h6>
+                            <div class="form-group">
+                                <input type="number" class="form-control" name="product_quantity" required id="product_quantity_field">
+                            </div>
+                        </div>
+                        <div class="col-xxl-12 mb-xxl-0 mb-4">
+                            <h6>Batch</h6>
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="product_batch" required >
+                            </div>
+                        </div>
+                        <div class="col-xxl-12 mb-xxl-0 mb-4">
+                            <h6>Purchase Price</h6>
+                            <div class="form-group">
+                                <input type="number" class="form-control" name="purchase_price" required >
+                            </div>
+                        </div>
+                        <div class="col-xxl-12 mb-xxl-0 mb-4">
+                            <h6>Sales Price</h6>
+                            <div class="form-group">
+                                <input type="number" class="form-control" name="product_price" required >
                             </div>
                         </div>
                     </div>

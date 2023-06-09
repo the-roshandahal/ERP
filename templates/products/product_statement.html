@@ -35,9 +35,9 @@
 					<tbody>
 						{% for product_statement in product_statements %}
 						<tr>
-							<td>{{product_statement.product.product_title}}</td>
+							<td>{{product_statement.batch.product.product_title}}</td>
 							<td>{{product_statement.type}}</td>
-                            <td>{{product_statement.product.product_batch}}</td>
+                            <td>{{product_statement.batch.product_batch}}</td>
                             <td>{{product_statement.quantity}}</td>
                             <td>{{product_statement.remarks}}</td>
                             <td>{{product_statement.created}}</td>
