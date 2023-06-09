@@ -1,0 +1,54 @@
+{% load static %}{% include 'header.html' %}
+
+		
+
+		<!-- Main Content -->
+<div class="hk-pg-wrapper">
+    <div class="container-xxl">
+        <!-- Page Header -->
+        <div class="hk-pg-header pg-header-wth-tab pt-7">
+            <div class="d-flex">
+                <div class="d-flex flex-wrap justify-content-between flex-1">
+                    <div class="mb-lg-0 mb-2 me-8">
+                        <h1 class="pg-title">Welcome back</h1>
+                        <p>Create pages using a variety of features that leverage jampack components</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Page Header -->
+
+        <div class="invoice-body mt-3">
+			<div class="row">
+				<table id="datable_1" class="table nowrap w-100 mb-5">
+					<thead>
+						<tr>
+							<th>Title</th>
+							<th>Type</th>
+                            <th>Batch</th>
+                            <th>Quantity</th>
+                            <th>Remarks</th>
+                            <th>Date</th>
+                            <th>Updated By</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for product_statement in product_statements %}
+						<tr>
+							<td>{{product_statement.product.product_title}}</td>
+							<td>{{product_statement.type}}</td>
+                            <td>{{product_statement.product.product_batch}}</td>
+                            <td>{{product_statement.quantity}}</td>
+                            <td>{{product_statement.remarks}}</td>
+                            <td>{{product_statement.created}}</td>
+                            <td>{{product_statement.created_by}}</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+    </div>
+</div>
+
+{% include 'footer.html' %}

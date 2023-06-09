@@ -22,6 +22,7 @@ class ProductUnit(models.Model):
 class Product(models.Model):
     product_type = models.CharField(max_length=255)
     product_title = models.CharField(max_length=255)
+    product_batch = models.CharField(max_length=255, blank=True, null=True)
     product_price = models.FloatField()
     product_quantity = models.IntegerField(null = True, blank = True)
     product_description = models.TextField(null = True, blank = True)
@@ -32,3 +33,23 @@ class Product(models.Model):
         return self.product_title
     class Meta:
         verbose_name_plural = "01. Products"      
+
+
+class ProductStatement(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    type = models.CharField(max_length=255)
+    created_by = models.CharField(max_length=255)
+    remarks = models.TextField()
+    quantity = models.IntegerField()
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.type
+    class Meta:
+        verbose_name_plural = "10. Product Statement"
+
+
+
+
+
+

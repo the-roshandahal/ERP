@@ -34,8 +34,6 @@
                                     <option value="service" {% if product.product_type == 'service' %} selected {% endif %}>service</option>
                                     <option value="product" {% if product.product_type == 'product' %} selected {% endif %}>product</option>
                                 </select>
-                                
-                                
                             </div>  
                         </div>
                         <div class="col-xxl-6 mb-xxl-0 mb-4">
@@ -60,25 +58,25 @@
                                 </select>
                             </div>  
                         </div>
-                        <div class="col-xxl-12 mb-xxl-0 mb-4">
+                        <div class="col-xxl-6 mb-xxl-0 mb-4">
                             <h6>Title</h6>
                             <div class="form-group">
                                 <input type="text" class="form-control" value="{{product.product_title}}" name = "product_title" required>
                             </div>
                         </div>
 
-                        <div class="col-xxl-12 mb-xxl-0 mb-4">
+                        <div class="col-xxl-6 mb-xxl-0 mb-4">
                             <h6>Price</h6>
                             <div class="form-group">
                                 <input type="number" class="form-control" value="{{product.product_price}}" name = "product_price" required>
                             </div>
                         </div>
-                        <!-- <div class="col-xxl-12 mb-xxl-0 mb-4">
-                            <h6>Available Quantity</h6>
+                        <div class="col-xxl-6 mb-xxl-0 mb-4">
+                            <h6>Batch</h6>
                             <div class="form-group">
-                                <input type="number" class="form-control" value="{{product.product_quantity}}" name = "product_quantity" id="product_quantity_field" required>
+                                <input type="text" class="form-control" name="product_batch" value="{{product.product_batch}}" required id="product_batch_field" disabled>
                             </div>
-                        </div> -->
+                        </div> 
 
                         
 
@@ -104,22 +102,16 @@
 
     </div>
 </div>
-
-<!-- 
 <script>
     function handleProductTypeChange() {
-    var productTypeSelect = document.getElementById('product-type-select');
-    var quantityInput = document.getElementsByName('product_quantity')[0];
-    
-    if (productTypeSelect.value === 'service') {
-        quantityInput.disabled = true;
-    } else {
-        quantityInput.disabled = false;
+        const productType = document.querySelector('select[name="product_type"]');
+        const productBatchField = document.querySelector('#product_batch_field');
+
+        if (productType.value === 'service') {
+            productBatchField.disabled = true;
+        } else {
+            productBatchField.disabled = false;
+        }
     }
-}
-
-// call the function on page load
-handleProductTypeChange();
-
-</script> -->
+</script>
 	{% include 'footer.html' %}

@@ -29,7 +29,7 @@
 					<thead>
 						<tr>
 							<th>Title</th>
-                            <th>Type</th>
+                            <th>Batch</th>
                             <th>Category</th>
                             <th>Price</th>
                             <th>Available Quantity</th>
@@ -41,7 +41,7 @@
 						{% for product_stock in product_stock %}
 						<tr>
 							<td>{{product_stock.product_title}}</td>
-                            <td>{{product_stock.product_type}}</td>
+                            <td>{{product_stock.product_batch}}</td>
                             <td>{{product_stock.product_category}}</td>
                             <td>{{product_stock.product_price}}</td>
                             <td>{{product_stock.product_quantity}}</td>
@@ -51,9 +51,9 @@
                                 {% if 'update_products' in permissions %}
                                 <a href="{% url 'edit_product' id=product_stock.id %}" class="btn btn-icon btn-rounded btn-flush-primary flush-soft-hover" data-bs-toggle="tooltip" data-bs-original-title="Edit" ><span class="icon"><span class="feather-icon"><i data-feather="edit-3"></i></span></span></a>
                                 {% endif %}
-                                {% if 'delete_products' in permissions %}
+                                {% comment %} {% if 'delete_products' in permissions %}
                                 <a href="{% url 'delete_product' id=product_stock.id %}" class="btn btn-icon btn-rounded btn-flush-danger flush-soft-hover" data-bs-toggle="tooltip" data-bs-original-title="Delete" ><span class="icon"><span class="feather-icon"><i data-feather="trash-2"></i></span></span></a>
-                                {% endif %}
+                                {% endif %} {% endcomment %}
                             </td>
 						</tr>
 						{% endfor %}
@@ -104,6 +104,12 @@
                             <h6>Quantity</h6>
                             <div class="form-group">
                                 <input type="number" class="form-control" name="new_product_quantity" required id="product_quantity_field">
+                            </div>
+                        </div>
+                        <div class="col-xxl-12 mb-xxl-0 mb-4">
+                            <h6>Remarks</h6>
+                            <div class="form-group">
+                                <textarea class="form-control" rows="6" placeholder="Write an internal note" name="remarks" autocomplete="off"></textarea>
                             </div>
                         </div>
                     </div>

@@ -12,19 +12,33 @@ from account.context_processors import custom_data_views
 def products(request):
     if 'read_products' in custom_data_views(request):
         products = Product.objects.all()
-        category = ProductCategory.objects.all()
-        unit = ProductUnit.objects.all()
+
         context={
             'products':products,
-            'category':category,
-            'unit':unit,
         }
         return render (request,'products/products.html',context)
     else:
         messages.info(request, "Unauthorized access.")
         return redirect('home')
 
- 
+def services(request):
+    if 'read_products' in custom_data_views(request):
+        services = Service.objects.all()
+        category = ProductCategory.objects.all()
+        unit = ProductUnit.objects.all()
+        context={
+            'services':services,
+            'category':category,
+            'unit':unit,
+        }
+        return render (request,'products/services.html',context)
+    else:
+        messages.info(request, "Unauthorized access.")
+        return redirect('home')
+    
+
+
+
 def product_stock(request):
     if 'read_products' in custom_data_views(request):
         product_stock = Product.objects.filter(product_type = 'product')
@@ -45,6 +59,7 @@ def add_product(request):
     if 'create_products' in custom_data_views(request):
         if request.method == "POST":
             product_type = request.POST["product_type"]
+            product_batch = request.POST["product_batch"]
             product_title = request.POST["product_title"]
             product_description = request.POST["product_description"]
             product_price = request.POST["product_price"]
@@ -56,9 +71,15 @@ def add_product(request):
             product_category = ProductCategory.objects.get(id=category)
             product_unit = ProductUnit.objects.get(id=unit)
             
-            Product.objects.create(product_type=product_type,product_title=product_title, product_description=product_description, 
+            product_obj=Product.objects.create(product_type=product_type,product_title=product_title, product_description=product_description, 
                                 product_price=product_price, product_quantity=product_quantity,is_vatable=is_vatable, 
-                                product_category=product_category,product_unit=product_unit)
+                                product_category=product_category,product_unit=product_unit,product_batch=product_batch)
+            product_obj.save()
+
+            logged_in_user = User.objects.get(username=request.user)
+            statement_obj = ProductStatement.objects.create(remarks ="Opening Balance", quantity = int(product_quantity), product=product_obj,type = 'credit', created_by = str(logged_in_user))
+            statement_obj.save()
+
             return redirect('products')
         else:
             products = Product.objects.all()
@@ -82,7 +103,7 @@ def edit_product(request,id):
             product_title = request.POST["product_title"]
             product_description = request.POST["product_description"]
             product_price = request.POST["product_price"]
-            # product_quantity = request.POST["product_quantity"]
+            product_batch = request.POST["product_batch"]
             is_vatable = request.POST.get('is_vatable', 0)
 
             category = request.POST["product_category"]
@@ -98,6 +119,7 @@ def edit_product(request,id):
             product_obj.is_vatable=is_vatable
             product_obj.product_category=product_category
             product_obj.product_unit=product_unit
+            product_obj.product_batch=product_batch
             product_obj.save()
             return redirect(products)
         else:
@@ -114,26 +136,7 @@ def edit_product(request,id):
         messages.info(request, "Unauthorized access.")
         return redirect('home')
 
-def update_product_quantity(request):
-    if 'update_products' in custom_data_views(request):
-        if request.method =="POST":
-            product = request.POST["product"]
-            update_type = request.POST["update_type"]
-            new_product_quantity = request.POST["new_product_quantity"]
 
-            product_obj = Product.objects.get(id=product)
-            
-            if update_type == 'debit':
-                product_obj.product_quantity=product_obj.product_quantity-int(new_product_quantity)
-                product_obj.save()
-            else:
-                product_obj.product_quantity=product_obj.product_quantity+int(new_product_quantity)
-                product_obj.save()
-            messages.info(request, f"Quantity {update_type}ed succesfully.")
-            return redirect(product_stock)
-    else:
-        messages.info(request, "Unauthorized access.")
-        return redirect('home')
 
 def delete_product(request,id):
     if 'delete_products' in custom_data_views(request):
@@ -226,6 +229,45 @@ def delete_product_unit(request,id):
         unit.delete()
         messages.info(request, "Product Unit Deleted Successfully")
         return redirect(product_setup)
+    else:
+        messages.info(request, "Unauthorized access.")
+        return redirect('home')
+def update_product_quantity(request):
+    if 'update_products' in custom_data_views(request):
+        if request.method =="POST":
+            product = request.POST["product"]
+            update_type = request.POST["update_type"]
+            new_product_quantity = request.POST["new_product_quantity"]
+            remarks = request.POST["remarks"]
+            product_obj = Product.objects.get(id=product)
+            logged_in_user = User.objects.get(username=request.user)
+            print(logged_in_user)
+            if update_type == 'debit':
+                product_obj.product_quantity=product_obj.product_quantity-int(new_product_quantity)
+                product_obj.save()
+                statement_obj = ProductStatement.objects.create(remarks = remarks, quantity = int(new_product_quantity), product=product_obj,type = 'debit', created_by = str(logged_in_user))
+                statement_obj.save()
+            else:
+                product_obj.product_quantity=product_obj.product_quantity+int(new_product_quantity)
+                product_obj.save()
+                statement_obj = ProductStatement.objects.create(remarks = remarks, quantity = int(new_product_quantity), product=product_obj,type = 'credit', created_by = str(logged_in_user))
+                statement_obj.save()
+            messages.info(request, f"Quantity {update_type}ed succesfully.")
+            return redirect(product_stock)
+    else:
+        messages.info(request, "Unauthorized access.")
+        return redirect('home')
+
+
+
+
+def product_statement(request):
+    if 'read_products' in custom_data_views(request):
+        product_statements = ProductStatement.objects.all()
+        context = {
+            'product_statements':product_statements
+        }
+        return render (request,'products/product_statement.html',context)
     else:
         messages.info(request, "Unauthorized access.")
         return redirect('home')

@@ -158,6 +158,11 @@ def create_invoice(request):
                 product_quantity_new = product.product_quantity
                 product.product_quantity = product_quantity_new - product_quantity
                 product.save()
+
+                logged_in_user = User.objects.get(username=request.user)
+                statement_obj = ProductStatement.objects.create(remarks ="Product Purchase", quantity = int(product_quantity), product=product, type = 'debit', created_by = str(logged_in_user))
+                statement_obj.save()
+
             details = invoice.id
             details = "INV_NO_"+str(details)
             if(Statement.objects.filter(customer=customer).exists()):
@@ -183,6 +188,8 @@ def create_invoice(request):
 
                 Statement.objects.create(
                     customer=customer, transaction='invoice', details=details, amount=invoice_amount, balance=balance)
+                
+                
             messages.info(request, "Invoice Created Successfully.")
             return redirect(view_invoice, id=invoice.id)
         else:
