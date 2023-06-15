@@ -52,6 +52,7 @@ def finance(request):
             for invoice in invoice :
                 
                 total_invoice_amt = total_invoice_amt+ invoice.invoice_amount
+                
 
 
         total_receipt_amt=0
