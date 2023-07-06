@@ -1199,7 +1199,9 @@ def device_attendance(request):
     
     att_user_data = DeviceAttendanceUser.objects.all().order_by('uid')
     att_user_att_data = DeviceAttendance.objects.filter(date = today).order_by('-punchin_timestamp')
-    all_attendance = DeviceAttendance.objects.all().order_by('-date', '-punchin_timestamp')[:30]
+    shuvam = DeviceAttendanceUser.objects.get(uid=11)
+    all_attendance = DeviceAttendance.objects.filter(att_user = shuvam)
+    # all_attendance = DeviceAttendance.objects.all().order_by('-date', '-punchin_timestamp')[:30]
     employee = Employee.objects.all()
     context = {
         'att_user_att_data':att_user_att_data,
