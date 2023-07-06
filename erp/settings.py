@@ -93,8 +93,8 @@ WSGI_APPLICATION = 'erp.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'spellsof_cms',
-        'USER': 'spellsof_cms',
+        'NAME': 'spellsof_erp',
+        'USER': 'spellsof_erp',
         'PASSWORD': '[u{nQs[FTcmS',
         'HOST': 'localhost',
         'PORT': '3306',
