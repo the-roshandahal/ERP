@@ -90,27 +90,27 @@ WSGI_APPLICATION = 'erp.wsgi.application'
 #     }
 # }
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'spellsof_erp',
-#         'USER': 'spellsof_erp',
-#         'PASSWORD': '[u{nQs[FTcmS',
-#         'HOST': 'localhost',
-#         'PORT': '3306',
-#     }
-# }
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'spellsof_cms',
-        'USER': 'root',
-        'PASSWORD': '',
+        'NAME': 'spellsof_erp',
+        'USER': 'spellsof_erp',
+        'PASSWORD': '[u{nQs[FTcmS',
         'HOST': 'localhost',
         'PORT': '3306',
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'spellsof_cms',
+#         'USER': 'root',
+#         'PASSWORD': '',
+#         'HOST': 'localhost',
+#         'PORT': '3306',
+#     }
+# }
 
 
 # Password validation
