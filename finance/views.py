@@ -108,6 +108,7 @@ def create_invoice(request):
             selected_product_amounts = request.POST.getlist("selected_product_amount")
             selected_product_discounts = request.POST.getlist("selected_product_discount")
             selected_product_quantities = request.POST.getlist("selected_product_quantity")
+
             selected_service_ids = request.POST.getlist("selected_service")
             selected_service_amounts = request.POST.getlist("selected_service_amount")
             selected_service_discounts = request.POST.getlist("selected_service_discount")
@@ -130,50 +131,52 @@ def create_invoice(request):
             
             # calculate the invoice amount for products
             invoice_amount = misc_amount
-            for i in range(len(selected_product_ids)):
-                product_id = selected_product_ids[i]
-                product_amount = Decimal(selected_product_amounts[i])
-                product_discount = Decimal(selected_product_discounts[i])
-                product_quantity = int(selected_product_quantities[i])
-                product_total = (product_amount - product_discount) * product_quantity
-                invoice_amount += product_total
-                product_batch = ProductBatch.objects.get(id=product_id)  # Retrieve ProductBatch instance
-                InvoiceProduct.objects.create(
-                    invoice=invoice,
-                    product=product_batch,  # Assign ProductBatch instance
-                    product_quantity=product_quantity,
-                    product_price=product_total,
-                )
-                product_quantity_new = product_batch.product_quantity
-                product_batch.product_quantity = product_quantity_new - product_quantity
-                product_batch.save()
+            if selected_product_ids and any(selected_product_ids):
+                for i in range(len(selected_product_ids)):
+                    product_id = selected_product_ids[i]
+                    product_amount = Decimal(selected_product_amounts[i])
+                    product_discount = Decimal(selected_product_discounts[i])
+                    product_quantity = int(selected_product_quantities[i])
+                    product_total = (product_amount - product_discount) * product_quantity
+                    invoice_amount += product_total
+                    product_batch = ProductBatch.objects.get(id=product_id)  # Retrieve ProductBatch instance
+                    InvoiceProduct.objects.create(
+                        invoice=invoice,
+                        product=product_batch,  # Assign ProductBatch instance
+                        product_quantity=product_quantity,
+                        product_price=product_total,
+                    )
+                    product_quantity_new = product_batch.product_quantity
+                    product_batch.product_quantity = product_quantity_new - product_quantity
+                    product_batch.save()
             
             # calculate the invoice amount for services
-            for i in range(len(selected_service_ids)):
-                service_id = selected_service_ids[i]
-                service_amount = Decimal(selected_service_amounts[i])
-                service_discount = Decimal(selected_service_discounts[i])
-                service_quantity = int(selected_service_quantities[i])
-                service_total = (service_amount - service_discount) * service_quantity
-                invoice_amount += service_total
-                service = Service.objects.get(id=service_id)
-                InvoiceService.objects.create(
-                    invoice=invoice,
-                    service=service,
-                    service_quantity=service_quantity,
-                    service_price=service_total,
-                )
-            
+            if selected_service_ids and any(selected_service_ids):
+
+                for i in range(len(selected_service_ids)):
+                    service_id = selected_service_ids[i]
+                    service_amount = Decimal(selected_service_amounts[i])
+                    service_discount = Decimal(selected_service_discounts[i])
+                    service_quantity = int(selected_service_quantities[i])
+                    service_total = (service_amount - service_discount) * service_quantity
+                    invoice_amount += service_total
+                    service = Service.objects.get(id=service_id)
+                    InvoiceService.objects.create(
+                        invoice=invoice,
+                        service=service,
+                        service_quantity=service_quantity,
+                        service_price=service_total,
+                    )
+                
             
             # calculate the VAT amount
-            if (
-                selected_product_ids
-                and Product.objects.filter(id__in=selected_product_ids, is_vatable=True).exists()
-            ):
-                vat_rate = Decimal("0.13")
-                vat_amount = invoice_amount * vat_rate
-                invoice.vat_amount = vat_amount
-                invoice_amount += vat_amount
+            if selected_product_ids and any(selected_product_ids):
+                if (selected_product_ids and Product.objects.filter(id__in=selected_product_ids, is_vatable=True).exists()):
+                    vat_rate = Decimal("0.13")
+                    vat_amount = invoice_amount * vat_rate
+                    invoice.vat_amount = vat_amount
+                    invoice_amount += vat_amount
+
             # save the invoice instance
             invoice.invoice_amount = invoice_amount
             invoice.save()
