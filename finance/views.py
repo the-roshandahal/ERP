@@ -131,13 +131,26 @@ def create_invoice(request):
             
             # calculate the invoice amount for products
             invoice_amount = misc_amount
+            invoice_vat_amount = 0
+
             if selected_product_ids and any(selected_product_ids):
                 for i in range(len(selected_product_ids)):
                     product_id = selected_product_ids[i]
+                    
                     product_amount = Decimal(selected_product_amounts[i])
                     product_discount = Decimal(selected_product_discounts[i])
                     product_quantity = int(selected_product_quantities[i])
                     product_total = (product_amount - product_discount) * product_quantity
+
+
+                    vat_check = Product.objects.get(id=product_id)
+                    if vat_check.is_vatable == True:
+                        vat_rate = Decimal("0.13")
+                        product_vat_amount = product_total * vat_rate
+                        invoice_vat_amount= invoice_vat_amount+product_vat_amount
+
+
+
                     invoice_amount += product_total
                     product_batch = ProductBatch.objects.get(id=product_id)  # Retrieve ProductBatch instance
                     InvoiceProduct.objects.create(
@@ -159,6 +172,14 @@ def create_invoice(request):
                     service_discount = Decimal(selected_service_discounts[i])
                     service_quantity = int(selected_service_quantities[i])
                     service_total = (service_amount - service_discount) * service_quantity
+
+                    vat_check = Service.objects.get(id=service_id)
+                    if vat_check.is_vatable == True:
+                        vat_rate = Decimal("0.13")
+                        service_vat_amount = service_total * vat_rate
+                        invoice_vat_amount= invoice_vat_amount+service_vat_amount
+
+
                     invoice_amount += service_total
                     service = Service.objects.get(id=service_id)
                     InvoiceService.objects.create(
@@ -168,17 +189,46 @@ def create_invoice(request):
                         service_price=service_total,
                     )
                 
-            
-            # calculate the VAT amount
-            if selected_product_ids and any(selected_product_ids):
-                if (selected_product_ids and Product.objects.filter(id__in=selected_product_ids, is_vatable=True).exists()):
-                    vat_rate = Decimal("0.13")
-                    vat_amount = invoice_amount * vat_rate
-                    invoice.vat_amount = vat_amount
-                    invoice_amount += vat_amount
+            # invoice_vat_amount = 0
+            # # calculate the VAT amount
+            # if selected_product_ids and any(selected_product_ids):
+            #     if (selected_product_ids and Product.objects.filter(id__in=selected_product_ids, is_vatable=True).exists()):
+            #         vat_rate = Decimal("0.13")
+            #         vat_amount = invoice_amount * vat_rate
+            #         invoice_vat_amount = invoice_vat_amount + vat_amount
+            #         invoice_amount += vat_amount
+
+
+            # if selected_service_ids and any(selected_service_ids):
+            #     if (selected_service_ids and Service.objects.filter(id__in=selected_service_ids, is_vatable=True).exists()):
+            #         vat_rate = Decimal("0.13")
+            #         vat_amount = invoice_amount * vat_rate
+            #         invoice_vat_amount = invoice_vat_amount + vat_amount
+            #         invoice_amount += vat_amount
+
+
+
+            # invoice_vat_amount = 0
+
+            # if (selected_product_ids and any(selected_product_ids) or selected_service_ids and any(selected_service_ids)):
+
+            #     if selected_product_ids:
+            #         products_vatable = Product.objects.filter(id__in=selected_product_ids, is_vatable=True).exists()
+
+            #     if selected_service_ids:
+            #         services_vatable = Service.objects.filter(id__in=selected_service_ids, is_vatable=True).exists()
+
+            #     if products_vatable or services_vatable:
+            #         vat_rate = Decimal("0.13")
+            #         vat_amount = invoice_amount * vat_rate
+            #         invoice_vat_amount += vat_amount
+            #         invoice_amount += vat_amount
+
+
 
             # save the invoice instance
-            invoice.invoice_amount = invoice_amount
+            invoice.vat_amount = invoice_vat_amount
+            invoice.invoice_amount = invoice_amount + invoice_vat_amount
             invoice.save()
             
             details = invoice.id
