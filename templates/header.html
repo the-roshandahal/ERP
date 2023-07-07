@@ -116,7 +116,7 @@
 								
 
 
-								{% if 'leads' in permissions %}
+								{% if 'manage_company' or 'manage_account' or 'manage_leads' or 'manage_products' or 'manage_finance' in permissions %}
 								<li class="nav-item">
 									<a class="nav-link" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#dash_chat_company_settings_setup">
 										<span class="nav-icon-wrap">
@@ -167,7 +167,7 @@
 									</ul>	
 								</li>
 								{% endif %}
-
+								{% if 'manage_company' in permissions %}
 								<li class="nav-item">
 									<a class="nav-link" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#dash_chat_messaging">
 										<span class="nav-icon-wrap">
@@ -190,6 +190,7 @@
 										</li>	
 									</ul>	
 								</li>
+								{% endif %}
 
 
 
