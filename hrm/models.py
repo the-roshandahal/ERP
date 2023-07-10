@@ -144,7 +144,7 @@ class DeviceAttendanceUser(models.Model):
         return f"User - {self.uid} - {self.name}"
 
     class Meta:
-        verbose_name_plural = "02. Attendance Users"
+        verbose_name_plural = "02. Device Attendance Users"
 
 
 

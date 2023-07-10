@@ -1240,6 +1240,7 @@ def get_zkusers(request):
 
 
 from django.db.models import Max
+from datetime import datetime
 
 def get_zkattendance(request):
     conn = None
@@ -1254,6 +1255,12 @@ def get_zkattendance(request):
         
         # Get the latest attendance date from DeviceAttendance model
         latest_attendance_date = DeviceAttendance.objects.aggregate(max_date=Max('date'))['max_date']
+
+        if latest_attendance_date is None:
+            latest_attendance_date = datetime.min.date()
+
+        attendance_data = [a for a in attendances if a.timestamp.date() >= latest_attendance_date]
+
         
         # Filter the attendance data to include only records after the latest attendance date
         attendance_data = [a for a in attendances if a.timestamp.date() >= latest_attendance_date]
