@@ -62,6 +62,7 @@ urlpatterns = [
     path("device_attendance/", views.device_attendance, name="device_attendance"),
     path("get_zkusers/", views.get_zkusers, name="get_zkusers"),
     path("get_zkattendance/", views.get_zkattendance, name="get_zkattendance"),
+    path("attendance_history/", views.attendance_history, name="attendance_history"),
 
 ]
 

@@ -30,21 +30,19 @@
 						</script>
 						
 					</div>
+                    <div class="pg-header-action-wrap">
+                        <a href="{% url 'attendance_history' %}"><button class="btn btn-primary">Attendance History</button></a>
+                    </div>
 				</div>
 			</div>
 		</div>
 
 		<!-- /Add other contents below -->
-		<div class="container mt-5"></div>
+		<div class="container mt-5">
 			<ul class="nav nav-justified nav-light nav-tabs nav-segmented-tabs">
 				<li class="nav-item">
 					<a class="nav-link active" data-bs-toggle="tab" href="#my_leads">
 						<span class="nav-link-text">Today Attendance</span>
-					</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" data-bs-toggle="tab" href="#active_leads">
-						<span class="nav-link-text">Attendance History</span>
 					</a>
 				</li>
 				<li class="nav-item">
@@ -85,37 +83,6 @@
 
                     
                     
-				</div>
-				<div class="tab-pane fade" id="active_leads">
-					
-					<div class="card-action-wrap mt-5 mb-5" style="display:flex; justify-content: flex-end;">
-
-                        <a href="{% url 'get_zkattendance' %}"><button class="btn btn-sm btn-primary ms-3"><span><span class="btn-text">Refresh</span></span></button> </a>
-                    </div>
-					<div class="row">
-                        <table class="table nowrap w-100 mb-5">
-                            <thead>
-                                <tr>
-                                    <th>User Id</th>
-                                    <th>Name</th>
-                                    <th>Date</th>
-                                    <th>Punch In Time</th>
-                                    <th>Punch Out Time</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for all_attendance in all_attendance %}
-                                <tr>
-                                    <td>{{all_attendance.att_user.uid}}</td>
-                                    <td>{{all_attendance.att_user.name}}</td>
-                                    <td>{{all_attendance.date}}</td>
-                                    <td>{{all_attendance.punchin_timestamp}}</td>
-                                    <td>{{all_attendance.punchout_timestamp}}</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
 				</div>
 				<div class="tab-pane fade" id="closed_leads">
 					

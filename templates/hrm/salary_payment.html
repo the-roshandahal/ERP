@@ -53,8 +53,8 @@
                                         <tr>
                                             <th scope="col"><input type="checkbox" id="check-all"></th>
                                             <th>Emp Name</th>
-                                            <th>Salary</th>
                                             <th>Absent Days</th>
+                                            <th>Salary</th>
                                             <th>Advance</th>
                                             <th>Leave Deduction</th>
                                             <th>Tax Deduction</th>
@@ -73,13 +73,13 @@
                                             <td><input type="checkbox" class="check" name="selected_employees" value="{{data_list.emp_id.id}}"></td>
                                             {% endif %}
                                             <td>{{data_list.employee}}</td>
-                                            <td name="salary">{{data_list.salary}}</td>
                                             <td>{{data_list.absent_days}}</td>
+                                            <td name="salary">{{data_list.salary}}</td>
                                             <td name="advance_this_month">{{data_list.advance_this_month}}</td>
-                                            <td><input type="text" class="form-control form-control-sm"  id="row-57-age" value="{{data_list.leave_deduction|floatformat:2}}" name="leave_deduction"></td>
-                                            <td><input type="text" class="form-control form-control-sm"  id="row-57-age" value="{{data_list.tax_deduction|floatformat:2}}" name="tax_deduction"></td>
-                                            <td><input type="text" class="form-control form-control-sm"  id="row-57-age" value="0.00" name="company_deduction"></td>
-                                            <td><input type="text" class="form-control form-control-sm"  id="row-57-age" value="{{data_list.final_salary|floatformat:2}}" name="final_salary"></td>
+                                            <td><input type="text" class="form-control form-control-sm"{% if data_list.status == 'paid' %} disabled {% endif %}  id="row-57-age" value="{{data_list.leave_deduction|floatformat:2}}" name="leave_deduction"></td>
+                                            <td><input type="text" class="form-control form-control-sm"{% if data_list.status == 'paid' %} disabled {% endif %}  id="row-57-age" value="{{data_list.tax_deduction|floatformat:2}}" name="tax_deduction"></td>
+                                            <td><input type="text" class="form-control form-control-sm"{% if data_list.status == 'paid' %} disabled {% endif %}  id="row-57-age" value="0.00" name="company_deduction"></td>
+                                            <td><input type="text" class="form-control form-control-sm"{% if data_list.status == 'paid' %} disabled {% endif %}  id="row-57-age" value="{{data_list.final_salary|floatformat:2}}" name="final_salary"></td>
                                             <td>
                                                 {% if data_list.status == 'paid' %}                                                           
                                                 <span class="badge badge-primary badge-outline">Paid</span>

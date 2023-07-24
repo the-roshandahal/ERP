@@ -8,10 +8,8 @@ from account.views import *
 from datetime import date,datetime,timedelta
 from django.core.paginator import Paginator
 from account.context_processors import custom_data_views
-# Create your views here.
 from django.db.models import Count
 from zk import ZK, const
-from datetime import datetime
 from django.utils.timezone import make_aware
 
 
@@ -1116,6 +1114,9 @@ def salary_payment(request):
             else:
                 context=None
                 return redirect('payroll')
+        else:
+            context=None
+            return redirect('payroll')
         return render(request,'hrm/salary_payment.html',context)
     else:
         messages.info(request, "Unauthorized access.")
@@ -1204,13 +1205,10 @@ def device_attendance(request):
     att_user_data = DeviceAttendanceUser.objects.all().order_by('uid')
     att_user_att_data = DeviceAttendance.objects.filter(date = today).order_by('-punchin_timestamp')
     # shuvam = DeviceAttendanceUser.objects.get(uid=11)
-    # all_attendance = DeviceAttendance.objects.filter(att_user = shuvam)
-    all_attendance = DeviceAttendance.objects.all().order_by('-date', '-punchin_timestamp')[:30]
     employee = Employee.objects.all()
     context = {
         'att_user_att_data':att_user_att_data,
         'att_user_data':att_user_data,
-        'all_attendance':all_attendance,
         'employee':employee,
     }
     return render (request, 'hrm/device_attendance.html',context)
@@ -1262,10 +1260,12 @@ def get_zkattendance(request):
 
         if latest_attendance_date is None:
             latest_attendance_date = datetime.min.date()
+        else:
+            current_date = datetime.now().date()
+            one_month_from_now = current_date - timedelta(days=60)
+            latest_attendance_date = one_month_from_now
 
-        attendance_data = [a for a in attendances if a.timestamp.date() >= latest_attendance_date]
 
-        
         # Filter the attendance data to include only records after the latest attendance date
         attendance_data = [a for a in attendances if a.timestamp.date() >= latest_attendance_date]
         
@@ -1336,4 +1336,72 @@ def delete_att_user(request,id):
     else:
         messages.info(request, "Unauthorized access.")
         return redirect('home')
-    
+
+
+
+def attendance_history(request):
+    if 'delete_hrm' in custom_data_views(request):
+        if request.method == "POST":
+            employee_id = request.POST.get('employee')
+            month_id = request.POST.get('month')
+            status = request.POST.get('status')
+
+            employee = Employee.objects.get(id=employee_id)
+            att_user = DeviceAttendanceUser.objects.get(employee=employee)
+            month = MonthSetup.objects.get(id=month_id)
+
+            from_date = month.start_date
+            to_date = month.end_date
+
+            all_attendance = None
+            absent_dates = None
+            holidays_between_absent = []  # List to store holidays between absent dates
+
+            if status == 'present':
+                all_attendance = DeviceAttendance.objects.filter(
+                    att_user=att_user,
+                    date__range=[from_date, to_date]
+                ).order_by('-date', '-punchin_timestamp')
+            else:
+                all_attendance_obj = DeviceAttendance.objects.filter(
+                    att_user=att_user,
+                    date__range=[from_date, to_date]
+                ).order_by('-date', '-punchin_timestamp')
+                holidays = set(Holidays.objects.filter(month=month).values_list('holiday', flat=True))
+                absent_dates = []
+                current_date = from_date
+                was_absent = False
+
+                while current_date <= to_date:
+                    if current_date in holidays:
+                        if was_absent:
+                            holidays_between_absent.append(current_date)
+                        was_absent = False
+
+                    if current_date not in holidays and not any(attendance.date == current_date for attendance in all_attendance_obj):
+                        if status == 'absent':
+                            absent_dates.append(current_date)
+                            was_absent = True
+
+                    current_date += timedelta(days=1)
+
+        else:
+            all_attendance = DeviceAttendance.objects.all().order_by('date', '-punchin_timestamp')[:30]
+            employees = Employee.objects.all()
+            absent_dates = []
+            holidays_between_absent=[]
+
+        employees = Employee.objects.all()
+        month = MonthSetup.objects.filter(is_active=True)
+        context = {
+            'employees': employees,
+            'month': month,
+            'all_attendance': all_attendance,
+            'absent_dates': absent_dates,
+            'holidays_between_absent': holidays_between_absent,  # Add holidays between absent dates to context
+
+        }
+        return render(request, 'hrm/attendance_history.html', context)
+    else:
+        messages.info(request, "Unauthorized access.")
+        return redirect('home')

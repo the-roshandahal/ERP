@@ -1,0 +1,130 @@
+{% load static %}{% include 'header.html' %}
+<!-- Main Content -->
+<div class="hk-pg-wrapper">
+	<div class="container-xxl">
+
+		<div class="hk-pg-header">
+			<div class="d-flex">
+				<div class="d-flex flex-wrap justify-content-between flex-1">
+					<div class="mb-md-0 mb-2 me-8">
+						<div class="d-flex align-items-center">
+							<h1 class="pg-title">Attendance</h1>
+						</div>
+						<p id="greeting"></p>
+
+						<script>
+							const now = new Date();
+							const hour = now.getHours();
+					
+							let greeting;
+					
+							if (hour < 12) {
+								greeting = "Good Morning";
+							} else if (hour < 18) {
+								greeting = "Good Afternoon";
+							} else {
+								greeting = "Good Evening";
+							}
+					
+							document.getElementById("greeting").innerHTML = greeting + " {{request.user.first_name}}!";
+						</script>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- /Add other contents below -->
+        <div class="container">
+			<form action="{% url 'attendance_history' %}" method="POST">
+				{% csrf_token %}
+				<div class="row mt-3">
+					<div class="col-4">
+						<h6>Select Employees</h6>
+						<div class="form-group">
+							<select class="form-select" name="employee" required>
+								{% for employees in employees %}
+								<option value = '{{employees.id}}'>{{employees.user.first_name}} {{employees.user.last_name}}</option>
+								{% endfor %}
+							</select>
+						</div>
+					</div>
+					<div class="col-4">
+						<h6>Status</h6>
+						<div class="form-group">
+							<select class="form-select" name="month" required>
+								{% for month in month %}
+								<option value = '{{month.id}}'>{{month.month}}</option>
+								{% endfor %}
+							</select>
+						</div>
+					</div>
+					<div class="col-4">
+						<h6>Status</h6>
+						<div class="form-group">
+							<select class="form-select" name="status" required>
+								<option value = 'present'>Present</option>
+								<option value = 'absent'>Absent</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-3">
+						<div class="pg-header-action-wrap">
+							<button class="btn btn-primary" type="submit">Search</button>
+						</div>
+					</div>
+				</div>
+			</form>
+            <div class="row">
+                <table class="table nowrap w-100 mb-5">
+                    <thead>
+                        <tr>
+                            <th>User Id</th>
+                            <th>Name</th>
+                            <th>Date</th>
+                            <th>Punch In Time</th>
+                            <th>Punch Out Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for all_attendance in all_attendance %}
+                        <tr>
+                            <td>{{all_attendance.att_user.uid}}</td>
+                            <td>{{all_attendance.att_user.name}}</td>
+                            <td>{{all_attendance.date}}</td>
+                            <td>{{all_attendance.punchin_timestamp}}</td>
+                            <td>{{all_attendance.punchout_timestamp}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+			<div class="row">
+				{% if absent_dates %}
+				<h2>Absent Dates:</h2>
+					<ul>
+						{% for date in absent_dates %}
+							<li>{{ date }}</li>
+						{% endfor %}
+					</ul>
+				{% else %}
+					<p>No absent dates found.</p>
+				{% endif %}
+			</div>
+			{% comment %} <div class="row">
+				<h2>Holidays Between Absent Dates:</h2>
+				{% if holidays_between_absent %}
+					<ul>
+						{% for date in holidays_between_absent %}
+							<li>{{ date }}</li>
+						{% endfor %}
+					</ul>
+				{% else %}
+					<p>No holidays between absent dates found.</p>
+				{% endif %}
+			</div> {% endcomment %}
+        </div>
+	</div>
+</div>
+{% include 'footer.html' %}
