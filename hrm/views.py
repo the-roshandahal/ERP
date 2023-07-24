@@ -143,7 +143,7 @@ def add_month(request):
             holidays = request.POST['holidays']
 
             year = YearSetup.objects.get(id=year)
-            month = MonthSetup.objects.create(year=year,month=month,start_date=start_date,end_date=end_date)
+            month = MonthSetup.objects.create(year=year,month=month,start_date=start_date,end_date=end_date,is_active=True)
             month.save()
             date_list = [date.strip() for date in holidays.split(",")]
             for holiday in date_list:
@@ -164,8 +164,12 @@ def edit_month(request,id):
             start_date = request.POST['start_date']
             end_date = request.POST['end_date']
             holidays = request.POST['holidays']
-            is_active = request.POST.get('is_active', 0)
+            is_active = request.POST.get('is_active')
             year = YearSetup.objects.get(id=year)
+            if is_active=="is_active":
+                is_active=True
+            else:
+                is_active=False
 
             month_obj = MonthSetup.objects.get(id=id)
             month_obj.year=year
