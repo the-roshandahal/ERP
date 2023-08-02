@@ -37,15 +37,19 @@
         <div class="container">
 			<form action="{% url 'attendance_history' %}" method="POST">
 				{% csrf_token %}
+
 				<div class="row mt-3">
 					<div class="col-4">
 						<h6>Select Employees</h6>
 						<div class="form-group">
 							<select class="form-select" name="employee" required>
 								{% for employees in employees %}
-								<option value = '{{employees.id}}'>{{employees.user.first_name}} {{employees.user.last_name}}</option>
+								<option value='{{employees.id}}' {% if employees.id == employee_selected %}selected{% endif %}>
+									{{employees.user.first_name}} {{employees.user.last_name}} -- {{employees.id}}
+								</option>
 								{% endfor %}
 							</select>
+							
 						</div>
 					</div>
 					<div class="col-4">
@@ -53,7 +57,7 @@
 						<div class="form-group">
 							<select class="form-select" name="month" required>
 								{% for month in month %}
-								<option value = '{{month.id}}'>{{month.month}}</option>
+								<option value = '{{month.id}}' {% if month_selected == month.id %}selected{% endif %}>{{month.month}}</option>
 								{% endfor %}
 							</select>
 						</div>
@@ -62,8 +66,8 @@
 						<h6>Status</h6>
 						<div class="form-group">
 							<select class="form-select" name="status" required>
-								<option value = 'present'>Present</option>
-								<option value = 'absent'>Absent</option>
+								<option value = 'present' {% if status_selected == 'present' %}selected{% endif %}>Present</option>
+								<option value = 'absent'  {% if status_selected == 'absent' %}selected{% endif %}>Absent</option>
 							</select>
 						</div>
 					</div>
@@ -112,18 +116,6 @@
 					<p>No absent dates found.</p>
 				{% endif %}
 			</div>
-			{% comment %} <div class="row">
-				<h2>Holidays Between Absent Dates:</h2>
-				{% if holidays_between_absent %}
-					<ul>
-						{% for date in holidays_between_absent %}
-							<li>{{ date }}</li>
-						{% endfor %}
-					</ul>
-				{% else %}
-					<p>No holidays between absent dates found.</p>
-				{% endif %}
-			</div> {% endcomment %}
         </div>
 	</div>
 </div>

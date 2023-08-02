@@ -1338,6 +1338,7 @@ def delete_att_user(request,id):
         return redirect('home')
 
 
+from datetime import timedelta
 
 def attendance_history(request):
     if 'delete_hrm' in custom_data_views(request):
@@ -1355,7 +1356,7 @@ def attendance_history(request):
 
             all_attendance = None
             absent_dates = None
-            holidays_between_absent = []  # List to store holidays between absent dates
+            holidays_between_absent = []
 
             if status == 'present':
                 all_attendance = DeviceAttendance.objects.filter(
@@ -1384,24 +1385,39 @@ def attendance_history(request):
                             was_absent = True
 
                     current_date += timedelta(days=1)
+                    
+            print("Employee Selected:", employee_id)
+            for employee in Employee.objects.all():
+                print("Employee ID:", employee.id)
 
-        else:
-            all_attendance = DeviceAttendance.objects.all().order_by('date', '-punchin_timestamp')[:30]
-            employees = Employee.objects.all()
-            absent_dates = []
-            holidays_between_absent=[]
 
-        employees = Employee.objects.all()
-        month = MonthSetup.objects.filter(is_active=True)
-        context = {
-            'employees': employees,
-            'month': month,
-            'all_attendance': all_attendance,
-            'absent_dates': absent_dates,
-            'holidays_between_absent': holidays_between_absent,  # Add holidays between absent dates to context
-
-        }
-        return render(request, 'hrm/attendance_history.html', context)
+            context = {
+                'employees': Employee.objects.all(),
+                'month': MonthSetup.objects.filter(is_active=True),
+                'all_attendance': all_attendance,
+                'absent_dates': absent_dates,
+                'holidays_between_absent': holidays_between_absent, 
+                'employee_selected': employee_id,
+                'month_selected': month_id,
+                'status_selected': status,
+            }
+            return render(request, 'hrm/attendance_history.html', context)
     else:
         messages.info(request, "Unauthorized access.")
         return redirect('home')
+
+    # Default case
+    all_attendance = DeviceAttendance.objects.all().order_by('date', '-punchin_timestamp')[:30]
+    employees = Employee.objects.all()
+
+    context = {
+        'employees': employees,
+        'month': MonthSetup.objects.filter(is_active=True),
+        'all_attendance': all_attendance,
+        'absent_dates': [],
+        'holidays_between_absent': [], 
+        'employee_selected': None,
+        'month_selected': None,
+        'status_selected': None,
+    }
+    return render(request, 'hrm/attendance_history.html', context)
